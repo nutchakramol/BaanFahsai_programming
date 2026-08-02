@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
   m_Name: lamp
   m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
-  itemId: 
+  itemId: lamp
   displayName: 
   icon: {fileID: 0}
   prefab: {fileID: 0}
