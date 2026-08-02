@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "BaanFahsai_programming.slnx",
+    "dotnet.defaultSolution": "My project (1).slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }

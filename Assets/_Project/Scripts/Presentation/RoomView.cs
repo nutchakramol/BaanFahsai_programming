@@ -1,16 +1,20 @@
+// ===================================================
+// FILE: RoomView.cs
+// Marks a GameObject as a valid drop-zone for a room.
+// The Collider2D here is a spatial "zone definition" —
+// like a geofence: no physical collision, just region testing.
+// ===================================================
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+[RequireComponent(typeof(Collider2D))]
+public class RoomView : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public string RoomId;
+    public RoomTag RoomTag;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        gameObject.layer = LayerMask.NameToLayer("RoomZone");
+        GetComponent<Collider2D>().isTrigger = true;
     }
 }
