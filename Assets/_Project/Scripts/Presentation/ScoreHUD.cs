@@ -1,14 +1,11 @@
-// ===================================================
-// FILE: ScoreHUD.cs
-// Pure listener — no logic, just displays whatever GameEvents broadcasts.
-// ===================================================
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // TextMeshPro namespace
 
 public class ScoreHUD : MonoBehaviour
 {
     [SerializeField] private Slider scoreBar;
-    [SerializeField] private Text scoreLabel;
+    [SerializeField] private TextMeshProUGUI scoreLabel; // changed from Text
 
     private void OnEnable()
     {
