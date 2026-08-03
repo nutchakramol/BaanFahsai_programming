@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
->
-    
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/MainMenyStyle.uss?fileID=7433441132597879392&amp;guid=d76edff817ca16a4eadfe7e6c73a1105&amp;type=3#MainMenyStyle"/>
+    <ui:VisualElement name="Container" style="flex-grow: 1; -unity-text-auto-size: best-fit 10px 100px; background-color: rgb(81, 81, 81); background-image: url(&quot;project://database/Assets/Sprites/GreenAero.jpg?fileID=5417542190726667440&amp;guid=82afb7c16649844409b25af87d414c24&amp;type=3#GreenAero_0&quot;);">
+        <ui:Label text="Let&apos;s Start !" name="Header" class="header" style="-unity-font-style: bold;"/>
+        <ui:Button text="PLAY" parse-escape-sequences="true" class="button" style="font-size: 35px; white-space: nowrap; -unity-text-align: middle-center; align-content: center;"/>
+    </ui:VisualElement>
 </ui:UXML>
