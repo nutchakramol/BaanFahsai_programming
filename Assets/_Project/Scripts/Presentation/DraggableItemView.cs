@@ -1,8 +1,3 @@
-// ===================================================
-// FILE: DraggableItemView.cs
-// Thin translation layer: mouse input -> LevelController calls.
-// Contains NO scoring logic itself.
-// ===================================================
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -16,16 +11,26 @@ public class DraggableItemView : MonoBehaviour
     private bool _isDragging;
     private LevelController _controller;
 
+    // Remembers where this item was before the current drag started,
+    // so we can snap back if the drop is invalid.
+    private Vector3 _positionBeforeDrag;
+    private bool _hasBeenPlacedSuccessfullyBefore;
+    private Vector3 _lastValidPosition;
+
     public void Init(string instanceId, string schemaId, LevelController controller)
     {
         InstanceId = instanceId;
         SchemaId = schemaId;
         _controller = controller;
         _mainCamera = Camera.main;
+
+        // Default fallback = wherever the item was spawned initially.
+        _lastValidPosition = transform.position;
     }
 
     private void OnMouseDown()
     {
+        _positionBeforeDrag = transform.position; // snapshot BEFORE this drag
         _dragOffset = transform.position - GetMouseWorldPos();
         _isDragging = true;
     }
@@ -43,11 +48,21 @@ public class DraggableItemView : MonoBehaviour
 
         if (room != null)
         {
+            // Valid drop — commit it and remember this as the new fallback.
             _controller.PlaceOrMoveItem(InstanceId, SchemaId, transform.position, room.RoomId);
+            _lastValidPosition = transform.position;
+            _hasBeenPlacedSuccessfullyBefore = true;
         }
         else
         {
-            Debug.Log("Dropped outside a valid room zone.");
+            Debug.Log("Dropped outside a valid room zone — snapping back.");
+
+            // Snap back: if this item was already placed successfully once
+            // before, return to that last valid spot. Otherwise return to
+            // wherever it was before THIS drag attempt (usually spawn point).
+            transform.position = _hasBeenPlacedSuccessfullyBefore
+                ? _lastValidPosition
+                : _positionBeforeDrag;
         }
     }
 
