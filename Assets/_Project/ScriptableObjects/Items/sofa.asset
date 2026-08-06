@@ -22,7 +22,7 @@ MonoBehaviour:
   - zoneLabel: Wall corner
     worldPosition: {x: -3, y: -1}
     innerRadius: 0.5
-    outerRadius: 2.5
+    outerRadius: 50
     falloffCurve:
       serializedVersion: 2
       m_Curve: []
