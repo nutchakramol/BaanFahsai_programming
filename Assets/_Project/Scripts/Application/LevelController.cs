@@ -8,17 +8,20 @@ public class LevelController
     private readonly Dictionary<string, ItemSchemaSO> _schemaLookup;
     private readonly List<PlacedItem> _placedItems = new List<PlacedItem>();
     private readonly Dictionary<string, RoomTag> _roomTagLookup;
+    private readonly int _totalPaletteItems;
 
     public LevelController(LevelDataSO levelData, List<ItemSchemaSO> allSchemas)
     {
         _levelData = levelData;
         _schemaLookup = allSchemas.ToDictionary(s => s.itemId, s => s);
         _roomTagLookup = levelData.rooms.ToDictionary(r => r.roomId, r => r.roomTag);
+        _totalPaletteItems = levelData.paletteItemIds.Count;
     }
 
     public void PlaceOrMoveItem(string instanceId, string schemaId, Vector2 worldPos, string roomId)
     {
         var existing = _placedItems.FirstOrDefault(p => p.InstanceId == instanceId);
+        bool isNewPlacement = existing == null;
 
         if (existing != null)
         {
@@ -36,6 +39,26 @@ public class LevelController
         }
 
         RecalculateAndBroadcast(existing);
+
+        if (isNewPlacement)
+            GameEvents.RaisePaletteProgressChanged(_placedItems.Count, _totalPaletteItems);
+    }
+
+    /// <summary>
+    /// Called when an item is dropped outside any valid room — removes it
+    /// from tracking so the palette can re-show its icon.
+    /// </summary>
+    public void RemovePlacement(string instanceId)
+    {
+        int removed = _placedItems.RemoveAll(p => p.InstanceId == instanceId);
+        if (removed > 0)
+        {
+            GameEvents.RaisePaletteProgressChanged(_placedItems.Count, _totalPaletteItems);
+
+            var levelResult = ScoringEngine.ComputeLevelScore(
+                _placedItems, _schemaLookup, _roomTagLookup, _levelData.requirements);
+            GameEvents.RaiseLevelScoreUpdated(levelResult);
+        }
     }
 
     private void RecalculateAndBroadcast(PlacedItem item)
@@ -48,10 +71,22 @@ public class LevelController
 
         var levelResult = ScoringEngine.ComputeLevelScore(
             _placedItems, _schemaLookup, _roomTagLookup, _levelData.requirements);
-
         GameEvents.RaiseLevelScoreUpdated(levelResult);
+    }
 
-        if (levelResult.OverallScorePercent >= _levelData.targetScoreToWin)
-            GameEvents.RaiseLevelCompleted();
+    /// <summary>
+    /// Called when the player presses "Check Level". Allowed even if not
+    /// all items scored perfectly — stars just reflect quality of placement.
+    /// </summary>
+    public LevelScoreResult CheckLevel()
+    {
+        var result = ScoringEngine.ComputeLevelScore(
+            _placedItems, _schemaLookup, _roomTagLookup, _levelData.requirements);
+
+        int stars = StarRatingCalculator.ComputeStars(result.OverallScorePercent, _levelData.starThresholds);
+        bool canProceed = result.OverallScorePercent >= _levelData.minScoreToPass;
+
+        GameEvents.RaiseLevelChecked(stars, result.OverallScorePercent, canProceed);
+        return result;
     }
 }
