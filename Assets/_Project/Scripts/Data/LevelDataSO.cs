@@ -14,6 +14,13 @@ public class LevelDataSO : ScriptableObject
     public List<RoomDefinition> rooms = new List<RoomDefinition>();
     public List<LevelRequirement> requirements = new List<LevelRequirement>();
     public int targetScoreToWin = 80;  // e.g. percentage threshold
+
+    [Header("Item Palette")]
+    public List<string> paletteItemIds = new List<string>(); // schemaIds to spawn, one instance each
+
+    [Header("Star Rating")]
+    public float[] starThresholds = new float[] { 30f, 50f, 65f, 80f, 95f }; // % needed for 1..5 stars
+    public float minScoreToPass = 30f; // minimum overall % required to unlock "Next Level"
 }
 
 [System.Serializable]
