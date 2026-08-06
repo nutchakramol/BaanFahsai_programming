@@ -16,4 +16,12 @@ public static class GameEvents
     public static event Action<PlacedItem, string, string> OnItemMovedRoom;
     public static void RaiseItemMovedRoom(PlacedItem item, string from, string to)
         => OnItemMovedRoom?.Invoke(item, from, to);
+    
+    public static event Action<int, int> OnPaletteProgressChanged; // (placedCount, totalCount)
+    public static void RaisePaletteProgressChanged(int placed, int total)
+        => OnPaletteProgressChanged?.Invoke(placed, total);
+
+    public static event Action<int, float, bool> OnLevelChecked; // (stars, overallPercent, canProceed)
+    public static void RaiseLevelChecked(int stars, float overallPercent, bool canProceed)
+        => OnLevelChecked?.Invoke(stars, overallPercent, canProceed);
 }
