@@ -1,3 +1,32 @@
-:root {
+.header {
+    font-size: 50px;
+    color: rgb(255, 255, 255);
+    align-self: center;
+    align-content: flex-start;
+    align-items: auto;
+    margin-top: 200px;
+    margin-right: 200px;
+    margin-bottom: 200px;
+    margin-left: 200px;
+    padding-top: 50px;
+    padding-right: 50px;
+    padding-bottom: 50px;
+    padding-left: 50px;
+}
 
+.button {
+    font-size: 35px;
+    width: 220px;
+    height: 60px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    align-self: center;
+    background-image: url("project://database/Assets/Sprites/PlayButton.png?fileID=-1958676783162264248&guid=bc023f5ebaec6954482e494943f9843e&type=3#PlayButton_0");
+    align-content: center;
 }

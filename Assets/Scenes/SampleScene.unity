@@ -899,7 +899,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+--- !u!1 &1668294404
+=======
 --- !u!1 &1114181648
+>>>>>>> a5ccc5f615018bb02286266c0912ccbe90e8f6fb
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -907,22 +911,54 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
+  - component: {fileID: 1668294406}
+  - component: {fileID: 1668294405}
+  m_Layer: 5
+  m_Name: MainMenu
+=======
   - component: {fileID: 1114181649}
   - component: {fileID: 1114181651}
   - component: {fileID: 1114181650}
   m_Layer: 5
   m_Name: Handle
+>>>>>>> a5ccc5f615018bb02286266c0912ccbe90e8f6fb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
+--- !u!114 &1668294405
+MonoBehaviour:
+=======
 --- !u!224 &1114181649
 RectTransform:
+>>>>>>> a5ccc5f615018bb02286266c0912ccbe90e8f6fb
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1668294404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 07e9e7abdb7b9404dbf22dd55eaf0413, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 01670fc7b0d828d49aa03cf94708e3ef, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &1668294406
+=======
   m_GameObject: {fileID: 1114181648}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1114,12 +1150,17 @@ MonoBehaviour:
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1558415951
+>>>>>>> a5ccc5f615018bb02286266c0912ccbe90e8f6fb
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
+  m_GameObject: {fileID: 1668294404}
+=======
   m_GameObject: {fileID: 1558415948}
+>>>>>>> a5ccc5f615018bb02286266c0912ccbe90e8f6fb
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -1263,7 +1304,11 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
+<<<<<<< HEAD
+  - {fileID: 1668294406}
+=======
   - {fileID: 1940133617}
   - {fileID: 306015977}
   - {fileID: 273959031}
   - {fileID: 1558415951}
+>>>>>>> a5ccc5f615018bb02286266c0912ccbe90e8f6fb
