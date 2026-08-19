@@ -1,40 +1,45 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [Header("Scene Name")]
-    public string levelSelectScene = "LevelSelect";
+    [SerializeField] private VisualTreeAsset mainMenu;
+    [SerializeField] private VisualTreeAsset levelSelect;
 
-    public void StartGame()
+    private UIDocument uiDocument;
+
+    private void OnEnable()
     {
-        SceneManager.LoadScene(levelSelectScene);
+        uiDocument = GetComponent<UIDocument>();
+
+        ShowMainMenu();
     }
 
-    public void ContinueGame()
+    private void ShowMainMenu()
     {
-        Debug.Log("Continue Game");
+        uiDocument.visualTreeAsset = mainMenu;
+
+        VisualElement root = uiDocument.rootVisualElement;
+
+        Button playButton = root.Q<Button>("play-button");
+
+        if (playButton != null)
+        {
+            playButton.clicked += ShowLevelSelect;
+        }
     }
 
-    // ปุ่ม Settings
-    public void OpenSettings(GameObject settingsPanel)
+    private void ShowLevelSelect()
     {
-        settingsPanel.SetActive(true);
-    }
+        uiDocument.visualTreeAsset = levelSelect;
 
-    public void CloseSettings(GameObject settingsPanel)
-    {
-        settingsPanel.SetActive(false);
-    }
+        VisualElement root = uiDocument.rootVisualElement;
 
-    public void ExitGame()
-    {
-        Debug.Log("Exit");
+        Button backButton = root.Q<Button>("back-button");
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+        if (backButton != null)
+        {
+            backButton.clicked += ShowMainMenu;
+        }
     }
 }
