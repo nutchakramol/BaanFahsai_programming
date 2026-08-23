@@ -25,6 +25,7 @@ public class MainMenuUI : MonoBehaviour
 
         if (playButton != null)
         {
+            playButton.clicked -= ShowLevelSelect;
             playButton.clicked += ShowLevelSelect;
         }
     }
@@ -35,11 +36,19 @@ public class MainMenuUI : MonoBehaviour
 
         VisualElement root = uiDocument.rootVisualElement;
 
-        Button backButton = root.Q<Button>("back-button");
+        Button HomeButton = root.Q<Button>("HomeButton");
 
-        if (backButton != null)
+        if (HomeButton != null)
         {
-            backButton.clicked += ShowMainMenu;
+            HomeButton.clicked -= ShowMainMenu;
+            HomeButton.clicked += ShowMainMenu;
+        }
+
+        LevelSelectUI levelSelectUI = GetComponent<LevelSelectUI>();
+
+        if (levelSelectUI != null)
+        {
+            levelSelectUI.Setup();
         }
     }
 }

@@ -1,6 +1,25 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:VisualElement name="LevelSelectRoot" style="flex-grow: 1;">
         <ui:VisualElement name="Background" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/city%20level.jpg?fileID=-7529163346068021233&amp;guid=bced25637b33f8b46a3711da1e737754&amp;type=3#city level_0&quot;);"/>
-        <ui:VisualElement name="LevelArea" style="flex-grow: 1; position: absolute; top: 100px; bottom: 100px; left: 0; right: 0;"/>
+        <ui:VisualElement name="LevelArea" style="flex-grow: 1; position: absolute; top: 100px; bottom: 100px; left: 0; right: 0; flex-direction: row; width: 100%; height: 100%; align-items: center; justify-content: center;">
+            <ui:VisualElement name="LevelBubble1" style="flex-grow: 0; width: 400px; height: 412px; flex-shrink: 0; background-color: rgba(66, 66, 66, 0); background-image: url(&quot;project://database/Assets/Sprites/bubble%20level.png?fileID=-8899539802803821158&amp;guid=fe998b38c7ac6974a99cb1e6cc5703c5&amp;type=3#bubble level_0&quot;); align-items: center; justify-content: space-between; align-self: center; align-content: flex-end; padding-top: 0; margin-top: 0;">
+                <ui:Label text="1" name="LevellNumber1" style="position: absolute; top: 10px; left: 10px; right: 0; bottom: 0; -unity-text-align: middle-center; font-size: 70px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="LevelBubble2" style="flex-grow: 0; width: 400px; height: 412px; flex-shrink: 0; background-color: rgba(66, 66, 66, 0); background-image: url(&quot;project://database/Assets/Sprites/bubble%20level.png?fileID=-8899539802803821158&amp;guid=fe998b38c7ac6974a99cb1e6cc5703c5&amp;type=3#bubble level_0&quot;); align-items: center; justify-content: space-between; align-self: center; align-content: flex-end; padding-top: 0; margin-top: 0;">
+                <ui:Label text="2&#10;" name="LevellNumber2" style="position: absolute; top: 10px; left: 10px; right: 0; bottom: 0; -unity-text-align: middle-center; font-size: 70px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="LevelBubble3" style="flex-grow: 0; width: 400px; height: 412px; flex-shrink: 0; background-color: rgba(66, 66, 66, 0); background-image: url(&quot;project://database/Assets/Sprites/bubble%20level.png?fileID=-8899539802803821158&amp;guid=fe998b38c7ac6974a99cb1e6cc5703c5&amp;type=3#bubble level_0&quot;); align-items: center; justify-content: space-between; align-self: center; align-content: flex-end; padding-top: 0; margin-top: 0;">
+                <ui:Label text="3&#10;" name="LevellNumber3" style="position: absolute; top: 10px; left: 10px; right: 0; bottom: 0; -unity-text-align: middle-center; font-size: 70px; margin-top: 4px; margin-right: 4px; margin-bottom: 2px; margin-left: 2px; padding-top: 4px; padding-right: 2px; padding-bottom: 4px; padding-left: 1px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="LevelBubble4" style="flex-grow: 0; width: 400px; height: 412px; flex-shrink: 0; background-color: rgba(66, 66, 66, 0); background-image: url(&quot;project://database/Assets/Sprites/bubble%20level.png?fileID=-8899539802803821158&amp;guid=fe998b38c7ac6974a99cb1e6cc5703c5&amp;type=3#bubble level_0&quot;); align-items: center; justify-content: space-between; align-self: center; align-content: flex-end; padding-top: 0; margin-top: 0;">
+                <ui:Label text="4" name="LevellNumber4" style="position: absolute; top: 10px; left: 10px; right: 0; bottom: 0; -unity-text-align: middle-center; font-size: 70px; margin-top: 4px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="LevelBubble5" style="flex-grow: 0; width: 400px; height: 412px; flex-shrink: 0; background-color: rgba(66, 66, 66, 0); background-image: url(&quot;project://database/Assets/Sprites/bubble%20level.png?fileID=-8899539802803821158&amp;guid=fe998b38c7ac6974a99cb1e6cc5703c5&amp;type=3#bubble level_0&quot;); align-items: center; justify-content: space-between; align-self: center; align-content: flex-end; padding-top: 0; margin-top: 0;">
+                <ui:Label text="5" name="LevellNumber5" style="position: absolute; top: 10px; left: 10px; right: 0; bottom: 0; -unity-text-align: middle-center; font-size: 70px;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button text="" name="HomeButton" display-tooltip-when-elided="true" icon-image="" style="position: absolute; background-image: url(&quot;project://database/Assets/Sprites/homeButton.png?fileID=5397759385407952218&amp;guid=78bd2b917c4fc3f47aa8549f8510ae4a&amp;type=3#homeButton_0&quot;); height: 105px; width: 120px; background-color: rgba(22, 22, 22, 0); top: 57px; left: 100px;"/>
+        <ui:Button text="Button" name="LeftButton"/>
+        <ui:Button text="Button" name="RightButton"/>
     </ui:VisualElement>
 </ui:UXML>
