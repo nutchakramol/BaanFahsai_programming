@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 82afb7c16649844409b25af87d414c24
+guid: 48c22dd10ff05544ea2daf958f02da82
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5417542190726667440
-    second: GreenAero_0
+      213: -3904655318887456192
+    second: abstract-colorful-geometric-pattern-orange-yellow-red-stoneware-mosaic-texture-background-modern-style-wall-background_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -38,7 +38,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 1
-    aniso: 1
+    aniso: 0
     mipBias: 0
     wrapU: 1
     wrapV: 1
@@ -47,11 +47,11 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 1
-  spriteMeshType: 1
+  spriteExtrude: 6
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 128
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GreenAero_0
+      name: abstract-colorful-geometric-pattern-orange-yellow-red-stoneware-mosaic-texture-background-modern-style-wall-background_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 736
-        height: 460
+        width: 3500
+        height: 3500
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0bc54f94be9fe2b40800000000000000
-      internalID: 5417542190726667440
+      spriteID: 042af5bdca0efc9c0800000000000000
+      internalID: -3904655318887456192
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GreenAero_0: 5417542190726667440
+      abstract-colorful-geometric-pattern-orange-yellow-red-stoneware-mosaic-texture-background-modern-style-wall-background_0: -3904655318887456192
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

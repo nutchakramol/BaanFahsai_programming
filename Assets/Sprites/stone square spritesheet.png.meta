@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: bc023f5ebaec6954482e494943f9843e
+guid: e58da52ad229fe3428c6116127b2c984
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1958676783162264248
-    second: PlayButton_0
+      213: 6855610625066600323
+    second: stone square spritesheet_0
+  - first:
+      213: -2758049054259847641
+    second: stone square spritesheet_1
+  - first:
+      213: 554032695155578068
+    second: stone square spritesheet_2
+  - first:
+      213: 7799712289087848345
+    second: stone square spritesheet_3
+  - first:
+      213: -2596102074609281086
+    second: stone square spritesheet_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +125,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayButton_0
+      name: stone square spritesheet_0
       rect:
         serializedVersion: 2
-        x: 18
-        y: 105
-        width: 410
-        height: 243
+        x: 0
+        y: 0
+        width: 256
+        height: 640
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +140,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 845fecdd7d161d4e0800000000000000
-      internalID: -1958676783162264248
+      spriteID: 3870d797a85042f50800000000000000
+      internalID: 6855610625066600323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone square spritesheet_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 640
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72e5db77ff079b9d0800000000000000
+      internalID: -2758049054259847641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone square spritesheet_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 256
+        height: 640
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d453b40dc150b700800000000000000
+      internalID: 554032695155578068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone square spritesheet_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 640
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99f745590052e3c60800000000000000
+      internalID: 7799712289087848345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone square spritesheet_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 127
+        width: 256
+        height: 513
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c7524afaeac8fbd0800000000000000
+      internalID: -2596102074609281086
       vertices: []
       indices: 
       edges: []
@@ -148,7 +248,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayButton_0: -1958676783162264248
+      stone square spritesheet_0: 6855610625066600323
+      stone square spritesheet_1: -2758049054259847641
+      stone square spritesheet_2: 554032695155578068
+      stone square spritesheet_3: 7799712289087848345
+      stone square spritesheet_4: -2596102074609281086
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
