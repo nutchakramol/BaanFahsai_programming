@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/MainMenyStyle.uss?fileID=7433441132597879392&amp;guid=d76edff817ca16a4eadfe7e6c73a1105&amp;type=3#MainMenyStyle"/>
+    <Style src=""/>
     <ui:VisualElement name="Container" style="flex-grow: 1; -unity-text-auto-size: best-fit 10px 100px; background-color: rgb(81, 81, 81); background-image: url(&quot;project://database/Assets/Sprites/GreenAero.jpg?fileID=5417542190726667440&amp;guid=82afb7c16649844409b25af87d414c24&amp;type=3#GreenAero_0&quot;);">
-        <ui:Label text="Let&apos;s Start !" name="Header" class="header" style="-unity-font-style: bold;"/>
-        <ui:Button text="PLAY" parse-escape-sequences="true" class="button" style="font-size: 35px; white-space: nowrap; -unity-text-align: middle-center; align-content: center;"/>
+        <ui:Label text="Let&apos;s Start !" name="Header" class="header" style="-unity-font-style: bold; -unity-background-image-tint-color: rgb(255, 255, 255); color: rgb(255, 255, 255); -unity-text-align: lower-center; font-size: 100px; padding-top: 100px; margin-bottom: 0;"/>
+        <ui:Button text="PLAY" parse-escape-sequences="true" name="play-button" class="button" style="font-size: 50px; white-space: nowrap; -unity-text-align: middle-center; align-content: center; -unity-font-style: bold; background-image: url(&quot;project://database/Assets/Sprites/PlayButton.png?fileID=-1958676783162264248&amp;guid=bc023f5ebaec6954482e494943f9843e&amp;type=3#PlayButton_0&quot;); background-size: 20% 100%; background-color: rgba(55, 55, 55, 0); -unity-background-image-tint-color: rgb(255, 255, 255); border-left-color: rgba(55, 55, 55, 0); border-right-color: rgba(55, 55, 55, 0); border-top-color: rgba(55, 55, 55, 0); border-bottom-color: rgba(55, 55, 55, 0); padding-top: 45px; padding-bottom: 45px; margin-top: 400px; color: rgb(255, 255, 255); border-right-width: 1px;"/>
     </ui:VisualElement>
 </ui:UXML>
