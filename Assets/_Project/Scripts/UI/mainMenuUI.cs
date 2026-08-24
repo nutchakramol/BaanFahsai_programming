@@ -3,52 +3,136 @@ using UnityEngine.UIElements;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [SerializeField] private VisualTreeAsset mainMenu;
-    [SerializeField] private VisualTreeAsset levelSelect;
+    [SerializeField]
+    private VisualTreeAsset mainMenu;
+
+    [SerializeField]
+    private VisualTreeAsset levelSelect;
+
 
     private UIDocument uiDocument;
 
+
+    private void Awake()
+    {
+        uiDocument =
+            GetComponent<UIDocument>();
+    }
+
+
     private void OnEnable()
     {
-        uiDocument = GetComponent<UIDocument>();
+        if (uiDocument == null)
+        {
+            uiDocument =
+                GetComponent<UIDocument>();
+        }
+
 
         ShowMainMenu();
     }
 
+
+    // =========================================================
+    // MAIN MENU
+    // =========================================================
+
     private void ShowMainMenu()
     {
-        uiDocument.visualTreeAsset = mainMenu;
+        uiDocument.visualTreeAsset =
+            mainMenu;
 
-        VisualElement root = uiDocument.rootVisualElement;
 
-        Button playButton = root.Q<Button>("play-button");
+        VisualElement root =
+            uiDocument.rootVisualElement;
+
+
+        if (root == null)
+            return;
+
+
+        Button playButton =
+            root.Q<Button>("play-button");
+
 
         if (playButton != null)
         {
-            playButton.clicked -= ShowLevelSelect;
-            playButton.clicked += ShowLevelSelect;
+            playButton.clicked -=
+                ShowLevelSelect;
+
+
+            playButton.clicked +=
+                ShowLevelSelect;
+        }
+        else
+        {
+            Debug.LogError(
+                "MainMenuUI: play-button not found."
+            );
         }
     }
 
+
+    // =========================================================
+    // LEVEL SELECT
+    // =========================================================
+
     private void ShowLevelSelect()
     {
-        uiDocument.visualTreeAsset = levelSelect;
+        uiDocument.visualTreeAsset =
+            levelSelect;
 
-        VisualElement root = uiDocument.rootVisualElement;
 
-        Button HomeButton = root.Q<Button>("HomeButton");
+        VisualElement root =
+            uiDocument.rootVisualElement;
 
-        if (HomeButton != null)
+
+        if (root == null)
+            return;
+
+
+        // =====================================================
+        // HOME
+        // =====================================================
+
+        Button homeButton =
+            root.Q<Button>("HomeButton");
+
+
+        if (homeButton != null)
         {
-            HomeButton.clicked -= ShowMainMenu;
-            HomeButton.clicked += ShowMainMenu;
+            homeButton.clicked -=
+                ShowMainMenu;
+
+
+            homeButton.clicked +=
+                ShowMainMenu;
+        }
+        else
+        {
+            Debug.LogError(
+                "MainMenuUI: HomeButton not found."
+            );
         }
 
-        LevelSelectUI levelSelectUI = GetComponent<LevelSelectUI>();
+
+        // =====================================================
+        // LEVEL SELECT SCRIPT
+        // =====================================================
+
+        LevelSelectUI levelSelectUI =
+            GetComponent<LevelSelectUI>();
+
 
         if (levelSelectUI != null)
         {
             levelSelectUI.Setup();
+        }
+        else
+        {
+            Debug.LogError(
+                "MainMenuUI: LevelSelectUI component not found."
+            );
         }
     }
 }
