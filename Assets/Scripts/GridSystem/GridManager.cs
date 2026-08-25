@@ -11,14 +11,13 @@ public class GridManager : MonoBehaviour
     public Grid tilemapGrid;
 
     [Header("Placeable Surfaces")]
-    [Tooltip("Any Tilemap furniture can be placed on: Floor, WallLeft, WallRight")]
     public Tilemap[] placeableTilemaps;
 
     [Header("Selection Highlight")]
-    [Tooltip("A simple Sprite GameObject that will move to follow the selected cell")]
     public GameObject highlightObject;
 
-    private Camera mainCam;
+    public Camera MainCam { get; private set; }
+
     private Dictionary<Vector3Int, GridCell> gridCells = new Dictionary<Vector3Int, GridCell>();
 
     public GridCell SelectedCell { get; private set; }
@@ -29,21 +28,10 @@ public class GridManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        mainCam = Camera.main;
+        MainCam = Camera.main;
 
         if (tilemapGrid == null)
             Debug.LogError("[GridManager] tilemapGrid is not assigned in the Inspector");
-
-        // TEMP DIAGNOSTIC: prints the actual painted tile bounds for each tilemap
-        if (placeableTilemaps != null)
-        {
-            foreach (var map in placeableTilemaps)
-            {
-                if (map == null) continue;
-                map.CompressBounds();
-                Debug.Log($"[{map.name}] cellBounds: {map.cellBounds} | tile count: {map.GetUsedTilesCount()}");
-            }
-        }
     }
 
     private void Update()
@@ -53,11 +41,11 @@ public class GridManager : MonoBehaviour
 
     private void HandleCellSelection()
     {
-        if (mainCam == null || tilemapGrid == null) return;
+        if (MainCam == null || tilemapGrid == null) return;
         if (Mouse.current == null) return;
 
         Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector3 worldPos = mainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, mainCam.nearClipPlane + 10f));
+        Vector3 worldPos = MainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, MainCam.nearClipPlane + 10f));
         worldPos.z = 0f;
 
         Vector3Int cellCoord = tilemapGrid.WorldToCell(worldPos);
@@ -66,17 +54,14 @@ public class GridManager : MonoBehaviour
         if (placeableTilemaps != null)
         {
             foreach (var map in placeableTilemaps)
+            {
+                if (map != null && map.HasTile(cellCoord))
                 {
-                    if (map != null && map.HasTile(cellCoord))
-                    {
-                        hitSurface = map;
-                        break;
-                    }
+                    hitSurface = map;
+                    break;
                 }
+            }
         }
-
-        // TEMP DIAGNOSTIC: remove once selection works
-        Debug.Log($"Mouse: {mousePos} | World: {worldPos} | Cell: {cellCoord} | Hit: {(hitSurface != null ? hitSurface.name : "none")}");
 
         if (hitSurface == null)
         {
@@ -85,16 +70,20 @@ public class GridManager : MonoBehaviour
             return;
         }
 
+        SelectedCell = GetOrCreateCell(cellCoord);
+        SelectedCellCoord = cellCoord;
+        SelectedSurface = hitSurface;
+    }
+
+    private GridCell GetOrCreateCell(Vector3Int cellCoord)
+    {
         if (!gridCells.TryGetValue(cellCoord, out GridCell cell))
         {
             Vector3 cellWorldCenter = tilemapGrid.GetCellCenterWorld(cellCoord);
             cell = new GridCell(new Vector2Int(cellCoord.x, cellCoord.y), cellWorldCenter);
             gridCells[cellCoord] = cell;
         }
-
-        SelectedCell = cell;
-        SelectedCellCoord = cellCoord;
-        SelectedSurface = hitSurface;
+        return cell;
     }
 
     private void LateUpdate()
@@ -104,7 +93,7 @@ public class GridManager : MonoBehaviour
         if (SelectedCell != null)
         {
             highlightObject.SetActive(true);
-            highlightObject.transform.position = SelectedCell.WorldPosition + new Vector3(0f, 0.02f, 0f);
+            highlightObject.transform.position = SelectedCell.WorldPosition;
         }
         else
         {
@@ -116,5 +105,11 @@ public class GridManager : MonoBehaviour
     {
         gridCells.TryGetValue(coord, out GridCell cell);
         return cell;
+    }
+
+    public GridCell GetCellByCoord2D(Vector2Int coord2D, int z = 0)
+    {
+        Vector3Int coord3D = new Vector3Int(coord2D.x, coord2D.y, z);
+        return GetOrCreateCell(coord3D);
     }
 }
