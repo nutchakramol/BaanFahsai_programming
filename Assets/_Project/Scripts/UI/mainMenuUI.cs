@@ -8,43 +8,60 @@ public class MainMenuUI : MonoBehaviour
 
     private UIDocument uiDocument;
 
+    private void Awake()
+    {
+        uiDocument =
+            GetComponent<UIDocument>();
+    }
+
     private void OnEnable()
     {
-        uiDocument = GetComponent<UIDocument>();
-
         ShowMainMenu();
     }
 
-    private void ShowMainMenu()
+    public void ShowMainMenu()
     {
-        uiDocument.visualTreeAsset = mainMenu;
+        uiDocument.visualTreeAsset =
+            mainMenu;
 
-        VisualElement root = uiDocument.rootVisualElement;
+        VisualElement root =
+            uiDocument.rootVisualElement;
 
-        Button playButton = root.Q<Button>("play-button");
+        Button playButton =
+            root.Q<Button>("play-button");
 
         if (playButton != null)
         {
-            playButton.clicked -= ShowLevelSelect;
-            playButton.clicked += ShowLevelSelect;
+            playButton.clicked -=
+                ShowLevelSelect;
+
+            playButton.clicked +=
+                ShowLevelSelect;
         }
     }
 
     private void ShowLevelSelect()
     {
-        uiDocument.visualTreeAsset = levelSelect;
+        uiDocument.visualTreeAsset =
+            levelSelect;
 
-        VisualElement root = uiDocument.rootVisualElement;
+        VisualElement root =
+            uiDocument.rootVisualElement;
 
-        Button HomeButton = root.Q<Button>("HomeButton");
+        Button homeButton =
+            root.Q<Button>("HomeButton");
 
-        if (HomeButton != null)
+        if (homeButton != null)
         {
-            HomeButton.clicked -= ShowMainMenu;
-            HomeButton.clicked += ShowMainMenu;
+            homeButton.clicked -=
+                ShowMainMenu;
+
+            homeButton.clicked +=
+                ShowMainMenu;
         }
 
-        LevelSelectUI levelSelectUI = GetComponent<LevelSelectUI>();
+        LevelSelectUI levelSelectUI =
+            GetComponent<LevelSelectUI>();
 
         if (levelSelectUI != null)
         {

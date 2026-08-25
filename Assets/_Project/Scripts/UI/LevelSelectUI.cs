@@ -5,30 +5,53 @@ using UnityEngine.UIElements;
 public class LevelSelectUI : MonoBehaviour
 {
     private UIDocument uiDocument;
-
     private VisualElement root;
     private VisualElement levelArea;
     private Button leftButton;
     private Button rightButton;
+    private Button selectButton;
+    private Button homeButton;
     private readonly List<VisualElement> levelBubbles = new();
     private int selectedLevel = 0;
     private const int LevelCount = 5;
-    private const float BubbleSize =400f;
-    private const float BubbleDistance = 280f;
-    private bool isSetup = false;
+    private const float BubbleWidth = 412f;
+    private const float BubbleHeight = 412f;
+    private const float BubbleDistance = 470f;
+    private const float CenterScale = 1.1f;
+    private const float SideScale = 0.75f;
+    private const float FarScale = 0.55f;
+    private const float AnimationDuration = 0.35f;
+    private bool isAnimating;
+    private float animationStartTime;
+    private readonly List<float> startX = new();
+    private readonly List<float> startY = new();
+    private readonly List<float> startScale = new();
+    private readonly List<float> targetX = new();
+    private readonly List<float> targetY = new();
+    private readonly List<float> targetScale = new();
+    private IVisualElementScheduledItem animationSchedule;
     private void Awake()
     {
         uiDocument = GetComponent<UIDocument>();
     }
-
     public void Setup()
     {
-        if (isSetup)
-            return;
         root = uiDocument.rootVisualElement;
-        levelArea = root.Q<VisualElement>("LevelArea");
-        leftButton = root.Q<Button>("LeftButton");
-        rightButton = root.Q<Button>("RightButton");
+        if (root == null)
+        {
+            Debug.LogError("LevelSelectUI: Root not found.");
+            return;
+        }
+        levelArea =
+            root.Q<VisualElement>("LevelArea");
+        leftButton =
+            root.Q<Button>("LeftButton");
+        rightButton =
+            root.Q<Button>("RightButton");
+        selectButton =
+            root.Q<Button>("SelectButton");
+        homeButton =
+            root.Q<Button>("HomeButton");
         if (levelArea == null)
         {
             Debug.LogError("LevelSelectUI: LevelArea not found.");
@@ -44,134 +67,484 @@ public class LevelSelectUI : MonoBehaviour
             Debug.LogError("LevelSelectUI: RightButton not found.");
             return;
         }
-        leftButton.clicked += PreviousLevel;
-        rightButton.clicked += NextLevel;
-        CreateLevels();
-        isSetup = true;
-        levelArea.RegisterCallback<GeometryChangedEvent>(_ =>
+        if (selectButton == null)
         {
-            UpdateLevels();
-        });
-    }
-
-    private void CreateLevels()
-    {
-        VisualElement template = root.Q<VisualElement>("LevelBubble");
-        if (template == null)
+            Debug.LogError("LevelSelectUI: SelectButton not found.");
+            return;
+        }
+        if (homeButton == null)
         {
-            Debug.LogError("LevelSelectUI: LevelBubble not found.");
+            Debug.LogError("LevelSelectUI: HomeButton not found.");
             return;
         }
 
-        Background bubbleBackground = template.resolvedStyle.backgroundImage;
-        float templateWidth = template.resolvedStyle.width;
-        float templateHeight = template.resolvedStyle.height;
-        template.RemoveFromHierarchy();
-        for (int i = 0; i < LevelCount; i++)
+        levelArea.pickingMode =
+            PickingMode.Ignore;
+        leftButton.clicked -= PreviousLevel;
+        rightButton.clicked -= NextLevel;
+        selectButton.clicked -= ConfirmLevel;
+        homeButton.clicked -= GoHome;
+        leftButton.clicked += PreviousLevel;
+        rightButton.clicked += NextLevel;
+        selectButton.clicked += ConfirmLevel;
+        homeButton.clicked += GoHome;
+        CreateLevels();
+        selectedLevel = 0;
+        isAnimating = false;
+        levelArea.RegisterCallback<GeometryChangedEvent>(
+            OnLevelAreaGeometryChanged
+        );
+        levelArea.schedule.Execute(() =>
         {
-            VisualElement bubble = CreateBubble(
-                i + 1,
-                bubbleBackground,
-                templateWidth,
-                templateHeight
-            );
-            levelArea.Add(bubble);
-            levelBubbles.Add(bubble);
+            UpdateLevels(true);
+        }).StartingIn(50);
+    }
+    private void OnLevelAreaGeometryChanged(
+        GeometryChangedEvent evt)
+    {
+        if (!isAnimating)
+        {
+            UpdateLevels(true);
         }
     }
-
-    private VisualElement CreateBubble(
-        int levelNumber,
-        Background bubbleBackground,
-        float bubbleWidth,
-        float bubbleHeight)
+    private void CreateLevels()
     {
-        VisualElement bubble = new VisualElement();
-        bubble.name = "LevelBubble_" + levelNumber;
-        bubble.style.position = Position.Absolute;
-        bubble.style.width = bubbleWidth;
-        bubble.style.height = bubbleHeight;
-        bubble.style.backgroundImage = bubbleBackground;
-        bubble.style.backgroundRepeat = new BackgroundRepeat(
-            Repeat.NoRepeat,
-            Repeat.NoRepeat
-        );
-        bubble.style.backgroundSize = new BackgroundSize(
-            Length.Percent(100),
-            Length.Percent(100)
-        );
-        Label number = new Label(levelNumber.ToString());
-        number.name = "LevelNumber";
-        number.style.position = Position.Absolute;
-        number.style.left = 0;
-        number.style.right = 0;
-        number.style.top = 0;
-        number.style.bottom = 0;
-        number.style.fontSize = 60;
-        number.style.unityTextAlign = TextAnchor.MiddleCenter;
-        bubble.Add(number);
-        int levelIndex = levelNumber - 1;
-        bubble.RegisterCallback<ClickEvent>(_ =>
+        levelBubbles.Clear();
+        VisualElement template =
+            root.Q<VisualElement>("LevelBubble");
+        if (template == null)
         {
-            SelectLevel(levelIndex);
-        });
-        return bubble;
+            Debug.LogError(
+                "LevelSelectUI: LevelBubble not found."
+            );
+            return;
+        }
+        Background bubbleBackground = template.resolvedStyle.backgroundImage;
+        for (int i = 0;
+             i < LevelCount;
+             i++)
+        {
+            VisualElement bubble =
+                new VisualElement();
+            bubble.name ="LevelBubble_" + (i + 1);
+            bubble.pickingMode =PickingMode.Position;
+            bubble.style.position =Position.Absolute;
+            bubble.style.width =
+                BubbleWidth;
+            bubble.style.height =
+                BubbleHeight;
+            bubble.style.backgroundImage =
+                bubbleBackground;
+            bubble.style.backgroundRepeat =
+                new BackgroundRepeat(
+                    Repeat.NoRepeat,
+                    Repeat.NoRepeat
+                );
+            bubble.style.backgroundSize =
+                new BackgroundSize(
+                    Length.Percent(100),
+                    Length.Percent(100)
+                );
+            Label number =
+                new Label(
+                    (i + 1).ToString()
+                );
+            number.name =
+                "LevelNumber";
+            number.pickingMode =
+                PickingMode.Ignore;
+            number.style.position =
+                Position.Absolute;
+            number.style.left = 0;
+            number.style.right = 0;
+            number.style.top = 0;
+            number.style.bottom = 0;
+            number.style.fontSize =
+                60;
+            number.style.unityTextAlign =
+                TextAnchor.MiddleCenter;
+            bubble.Add(number);
+            VisualElement crown =
+                CreateIcon(
+                    "Crown",
+                    template
+                );
+            VisualElement star1 =
+                CreateIcon(
+                    "Star1",
+                    template
+                );
+            VisualElement star2 =
+                CreateIcon(
+                    "Star2",
+                    template
+                );
+            VisualElement star3 =
+                CreateIcon(
+                    "Star3",
+                    template
+                );
+            VisualElement lockIcon =
+                CreateIcon(
+                    "Lock",
+                    template
+                );
+            if (i > 0)
+            {
+                crown.style.display = DisplayStyle.None;
+                star1.style.display = DisplayStyle.None;
+                star2.style.display = DisplayStyle.None;
+                star3.style.display = DisplayStyle.None;
+                lockIcon.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                crown.style.display = DisplayStyle.Flex;
+                star1.style.display = DisplayStyle.Flex;
+                star2.style.display = DisplayStyle.Flex;
+                star3.style.display = DisplayStyle.Flex;
+                lockIcon.style.display = DisplayStyle.None;
+            }
+            bubble.Add(crown);
+            bubble.Add(star1);
+            bubble.Add(star2);
+            bubble.Add(star3);
+            bubble.Add(lockIcon);
+
+
+            int levelIndex = i;
+            bubble.RegisterCallback<ClickEvent>(
+                evt =>
+                {
+                    SelectLevel(levelIndex);
+
+                    evt.StopPropagation();
+                }
+            );
+
+
+            levelArea.Add(bubble);
+
+            levelBubbles.Add(bubble);
+        }
+
+
+        template.RemoveFromHierarchy();
     }
 
+
+    private VisualElement CreateIcon(
+        string imageName,
+        VisualElement template)
+    {
+        VisualElement original =
+            template.Q<VisualElement>(
+                imageName
+            );
+        VisualElement icon =
+            new VisualElement();
+        icon.name =
+            imageName;
+        icon.pickingMode =
+            PickingMode.Ignore; 
+        icon.style.position =
+            Position.Absolute;
+        if (original != null)
+        {
+            icon.style.backgroundImage =
+                original.resolvedStyle.backgroundImage;
+            icon.style.backgroundSize =
+                original.resolvedStyle.backgroundSize;
+            icon.style.backgroundRepeat =
+                original.resolvedStyle.backgroundRepeat;
+        }
+        if (imageName == "Crown")
+        {
+            icon.style.width = 100;
+            icon.style.height = 100;
+            icon.style.left = 156;
+            icon.style.top = -55;
+        }
+        else if (imageName == "Star1")
+        {
+            icon.style.width = 50;
+            icon.style.height = 50;
+            icon.style.left = 135;
+            icon.style.top = 370;
+        }
+        else if (imageName == "Star2")
+        {
+            icon.style.width = 50;
+            icon.style.height = 50;
+            icon.style.left = 181;
+            icon.style.top = 370;
+        }
+        else if (imageName == "Star3")
+        {
+            icon.style.width = 50;
+            icon.style.height = 50;
+            icon.style.left = 227;
+            icon.style.top = 370;
+        }
+        else if (imageName == "Lock")
+        {
+            icon.style.width = 100;
+            icon.style.height = 100;
+            icon.style.left = 156;
+            icon.style.top = 156;
+            icon.style.display =
+                DisplayStyle.None;
+        }
+        return icon;
+    }
     private void PreviousLevel()
     {
+        if (isAnimating)
+            return;
         if (selectedLevel <= 0)
             return;
         selectedLevel--;
-        UpdateLevels();
+        StartAnimation();
     }
-
     private void NextLevel()
     {
+        if (isAnimating)
+            return;
         if (selectedLevel >= LevelCount - 1)
             return;
         selectedLevel++;
-        UpdateLevels();
+        StartAnimation();
     }
 
-    private void SelectLevel(int levelIndex)
+
+    private void SelectLevel(
+        int levelIndex)
     {
-        if (levelIndex < 0 || levelIndex >= LevelCount)
+        if (isAnimating)
             return;
-        selectedLevel = levelIndex;
-        UpdateLevels();
+        if (levelIndex < 0 ||
+            levelIndex >= LevelCount)
+            return;
+        if (levelIndex == selectedLevel)
+            return;
+        selectedLevel =
+            levelIndex;
+        StartAnimation();
     }
-
-    private void UpdateLevels()
+    private void UpdateLevels(
+        bool instant)
     {
         if (levelArea == null)
             return;
-        float areaWidth = levelArea.resolvedStyle.width;
-        if (areaWidth <= 0)
+        if (levelBubbles.Count == 0)
+            return;
+        float areaWidth =
+            levelArea.resolvedStyle.width;
+        float areaHeight =
+            levelArea.resolvedStyle.height;
+        if (areaWidth <= 0 ||
+            areaHeight <= 0)
             return;
         float centerX =
-            (areaWidth - BubbleSize) / 2f;
-        for (int i = 0; i < levelBubbles.Count; i++)
+            (areaWidth - BubbleWidth) / 2f;
+        float centerY =
+            (areaHeight - BubbleHeight) / 2f;
+        for (int i = 0;
+             i < levelBubbles.Count;
+             i++)
         {
-            int relativePosition = i - selectedLevel;
+            VisualElement bubble =
+                levelBubbles[i];
+            int relativePosition =
+                i - selectedLevel;
             float x =
                 centerX +
-                relativePosition * BubbleDistance;
-            float scale = 0.7f;
+                relativePosition *
+                BubbleDistance;
+            float scale;
             if (relativePosition == 0)
             {
-                scale = 1.25f;
+                scale =
+                    CenterScale;
             }
-            else if (Mathf.Abs(relativePosition) == 1)
+            else if (
+                Mathf.Abs(relativePosition) == 1)
             {
-                scale = 0.9f;
+                scale =
+                    SideScale;
             }
-            float areaHeight = levelArea.resolvedStyle.height;
-            float y = (areaHeight - BubbleSize) / 2f + 80f;
-            levelBubbles[i].style.left = x;
-            levelBubbles[i].style.top = y;
-            levelBubbles[i].style.scale =
-                new Scale(Vector3.one * scale);
+            else
+            {
+                scale =
+                    FarScale;
+            }
+            bubble.style.left =
+                x;
+            bubble.style.top =
+                centerY;
+            bubble.style.scale =
+                new Scale(
+                    Vector3.one * scale
+                );
+        }
+        isAnimating = false;
+    }
+    private void StartAnimation()
+    {
+        if (levelArea == null)
+            return;
+        if (levelBubbles.Count == 0)
+            return;
+        if (animationSchedule != null)
+        {
+            animationSchedule.Pause();
+        }
+        float areaWidth =
+            levelArea.resolvedStyle.width;
+        float areaHeight =
+            levelArea.resolvedStyle.height;
+        if (areaWidth <= 0 ||
+            areaHeight <= 0)
+        {
+            UpdateLevels(true);
+            return;
+        }
+        float centerX =
+            (areaWidth - BubbleWidth) / 2f;
+        float centerY =
+            (areaHeight - BubbleHeight) / 2f;
+        startX.Clear();
+        startY.Clear();
+        startScale.Clear();
+        targetX.Clear();
+        targetY.Clear();
+        targetScale.Clear();
+        for (int i = 0;
+             i < levelBubbles.Count;
+             i++)
+        {
+            VisualElement bubble =
+                levelBubbles[i];
+            int relativePosition =
+                i - selectedLevel;
+            float targetPositionX =
+                centerX +
+                relativePosition *
+                BubbleDistance;
+            float targetPositionScale;
+            if (relativePosition == 0)
+            {
+                targetPositionScale =
+                    CenterScale;
+            }
+            else if (
+                Mathf.Abs(relativePosition) == 1)
+            {
+                targetPositionScale =
+                    SideScale;
+            }
+            else
+            {
+                targetPositionScale =
+                    FarScale;
+            }
+            float currentX =
+                bubble.resolvedStyle.left;
+            float currentY =
+                bubble.resolvedStyle.top;
+            Vector3 currentScale =
+                bubble.resolvedStyle.scale.value;
+            startX.Add(currentX);
+            startY.Add(currentY);
+            startScale.Add(currentScale.x);
+            targetX.Add(targetPositionX);
+            targetY.Add(centerY);
+            targetScale.Add(targetPositionScale);
+        }
+        animationStartTime =
+            Time.realtimeSinceStartup;
+        isAnimating = true;
+        animationSchedule =
+            levelArea.schedule.Execute(
+                AnimateLevels
+            );
+        animationSchedule.Every(16);
+    }
+    private void AnimateLevels(
+        TimerState timer)
+    {
+        if (!isAnimating)
+            return;
+        float elapsed =
+            Time.realtimeSinceStartup -
+            animationStartTime;
+        float t =
+            Mathf.Clamp01(
+                elapsed /
+                AnimationDuration
+            );
+        t =
+            Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
+        for (int i = 0;
+             i < levelBubbles.Count;
+             i++)
+        {
+            VisualElement bubble =
+                levelBubbles[i];
+            float x =
+                Mathf.Lerp(
+                    startX[i],
+                    targetX[i],
+                    t
+                );
+            float y =
+                Mathf.Lerp(
+                    startY[i],
+                    targetY[i],
+                    t
+                );
+            float scale =
+                Mathf.Lerp(
+                    startScale[i],
+                    targetScale[i],
+                    t
+                );
+            bubble.style.left =
+                x;
+            bubble.style.top =
+                y;
+            bubble.style.scale =
+                new Scale(
+                    Vector3.one * scale
+                );
+        }
+        if (t >= 1f)
+        {
+            isAnimating = false;
+            if (animationSchedule != null)
+            {
+                animationSchedule.Pause();
+            }
+        }
+    }
+    private void ConfirmLevel()
+    {
+        Debug.Log(
+            "Selected Level: " +
+            (selectedLevel + 1)
+        );
+    }
+    private void GoHome()
+    {
+        MainMenuUI mainMenu =
+            GetComponent<MainMenuUI>();
+        if (mainMenu != null)
+        {
+            mainMenu.ShowMainMenu();
         }
     }
 }
