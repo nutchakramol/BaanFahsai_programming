@@ -41,6 +41,11 @@ public class LevelSelectUI : MonoBehaviour
 
     public void Setup()
     {
+        if (uiDocument == null)
+        {
+            uiDocument = GetComponent<UIDocument>();
+        }
+
         root = uiDocument.rootVisualElement;
         if (root == null)
         {
@@ -76,6 +81,7 @@ public class LevelSelectUI : MonoBehaviour
         selectButton.clicked += ConfirmLevel;
         homeButton.clicked += GoHome;
 
+        levelBubbles.Clear();
         CreateLevels();
         selectedLevel = 0;
         isAnimating = false;
@@ -95,7 +101,7 @@ public class LevelSelectUI : MonoBehaviour
         VisualElement template = root.Q<VisualElement>("LevelBubble");
         if (template == null)
         {
-            Debug.LogError("LevelSelectUI: LevelBubble not found.");
+            Debug.LogError("LevelSelectUI: LevelBubble template not found.");
             return;
         }
 

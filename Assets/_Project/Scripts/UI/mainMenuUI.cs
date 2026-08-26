@@ -9,7 +9,9 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField]
     private VisualTreeAsset levelSelect;
 
+
     private UIDocument uiDocument;
+
 
     private void Awake()
     {
@@ -37,14 +39,18 @@ public class MainMenuUI : MonoBehaviour
         uiDocument.visualTreeAsset =
             mainMenu;
 
+
         VisualElement root =
             uiDocument.rootVisualElement;
+
 
         if (root == null)
             return;
 
+
         Button playButton =
             root.Q<Button>("play-button");
+
 
         if (playButton != null)
         {
@@ -71,11 +77,14 @@ public class MainMenuUI : MonoBehaviour
         uiDocument.visualTreeAsset =
             levelSelect;
 
+
         VisualElement root =
             uiDocument.rootVisualElement;
 
+
         if (root == null)
             return;
+
 
         // =====================================================
         // HOME
