@@ -2339,7 +2339,7 @@ MonoBehaviour:
   furniturePrefabs:
   - {fileID: 1746393653288073454, guid: af6a5b4f2d7eb8a4ca112c62d682aede, type: 3}
   placementYOffset: 0.05
-  ghostPreview: {fileID: 0}
+  ghostPreview: {fileID: 1384769678}
 --- !u!4 &2124855544
 Transform:
   m_ObjectHideFlags: 0
