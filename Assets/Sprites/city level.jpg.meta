@@ -1,10 +1,19 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Sprites/city level.jpg.meta
 guid: bced25637b33f8b46a3711da1e737754
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -7529163346068021233
     second: city level_0
+========
+guid: 5aca792d70acca24986cdfc0e9d0ff42
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6718720453205748192
+    second: white-wall-textures_0
+>>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/white-wall-textures.jpg.meta
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +122,17 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
+<<<<<<<< HEAD:Assets/Sprites/city level.jpg.meta
       name: city level_0
+========
+      name: white-wall-textures_0
+>>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/white-wall-textures.jpg.meta
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 736
-        height: 460
+        width: 4016
+        height: 4016
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +141,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
+<<<<<<<< HEAD:Assets/Sprites/city level.jpg.meta
       spriteID: f0069b5f3d9038790800000000000000
       internalID: -7529163346068021233
+========
+      spriteID: 0261589585f42c2a0800000000000000
+      internalID: -6718720453205748192
+>>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/white-wall-textures.jpg.meta
       vertices: []
       indices: 
       edges: []
@@ -148,7 +166,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
+<<<<<<<< HEAD:Assets/Sprites/city level.jpg.meta
       city level_0: -7529163346068021233
+========
+      white-wall-textures_0: -6718720453205748192
+>>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/white-wall-textures.jpg.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

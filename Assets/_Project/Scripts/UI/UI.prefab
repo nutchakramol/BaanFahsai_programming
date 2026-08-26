@@ -68,6 +68,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 944c658e735940944aa5b9958f5a4281, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuUI
-  uiDocument: {fileID: 0}
-  mainMenu: {fileID: 9197481963319205126, guid: 01670fc7b0d828d49aa03cf94708e3ef, type: 3}
-  levelSelect: {fileID: 9197481963319205126, guid: eb41c4efa03e1e645b490ffdb7447346, type: 3}
+  levelSelectScene: LevelSelect

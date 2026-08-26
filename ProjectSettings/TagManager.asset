@@ -11,7 +11,7 @@ TagManager:
   - RoomZone
   - Water
   - UI
-  - 
+  - GridSystem
   - 
   - 
   - 
@@ -40,6 +40,18 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: floor
+    uniqueID: 774337559
+    locked: 0
+  - name: wall
+    uniqueID: 3038475409
+    locked: 0
+  - name: hightlight
+    uniqueID: 3552322635
+    locked: 0
+  - name: furniture
+    uniqueID: 315001287
     locked: 0
   m_RenderingLayers:
   - Default
