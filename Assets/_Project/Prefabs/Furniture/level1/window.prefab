@@ -10,11 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5882379119387271854}
   - component: {fileID: 3464508008117618996}
-<<<<<<< HEAD
   - component: {fileID: -3741823764046580285}
   - component: {fileID: 8850784040209625089}
-=======
->>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7
   m_Layer: 0
   m_Name: window
   m_TagString: Untagged

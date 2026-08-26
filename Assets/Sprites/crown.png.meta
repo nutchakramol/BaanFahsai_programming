@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Sprites/crown.png.meta
 guid: 520dbdda35200f24c962e31567adb29c
 TextureImporter:
   internalIDToNameTable:
   - first:
       213: -6981827254641702772
     second: cloud_0
-========
-guid: 1c523bccf29412144963d271b10cec2b
-TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 1344641989258931390
-    second: light-wooden-floor-background_0
->>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/light-wooden-floor-background.jpg.meta
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,7 +113,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-<<<<<<<< HEAD:Assets/Sprites/crown.png.meta
       name: cloud_0
       rect:
         serializedVersion: 2
@@ -130,15 +120,6 @@ TextureImporter:
         y: 7
         width: 1028
         height: 685
-========
-      name: light-wooden-floor-background_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 5000
-        height: 3333
->>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/light-wooden-floor-background.jpg.meta
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,13 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-<<<<<<<< HEAD:Assets/Sprites/crown.png.meta
       spriteID: c88c0fb6a119b1f90800000000000000
       internalID: -6981827254641702772
-========
-      spriteID: ebc6ad7d3c029a210800000000000000
-      internalID: 1344641989258931390
->>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/light-wooden-floor-background.jpg.meta
       vertices: []
       indices: 
       edges: []
@@ -172,11 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-<<<<<<<< HEAD:Assets/Sprites/crown.png.meta
       cloud_0: -6981827254641702772
-========
-      light-wooden-floor-background_0: 1344641989258931390
->>>>>>>> 10f571002383adc692459ebef9020bbe055ca0f7:Assets/Sprites/light-wooden-floor-background.jpg.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
