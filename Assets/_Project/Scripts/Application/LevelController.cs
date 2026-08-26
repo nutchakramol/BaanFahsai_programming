@@ -44,10 +44,6 @@ public class LevelController
             GameEvents.RaisePaletteProgressChanged(_placedItems.Count, _totalPaletteItems);
     }
 
-    /// <summary>
-    /// Called when an item is dropped outside any valid room — removes it
-    /// from tracking so the palette can re-show its icon.
-    /// </summary>
     public void RemovePlacement(string instanceId)
     {
         int removed = _placedItems.RemoveAll(p => p.InstanceId == instanceId);
@@ -74,10 +70,6 @@ public class LevelController
         GameEvents.RaiseLevelScoreUpdated(levelResult);
     }
 
-    /// <summary>
-    /// Called when the player presses "Check Level". Allowed even if not
-    /// all items scored perfectly — stars just reflect quality of placement.
-    /// </summary>
     public LevelScoreResult CheckLevel()
     {
         var result = ScoringEngine.ComputeLevelScore(
