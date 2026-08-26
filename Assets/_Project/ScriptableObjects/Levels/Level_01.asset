@@ -10,20 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
-  m_Name: Level5Data
+  m_Name: Level_01
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 0
-  sceneName: 
+  levelIndex: 1
   multiRoomEnabled: 0
-  rooms: []
-  requirements: []
-  targetScoreToWin: 80
-  paletteItemIds: []
-  starThresholds:
-  - 50
-  - 75
-  - 95
-  minScoreToPass: 30
-  npcName: 
-  npcPortrait: {fileID: 0}
-  npcIntroDialogue: 
+  rooms:
+  - roomId: bedroom
+    roomTag: 1
+    roomOrigin: {x: 0, y: 0}
+    roomSize: {x: 0, y: 0}
+    fixedStructures: []
+  requirements:
+  - requirementId: Seating
+    requiredCategory: 0
+    minCount: 1
+    minAvgScore: 0
+  targetScoreToWin: 50

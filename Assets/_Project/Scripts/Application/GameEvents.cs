@@ -24,8 +24,4 @@ public static class GameEvents
     public static event Action<int, float, bool> OnLevelChecked; // (stars, overallPercent, canProceed)
     public static void RaiseLevelChecked(int stars, float overallPercent, bool canProceed)
         => OnLevelChecked?.Invoke(stars, overallPercent, canProceed);
-
-    public static event Action<LevelDataSO> OnLevelSelected;
-    public static void RaiseLevelSelected(LevelDataSO level) 
-        => OnLevelSelected?.Invoke(level);
 }
