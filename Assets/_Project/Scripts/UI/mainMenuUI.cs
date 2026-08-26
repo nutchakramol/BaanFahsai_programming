@@ -11,13 +11,18 @@ public class MainMenuUI : MonoBehaviour
  
  
     private UIDocument uiDocument;
+<<<<<<< HEAD
  
  
+=======
+
+>>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7
     private void Awake()
     {
         uiDocument =
             GetComponent<UIDocument>();
     }
+<<<<<<< HEAD
  
  
     private void OnEnable()
@@ -55,10 +60,30 @@ public class MainMenuUI : MonoBehaviour
             root.Q<Button>("play-button");
  
  
+=======
+
+    private void OnEnable()
+    {
+        ShowMainMenu();
+    }
+
+    public void ShowMainMenu()
+    {
+        uiDocument.visualTreeAsset =
+            mainMenu;
+
+        VisualElement root =
+            uiDocument.rootVisualElement;
+
+        Button playButton =
+            root.Q<Button>("play-button");
+
+>>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7
         if (playButton != null)
         {
             playButton.clicked -=
                 ShowLevelSelect;
+<<<<<<< HEAD
  
  
             playButton.clicked +=
@@ -69,6 +94,11 @@ public class MainMenuUI : MonoBehaviour
             Debug.LogError(
                 "MainMenuUI: play-button not found."
             );
+=======
+
+            playButton.clicked +=
+                ShowLevelSelect;
+>>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7
         }
     }
  
@@ -81,6 +111,7 @@ public class MainMenuUI : MonoBehaviour
     {
         uiDocument.visualTreeAsset =
             levelSelect;
+<<<<<<< HEAD
  
  
         VisualElement root =
@@ -99,10 +130,20 @@ public class MainMenuUI : MonoBehaviour
             root.Q<Button>("HomeButton");
  
  
+=======
+
+        VisualElement root =
+            uiDocument.rootVisualElement;
+
+        Button homeButton =
+            root.Q<Button>("HomeButton");
+
+>>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7
         if (homeButton != null)
         {
             homeButton.clicked -=
                 ShowMainMenu;
+<<<<<<< HEAD
  
  
             homeButton.clicked +=
@@ -124,6 +165,16 @@ public class MainMenuUI : MonoBehaviour
             GetComponent<LevelSelectUI>();
  
  
+=======
+
+            homeButton.clicked +=
+                ShowMainMenu;
+        }
+
+        LevelSelectUI levelSelectUI =
+            GetComponent<LevelSelectUI>();
+
+>>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7
         if (levelSelectUI != null)
         {
             levelSelectUI.Setup();

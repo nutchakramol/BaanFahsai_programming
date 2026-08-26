@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/_Project/Prefabs/Furniture/level1/carpet.prefab.meta
 guid: 86b97ad35e73501469204dc49c49adc5
+========
+guid: a62e811e4a2858942bf3bea5af0bb5ca
+>>>>>>>> 966d99285b3dbaf33b3f239b35e13e828f18fec7:Assets/_Project/Prefabs/Furniture/level1/bed.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

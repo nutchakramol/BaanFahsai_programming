@@ -10,6 +10,8 @@ using System.Collections.Generic;
 public class LevelDataSO : ScriptableObject
 {
     public int levelIndex;
+    public string sceneName;
+
     public bool multiRoomEnabled;      // false for lvl 1-2, true for lvl 3-6
     public List<RoomDefinition> rooms = new List<RoomDefinition>();
     public List<LevelRequirement> requirements = new List<LevelRequirement>();
