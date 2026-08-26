@@ -445,6 +445,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 966d134c09bc6b64aba292af680a8c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSelectUI
+  levelData:
+  - {fileID: 11400000, guid: f47a47b78516b98458f53f9afedfdbe9, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1001 &4148682566577819309
 PrefabInstance:
   m_ObjectHideFlags: 0
