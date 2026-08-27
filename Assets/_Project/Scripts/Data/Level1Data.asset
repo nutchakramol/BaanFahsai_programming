@@ -12,11 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
   m_Name: Level1Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 1
+  levelIndex: 0
   sceneName: Level1
   multiRoomEnabled: 0
-  rooms: []
-  requirements: []
+  rooms:
+  - roomId: bedroom_1
+    roomTag: 1
+    roomOrigin: {x: -1.72, y: 0}
+    roomSize: {x: 10, y: 10}
+    fixedStructures: []
+  requirements:
+  - requirementId: '"hasBED"'
+    requiredCategory: 6
+    minCount: 1
+    minAvgScore: 0.5
   targetScoreToWin: 80
   paletteItemIds: []
   starThresholds:

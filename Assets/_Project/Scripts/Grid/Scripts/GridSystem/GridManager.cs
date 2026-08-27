@@ -112,6 +112,23 @@ public class GridManager : MonoBehaviour
         Vector3Int coord3D = new Vector3Int(coord2D.x, coord2D.y, z);
         return GetOrCreateCell(coord3D);
     }
+
+    /// <summary>
+    /// Returns every currently occupied cell, so scoring/evaluation code
+    /// can inspect what's placed and where, without needing to track
+    /// placement separately. Read-only snapshot — safe to call anytime.
+    /// </summary>
+    public List<GridCell> GetAllOccupiedCells()
+    {
+        List<GridCell> occupied = new List<GridCell>();
+        foreach (var cell in gridCells.Values)
+        {
+            if (cell.IsOccupied)
+                occupied.Add(cell);
+        }
+        return occupied;
+    }
+
     public void SetActiveRoom(Grid newGrid, Tilemap[] newSurfaces)
     {
         tilemapGrid = newGrid;

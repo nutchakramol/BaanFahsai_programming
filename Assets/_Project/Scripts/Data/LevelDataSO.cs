@@ -17,6 +17,7 @@ public class LevelDataSO : ScriptableObject
     public int targetScoreToWin = 80;  // e.g. percentage threshold
     [Header("Item Palette")]
     public List<string> paletteItemIds = new List<string>(); // schemaIds to spawn, one instance each
+    public List<ItemSchemaSO> itemSchemas = new List<ItemSchemaSO>(); // actual schema references for this level's items
     [Header("Star Rating")]
     public float[] starThresholds = new float[] { 50f, 75f, 95f }; // % needed for 1..3 stars
     public float minScoreToPass = 30f; // minimum overall % required to unlock "Next Level"

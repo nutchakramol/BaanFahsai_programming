@@ -80,6 +80,11 @@ public class LevelController
     /// </summary>
     public LevelScoreResult CheckLevel()
     {
+        foreach (var item in _placedItems)
+        {
+            Debug.Log($"[LevelController] Placed item: {item.ItemSchemaId}, RoomId: '{item.CurrentRoomId}'");
+        }
+
         var result = ScoringEngine.ComputeLevelScore(
             _placedItems, _schemaLookup, _roomTagLookup, _levelData.requirements);
 
@@ -88,5 +93,4 @@ public class LevelController
 
         GameEvents.RaiseLevelChecked(stars, result.OverallScorePercent, canProceed);
         return result;
-    }
-}
+    }}

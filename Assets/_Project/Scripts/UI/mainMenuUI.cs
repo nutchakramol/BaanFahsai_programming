@@ -9,8 +9,12 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField]
     private VisualTreeAsset levelSelect;
 
-    [SerializeField] private VisualTreeAsset settingsScreen;
+    [SerializeField]
+    private VisualTreeAsset settingsScreen;
 
+    // Set to true by other scripts (e.g. GridScoringBridge) before loading
+    // this scene, so it opens on Level Select instead of the Main Menu.
+    public static bool ReturnToLevelSelectOnLoad = false;
 
     private UIDocument uiDocument;
 
@@ -29,19 +33,16 @@ public class MainMenuUI : MonoBehaviour
                 GetComponent<UIDocument>();
         }
 
-        ShowMainMenu();
+        if (ReturnToLevelSelectOnLoad)
+        {
+            ReturnToLevelSelectOnLoad = false; // consume the flag
+            ShowLevelSelect();
+        }
+        else
+        {
+            ShowMainMenu();
+        }
     }
-    public void ShowSettings()
-   {
-       uiDocument.visualTreeAsset = settingsScreen;
-       VisualElement root = uiDocument.rootVisualElement;
-       Button backButton = root.Q<Button>("BackButton");
-       if (backButton != null)
-       {
-           backButton.clicked -= ShowMainMenu;
-           backButton.clicked += ShowMainMenu;
-       }
-   }
 
     // =========================================================
     // MAIN MENU
