@@ -20,17 +20,17 @@ public class PlacementController : MonoBehaviour
     private GameObject selectedFurniture;
     private GridCell selectedFurnitureCell;
 
-    // Public read-only access for UI scripts
     public GameObject SelectedFurniture => selectedFurniture;
     public GridCell SelectedFurnitureCell => selectedFurnitureCell;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) 
-        { 
-            Destroy(gameObject); 
-            return; 
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
         }
+
         Instance = this;
     }
 
@@ -41,9 +41,14 @@ public class PlacementController : MonoBehaviour
         HandleDeselect();
     }
 
+    // =========================================================
+    // FURNITURE CYCLING
+    // =========================================================
+
     private void HandleCycling()
     {
-        if (furniturePrefabs == null || furniturePrefabs.Length == 0) return;
+        if (furniturePrefabs == null || furniturePrefabs.Length == 0)
+            return;
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -52,150 +57,425 @@ public class PlacementController : MonoBehaviour
 
             do
             {
-                currentIndex = (currentIndex + direction + furniturePrefabs.Length) % furniturePrefabs.Length;
+                currentIndex =
+                    (currentIndex + direction + furniturePrefabs.Length)
+                    % furniturePrefabs.Length;
+
                 attempts++;
             }
-            while (!IsFurnitureUnlocked(furniturePrefabs[currentIndex]) && attempts < furniturePrefabs.Length);
+            while (
+                !IsFurnitureUnlocked(furniturePrefabs[currentIndex])
+                && attempts < furniturePrefabs.Length
+            );
 
-            Debug.Log($"[PlacementController] Selected furniture: {furniturePrefabs[currentIndex].name}");
+            Debug.Log(
+                $"[PlacementController] Selected furniture: " +
+                $"{furniturePrefabs[currentIndex].name}"
+            );
         }
     }
 
-private bool IsFurnitureUnlocked(GameObject prefab)
-{
-    FurnitureItem item = prefab.GetComponent<FurnitureItem>();
-    if (item == null) return true; // no FurnitureItem = no restriction
-    return item.IsUnlockedForPlayer();
-}
+    private bool IsFurnitureUnlocked(GameObject prefab)
+    {
+        if (prefab == null)
+            return false;
+
+        FurnitureItem item = prefab.GetComponent<FurnitureItem>();
+
+        // No FurnitureItem = no restriction
+        if (item == null)
+            return true;
+
+        return item.IsUnlockedForPlayer();
+    }
+
+    // =========================================================
+    // PLACEMENT / SELECTION
+    // =========================================================
+
     private void HandlePlacementAndSelection()
     {
-        if (GridManager.Instance == null) return;
+        if (GridManager.Instance == null)
+            return;
 
         GridCell cell = GridManager.Instance.SelectedCell;
 
-        // Update Ghost Preview based on whether we are hovering over a cell
+        // -----------------------------------------
+        // Ghost Preview
+        // -----------------------------------------
+
         if (ghostPreview != null)
         {
-            ghostPreview.UpdatePreview(cell != null && !cell.IsOccupied ? furniturePrefabs[currentIndex] : null, cell);
+            GameObject previewPrefab = null;
+
+            if (
+                cell != null &&
+                !cell.IsOccupied &&
+                furniturePrefabs != null &&
+                furniturePrefabs.Length > 0
+            )
+            {
+                // Protect against invalid index
+                if (currentIndex < 0 || currentIndex >= furniturePrefabs.Length)
+                {
+                    currentIndex = 0;
+                }
+
+                previewPrefab = furniturePrefabs[currentIndex];
+            }
+
+            ghostPreview.UpdatePreview(previewPrefab, cell);
         }
 
-        if (cell == null) return;
+        if (cell == null)
+            return;
 
-        // Handle Mouse Clicks
-        if (Input.GetMouseButtonDown(0)) // Left click: select existing or place new
+        // -----------------------------------------
+        // Left Click
+        // Select existing furniture OR place new
+        // -----------------------------------------
+
+        if (Input.GetMouseButtonDown(0))
         {
             if (cell.IsOccupied)
             {
                 selectedFurniture = cell.OccupyingObject;
                 selectedFurnitureCell = cell;
-                Debug.Log($"[PlacementController] Selected placed furniture: {selectedFurniture.name}");
+
+                Debug.Log(
+                    $"[PlacementController] Selected placed furniture: " +
+                    $"{selectedFurniture.name}"
+                );
             }
             else
             {
                 PlaceFurnitureAt(cell);
             }
         }
-        else if (Input.GetMouseButtonDown(1)) // Right click: delete furniture
+
+        // -----------------------------------------
+        // Right Click
+        // Delete furniture
+        // -----------------------------------------
+
+        else if (Input.GetMouseButtonDown(1))
         {
             DeleteFurniture(cell);
         }
-        else if (Input.GetMouseButtonDown(2)) // Middle click: flip horizontal directly
+
+        // -----------------------------------------
+        // Middle Click
+        // Flip furniture
+        // -----------------------------------------
+
+        else if (Input.GetMouseButtonDown(2))
         {
             FlipFurnitureHorizontal(cell);
         }
     }
 
+    // =========================================================
+    // DESELECT
+    // =========================================================
+
     private void HandleDeselect()
     {
-        // Press Escape to clear the current selection
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            selectedFurniture = null;
-            selectedFurnitureCell = null;
+            ClearSelection();
+
+            Debug.Log("[PlacementController] Selection cleared.");
         }
     }
+
+    private void ClearSelection()
+    {
+        selectedFurniture = null;
+        selectedFurnitureCell = null;
+    }
+
+    // =========================================================
+    // PLACE FURNITURE
+    // =========================================================
 
     private void PlaceFurnitureAt(GridCell cell)
     {
-        if (furniturePrefabs == null || furniturePrefabs.Length == 0) return;
+        if (cell == null)
+            return;
 
-        // TODO: once CollisionChecker.cs is built, check multi-cell footprint here
+        if (furniturePrefabs == null || furniturePrefabs.Length == 0)
+        {
+            Debug.LogWarning(
+                "[PlacementController] No furniture prefabs assigned."
+            );
+
+            return;
+        }
+
+        if (currentIndex < 0 || currentIndex >= furniturePrefabs.Length)
+        {
+            currentIndex = 0;
+        }
+
         if (cell.IsOccupied)
         {
-            Debug.Log("[PlacementController] Cell is already occupied, can't place here.");
+            Debug.Log(
+                "[PlacementController] Cell is already occupied, can't place here."
+            );
+
             return;
         }
-        
 
         GameObject prefab = furniturePrefabs[currentIndex];
-        if (!IsFurnitureUnlocked(prefab))
+
+        if (prefab == null)
         {
-            Debug.Log($"[PlacementController] {prefab.name} is locked (requires a higher level).");
+            Debug.LogError(
+                $"[PlacementController] Furniture prefab at index " +
+                $"{currentIndex} is null."
+            );
+
             return;
         }
-        Vector3 spawnPos = cell.WorldPosition + new Vector3(0f, placementYOffset, 0f);
+
+        if (!IsFurnitureUnlocked(prefab))
+        {
+            Debug.Log(
+                $"[PlacementController] {prefab.name} is locked " +
+                $"(requires a higher level)."
+            );
+
+            return;
+        }
+
+        Vector3 spawnPos =
+            cell.WorldPosition +
+            new Vector3(0f, placementYOffset, 0f);
+
         Quaternion spawnRot = Quaternion.identity;
 
-        GameObject placed = Instantiate(prefab, spawnPos, spawnRot);
+        GameObject placed =
+            Instantiate(prefab, spawnPos, spawnRot);
+
         cell.SetOccupied(placed);
 
-        // Auto-select the newly placed furniture so action menu/UI options trigger immediately
+        // Auto-select newly placed furniture
         selectedFurniture = placed;
         selectedFurnitureCell = cell;
 
-        Debug.Log($"[PlacementController] Placed {prefab.name} at {cell.Coordinate}");
+        Debug.Log(
+            $"[PlacementController] Placed {prefab.name} " +
+            $"at {cell.Coordinate}"
+        );
     }
+
+    // =========================================================
+    // DELETE
+    // =========================================================
 
     private void DeleteFurniture(GridCell cell)
     {
-        if (!cell.IsOccupied) return;
+        if (cell == null)
+            return;
 
-        // If the deleted object was also our active selection, clear it
+        if (!cell.IsOccupied)
+            return;
+
         if (selectedFurnitureCell == cell)
         {
-            selectedFurniture = null;
-            selectedFurnitureCell = null;
+            ClearSelection();
         }
 
-        Destroy(cell.OccupyingObject);
+        GameObject objectToDelete = cell.OccupyingObject;
+
         cell.ClearOccupied();
 
-        Debug.Log($"[PlacementController] Deleted furniture at {cell.Coordinate}");
+        if (objectToDelete != null)
+        {
+            Destroy(objectToDelete);
+        }
+
+        Debug.Log(
+            $"[PlacementController] Deleted furniture at {cell.Coordinate}"
+        );
     }
+
+    // =========================================================
+    // FLIP
+    // =========================================================
 
     private void FlipFurnitureHorizontal(GridCell cell)
     {
-        if (!cell.IsOccupied) return;
+        if (cell == null || !cell.IsOccupied)
+            return;
 
-        SpriteRenderer sr = cell.OccupyingObject.GetComponent<SpriteRenderer>();
-        if (sr == null) return;
+        GameObject furniture = cell.OccupyingObject;
+
+        if (furniture == null)
+            return;
+
+        SpriteRenderer sr =
+            furniture.GetComponent<SpriteRenderer>();
+
+        if (sr == null)
+        {
+            // Sometimes SpriteRenderer may be on a child object
+            sr = furniture.GetComponentInChildren<SpriteRenderer>();
+        }
+
+        if (sr == null)
+        {
+            Debug.LogWarning(
+                $"[PlacementController] No SpriteRenderer found on " +
+                $"{furniture.name}"
+            );
+
+            return;
+        }
 
         sr.flipX = !sr.flipX;
 
-        Debug.Log($"[PlacementController] Flipped {cell.OccupyingObject.name} (flipX = {sr.flipX})");
+        Debug.Log(
+            $"[PlacementController] Flipped {furniture.name} " +
+            $"(flipX = {sr.flipX})"
+        );
     }
 
-    // ==========================================
+    // =========================================================
+    // MOVE
+    // =========================================================
+
+    public void MoveSelected(Vector2Int direction)
+    {
+        if (selectedFurniture == null || selectedFurnitureCell == null)
+        {
+            Debug.Log(
+                "[PlacementController] No furniture selected to move."
+            );
+
+            return;
+        }
+
+        if (GridManager.Instance == null)
+        {
+            Debug.LogError(
+                "[PlacementController] GridManager.Instance not found."
+            );
+
+            return;
+        }
+
+        Vector2Int targetCoord =
+            selectedFurnitureCell.Coordinate + direction;
+
+        GridCell targetCell =
+            GridManager.Instance.GetCellByCoord2D(targetCoord);
+
+        if (targetCell == null)
+        {
+            Debug.Log(
+                "[PlacementController] Can't move there — invalid cell."
+            );
+
+            return;
+        }
+
+        if (targetCell.IsOccupied)
+        {
+            Debug.Log(
+                "[PlacementController] Can't move there — cell occupied."
+            );
+
+            return;
+        }
+
+        selectedFurnitureCell.ClearOccupied();
+
+        selectedFurniture.transform.position =
+            targetCell.WorldPosition +
+            new Vector3(0f, placementYOffset, 0f);
+
+        targetCell.SetOccupied(selectedFurniture);
+
+        selectedFurnitureCell = targetCell;
+
+        Debug.Log(
+            $"[PlacementController] Moved furniture to {targetCoord}"
+        );
+    }
+
+    // =========================================================
+    // ROOM MANAGER SUPPORT
+    // =========================================================
+
+    public void SetFurnitureSet(GameObject[] newPrefabs)
+    {
+        furniturePrefabs = newPrefabs;
+
+        currentIndex = 0;
+
+        // Prevent furniture selected in another room
+        // from remaining selected
+        ClearSelection();
+
+        int count =
+            furniturePrefabs != null
+                ? furniturePrefabs.Length
+                : 0;
+
+        Debug.Log(
+            $"[PlacementController] Furniture set changed. Count: {count}"
+        );
+
+        if (count == 0)
+        {
+            Debug.LogWarning(
+                "[PlacementController] Current room has no furniture prefabs assigned."
+            );
+        }
+    }
+
+    // =========================================================
     // UI BUTTON METHODS
-    // ==========================================
+    // =========================================================
 
     public void OnPlaceButton()
     {
-        if (GridManager.Instance == null) return;
-        GridCell cell = GridManager.Instance.SelectedCell;
-        if (cell == null)
+        if (GridManager.Instance == null)
         {
-            Debug.Log("[PlacementController] No cell hovered to place into.");
+            Debug.LogError(
+                "[PlacementController] GridManager.Instance not found."
+            );
+
             return;
         }
+
+        GridCell cell =
+            GridManager.Instance.SelectedCell;
+
+        if (cell == null)
+        {
+            Debug.Log(
+                "[PlacementController] No cell hovered to place into."
+            );
+
+            return;
+        }
+
         PlaceFurnitureAt(cell);
     }
 
     public void OnDeleteButton()
     {
-        if (selectedFurniture == null || selectedFurnitureCell == null)
+        if (
+            selectedFurniture == null ||
+            selectedFurnitureCell == null
+        )
         {
-            Debug.Log("[PlacementController] No furniture selected to delete.");
+            Debug.Log(
+                "[PlacementController] No furniture selected to delete."
+            );
+
             return;
         }
 
@@ -204,47 +484,38 @@ private bool IsFurnitureUnlocked(GameObject prefab)
 
     public void OnFlipButton()
     {
-        if (selectedFurniture == null)
+        if (
+            selectedFurniture == null ||
+            selectedFurnitureCell == null
+        )
         {
-            Debug.Log("[PlacementController] No furniture selected to flip.");
+            Debug.Log(
+                "[PlacementController] No furniture selected to flip."
+            );
+
             return;
         }
 
         FlipFurnitureHorizontal(selectedFurnitureCell);
     }
 
-    public void MoveSelected(Vector2Int direction)
+    public void OnMoveUpButton()
     {
-        if (selectedFurniture == null || selectedFurnitureCell == null)
-        {
-            Debug.Log("[PlacementController] No furniture selected to move.");
-            return;
-        }
-
-        Vector2Int targetCoord = selectedFurnitureCell.Coordinate + direction;
-        GridCell targetCell = GridManager.Instance.GetCellByCoord2D(targetCoord);
-
-        if (targetCell == null || targetCell.IsOccupied)
-        {
-            Debug.Log("[PlacementController] Can't move there — occupied or invalid.");
-            return;
-        }
-
-        selectedFurnitureCell.ClearOccupied();
-        selectedFurniture.transform.position = targetCell.WorldPosition + new Vector3(0f, placementYOffset, 0f);
-        targetCell.SetOccupied(selectedFurniture);
-        selectedFurnitureCell = targetCell;
-
-        Debug.Log($"[PlacementController] Moved furniture to {targetCoord}");
-    }
-    public void SetFurnitureSet(GameObject[] newPrefabs)
-    {
-        furniturePrefabs = newPrefabs;
-        currentIndex = 0;
+        MoveSelected(new Vector2Int(0, 1));
     }
 
-    public void OnMoveUpButton() => MoveSelected(new Vector2Int(0, 1));
-    public void OnMoveDownButton() => MoveSelected(new Vector2Int(0, -1));
-    public void OnMoveLeftButton() => MoveSelected(new Vector2Int(-1, 0));
-    public void OnMoveRightButton() => MoveSelected(new Vector2Int(1, 0));
+    public void OnMoveDownButton()
+    {
+        MoveSelected(new Vector2Int(0, -1));
+    }
+
+    public void OnMoveLeftButton()
+    {
+        MoveSelected(new Vector2Int(-1, 0));
+    }
+
+    public void OnMoveRightButton()
+    {
+        MoveSelected(new Vector2Int(1, 0));
+    }
 }
