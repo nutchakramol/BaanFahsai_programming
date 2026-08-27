@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
   m_Name: Level4Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 3
+  levelIndex: 0
   sceneName: 
   multiRoomEnabled: 0
   rooms: []
@@ -24,6 +24,18 @@ MonoBehaviour:
   - 75
   - 95
   minScoreToPass: 30
-  npcName: 
+  npcName: Chef Sommai
   npcPortrait: {fileID: 0}
-  npcIntroDialogue: 
+  npcIntroDialogue:
+  - "Hello! I\u2019ve seen your work, and the rooms you\u2019ve decorated so far
+    look wonderful."
+  - "I\u2019m planning to open a small restaurant of my own."
+  - But before I start the restaurant, I want to prepare my home kitchen for cooking.
+  - I need enough space for preparing food, cooking, and storing ingredients.
+  - "Everything should be placed where it\u2019s easy to reach and use. I really
+    don\u2019t like anything getting in the way while I\u2019m cooking."
+  - "And don\u2019t forget the coffee maker! I need my coffee every morning!"
+  - Please design a kitchen that is both beautiful and practical.
+  npcCompletionDialogue:
+  - "Wonderful! Everything is in the perfect place, and the kitchen looks beautiful
+    and organized. Now I\u2019m ready to start cooking!"
