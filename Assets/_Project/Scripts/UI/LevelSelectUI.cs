@@ -204,8 +204,9 @@ public class LevelSelectUI : MonoBehaviour
             VisualElement lockIcon =
                 CreateIcon("Lock", template);
 
-            bool unlocked =
-                LevelProgress.IsUnlocked(i);
+            // ===== CHANGED BLOCK START =====
+            bool unlocked = LevelProgress.IsUnlocked(i);
+            int starsEarned = LevelProgress.GetStars(i);
 
             crown.style.display =
                 unlocked
@@ -213,17 +214,17 @@ public class LevelSelectUI : MonoBehaviour
                     : DisplayStyle.None;
 
             star1.style.display =
-                unlocked
+                (unlocked && starsEarned >= 1)
                     ? DisplayStyle.Flex
                     : DisplayStyle.None;
 
             star2.style.display =
-                unlocked
+                (unlocked && starsEarned >= 2)
                     ? DisplayStyle.Flex
                     : DisplayStyle.None;
 
             star3.style.display =
-                unlocked
+                (unlocked && starsEarned >= 3)
                     ? DisplayStyle.Flex
                     : DisplayStyle.None;
 
@@ -231,6 +232,7 @@ public class LevelSelectUI : MonoBehaviour
                 unlocked
                     ? DisplayStyle.None
                     : DisplayStyle.Flex;
+            // ===== CHANGED BLOCK END =====
 
             bubble.Add(crown);
             bubble.Add(star1);

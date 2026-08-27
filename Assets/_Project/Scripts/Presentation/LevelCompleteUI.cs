@@ -1,8 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelCompleteUI : MonoBehaviour
 {
+    [Header("Level Info")]
+    [SerializeField] private int currentLevelIndex; // set this per level scene (0 = Level 1, 1 = Level 2, ...)
+
     [Header("Check Button")]
     [SerializeField] private Button checkLevelButton;
 
@@ -24,6 +28,7 @@ public class LevelCompleteUI : MonoBehaviour
         checkLevelButton.interactable = false; // enabled once all palette items are placed
 
         checkLevelButton.onClick.AddListener(() => _controller.CheckLevel());
+        nextLevelButton.onClick.AddListener(HandleNextLevel); // NEW
 
         GameEvents.OnPaletteProgressChanged += HandlePaletteProgress;
         GameEvents.OnLevelChecked += HandleLevelChecked;
@@ -49,7 +54,30 @@ public class LevelCompleteUI : MonoBehaviour
 
         resultText.text = $"Score: {overallPercent:F0}%";
 
+        // NEW: only save/unlock if the level was actually passed
+        if (canProceed)
+        {
+            LevelProgress.UnlockUpTo(currentLevelIndex + 1);
+            SaveStarsIfBetter(currentLevelIndex, stars);
+        }
+
         nextLevelButton.gameObject.SetActive(canProceed);
         retryButton.gameObject.SetActive(!canProceed);
+    }
+
+    // NEW
+    private void SaveStarsIfBetter(int levelIndex, int stars)
+    {
+        if (stars > LevelProgress.GetStars(levelIndex))
+        {
+            PlayerPrefs.SetInt("level_stars_" + levelIndex, stars);
+            PlayerPrefs.Save();
+        }
+    }
+
+    // NEW
+    private void HandleNextLevel()
+    {
+        SceneManager.LoadScene("LevelSelect"); // change if your scene is named differently
     }
 }
