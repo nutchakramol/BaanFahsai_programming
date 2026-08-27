@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: bar
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: bar
+  displayName: Bar
+  icon: {fileID: 1824777350089454896, guid: 1e91bb9d96ecb8e41ae9e926f613846c, type: 3}
+  prefab: {fileID: 74625100585546817, guid: 78d8b24202734534b81fc03ba4f5b9ec, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

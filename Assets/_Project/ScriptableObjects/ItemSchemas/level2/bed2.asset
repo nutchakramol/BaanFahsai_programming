@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: bed2
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: bed2
+  displayName: Bed2
+  icon: {fileID: -5675716643971599528, guid: 18fa17c79f75ae843b6a2b82b709cc9d, type: 3}
+  prefab: {fileID: 5819008028065586295, guid: d0bd4982ac3f03d4eadf84eb828714c6, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: toilet
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: toilet
+  displayName: Toilet
+  icon: {fileID: -8806758135501145626, guid: 85262aba94aee4145a033164656f3095, type: 3}
+  prefab: {fileID: 8485559049167859407, guid: 5edb56e38719d1c458b6c6f3ac632c62, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

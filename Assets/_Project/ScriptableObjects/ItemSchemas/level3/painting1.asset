@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: painting1
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: painting1
+  displayName: Painting 1
+  icon: {fileID: 5547728874612519967, guid: 3364626e0b994f74ab3c7764c5902685, type: 3}
+  prefab: {fileID: 3273687614664215720, guid: d9f5956b366c5494f840bd06c2d3ed49, type: 3}
+  category: 4
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: coffee_maker
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: coffee_maker
+  displayName: Coffee maker
+  icon: {fileID: 1395071446575585912, guid: 67b0fd2ac20f9fa468899b0a479c307d, type: 3}
+  prefab: {fileID: 6479759220398126585, guid: a775b87a09014304092748faa42b93bb, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 
