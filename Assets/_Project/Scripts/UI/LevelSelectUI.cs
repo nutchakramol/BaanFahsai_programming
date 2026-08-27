@@ -586,7 +586,6 @@ public class LevelSelectUI : MonoBehaviour
             Debug.Log("This level is locked.");
             return;
         }
-
         if (selectedLevel < 0 ||
             selectedLevel >= LevelCount)
         {
@@ -595,10 +594,8 @@ public class LevelSelectUI : MonoBehaviour
             );
             return;
         }
-
         LevelDataSO data =
             levels[selectedLevel];
-
         if (data == null)
         {
             Debug.LogError(
@@ -607,7 +604,6 @@ public class LevelSelectUI : MonoBehaviour
             );
             return;
         }
-
         if (string.IsNullOrEmpty(data.sceneName))
         {
             Debug.LogError(
@@ -616,16 +612,13 @@ public class LevelSelectUI : MonoBehaviour
             );
             return;
         }
-
         Debug.Log(
             "Loading Level: " +
             data.levelIndex +
             " → " +
             data.sceneName
         );
-
         GameEvents.RaiseLevelSelected(data);
-
         SceneManager.LoadScene(data.sceneName);
     }
 
