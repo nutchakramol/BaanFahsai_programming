@@ -150,11 +150,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 831
-        width: 129
-        height: 321
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 832
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -171,19 +171,19 @@ TextureImporter:
       name: cutie pink pastels_1
       rect:
         serializedVersion: 2
-        x: 255
-        y: 831
-        width: 130
-        height: 321
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 832
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8fe55fa97496dea50800000000000000
+      spriteID: 2ca969aef8c87dd43826370204019acc
       internalID: 6552008789157306104
       vertices: []
       indices: 
@@ -193,19 +193,19 @@ TextureImporter:
       name: cutie pink pastels_2
       rect:
         serializedVersion: 2
-        x: 511
-        y: 831
-        width: 130
-        height: 321
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 832
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6a0d04858f8657970800000000000000
+      spriteID: f73994ff89f82434fa724b59cddb81f3
       internalID: 8752016866706247846
       vertices: []
       indices: 
@@ -215,19 +215,19 @@ TextureImporter:
       name: cutie pink pastels_3
       rect:
         serializedVersion: 2
-        x: 767
-        y: 831
-        width: 130
-        height: 321
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 832
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: aef2ec75a4b14bbd0800000000000000
+      spriteID: 5b972fc6aa045144b984c7a520d19e18
       internalID: -2615435477480755222
       vertices: []
       indices: 
@@ -238,18 +238,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 447
-        width: 129
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 448
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ac2be9dbca0c37780800000000000000
+      spriteID: f32a8a05bbd63ed4b8c99a55e57a72ab
       internalID: -8686387408119352630
       vertices: []
       indices: 
@@ -259,19 +259,19 @@ TextureImporter:
       name: cutie pink pastels_5
       rect:
         serializedVersion: 2
-        x: 255
-        y: 447
-        width: 130
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 448
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e23bf6ce35417c660800000000000000
+      spriteID: b91081d00c10dee4e96d223b1abb0f1a
       internalID: 7405910462915654446
       vertices: []
       indices: 
@@ -282,18 +282,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 511
-        y: 447
-        width: 130
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 448
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: be8d389afc4ea2b40800000000000000
+      spriteID: 394e6dfbd0710bd46a9898075e841652
       internalID: 5416393082419796203
       vertices: []
       indices: 
@@ -303,19 +303,19 @@ TextureImporter:
       name: cutie pink pastels_7
       rect:
         serializedVersion: 2
-        x: 767
-        y: 447
-        width: 130
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 448
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f74dfd00a59e9dfc0800000000000000
+      spriteID: d28bf6fe77ec9d74183eb15fc627e4f0
       internalID: -3469485465141259137
       vertices: []
       indices: 
@@ -326,18 +326,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 63
-        width: 129
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        y: 64
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8ab28e5512f68a1e0800000000000000
+      spriteID: e66a48a8eecfff4488626429ae2cc6ef
       internalID: -2186375430122493016
       vertices: []
       indices: 
@@ -347,19 +347,19 @@ TextureImporter:
       name: cutie pink pastels_9
       rect:
         serializedVersion: 2
-        x: 255
-        y: 63
-        width: 130
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 64
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c32afed62513c3a70800000000000000
+      spriteID: caedb6c4143032c4f83d275ea3dd095d
       internalID: 8807969201331348028
       vertices: []
       indices: 
@@ -369,19 +369,19 @@ TextureImporter:
       name: cutie pink pastels_10
       rect:
         serializedVersion: 2
-        x: 511
-        y: 63
-        width: 130
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 64
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4e7f912fb127301b0800000000000000
+      spriteID: b5400bed90af2544ea4972594da0e086
       internalID: -5691580039714703388
       vertices: []
       indices: 
@@ -391,19 +391,19 @@ TextureImporter:
       name: cutie pink pastels_11
       rect:
         serializedVersion: 2
-        x: 767
-        y: 63
-        width: 130
-        height: 322
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 64
+        width: 128
+        height: 320
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8d501f4de33c18130800000000000000
+      spriteID: ec2b91b1e5dc9964cbd5e545c6b2b7d1
       internalID: 3567347054482097624
       vertices: []
       indices: 
@@ -413,7 +413,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: d168d52fbd905fe4ab387fef5a469883
     internalID: 0
     vertices: []
     indices: 
@@ -421,7 +421,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1024.0,"y":1152.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       cutie pink pastels_0: 3076920731373758963
       cutie pink pastels_1: 6552008789157306104

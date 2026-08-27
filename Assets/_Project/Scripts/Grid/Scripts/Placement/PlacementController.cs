@@ -47,15 +47,26 @@ public class PlacementController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            if (Input.GetKey(KeyCode.LeftShift))
-                currentIndex = (currentIndex - 1 + furniturePrefabs.Length) % furniturePrefabs.Length;
-            else
-                currentIndex = (currentIndex + 1) % furniturePrefabs.Length;
+            int direction = Input.GetKey(KeyCode.LeftShift) ? -1 : 1;
+            int attempts = 0;
+
+            do
+            {
+                currentIndex = (currentIndex + direction + furniturePrefabs.Length) % furniturePrefabs.Length;
+                attempts++;
+            }
+            while (!IsFurnitureUnlocked(furniturePrefabs[currentIndex]) && attempts < furniturePrefabs.Length);
 
             Debug.Log($"[PlacementController] Selected furniture: {furniturePrefabs[currentIndex].name}");
         }
     }
 
+private bool IsFurnitureUnlocked(GameObject prefab)
+{
+    FurnitureItem item = prefab.GetComponent<FurnitureItem>();
+    if (item == null) return true; // no FurnitureItem = no restriction
+    return item.IsUnlockedForPlayer();
+}
     private void HandlePlacementAndSelection()
     {
         if (GridManager.Instance == null) return;
@@ -114,8 +125,14 @@ public class PlacementController : MonoBehaviour
             Debug.Log("[PlacementController] Cell is already occupied, can't place here.");
             return;
         }
+        
 
         GameObject prefab = furniturePrefabs[currentIndex];
+        if (!IsFurnitureUnlocked(prefab))
+        {
+            Debug.Log($"[PlacementController] {prefab.name} is locked (requires a higher level).");
+            return;
+        }
         Vector3 spawnPos = cell.WorldPosition + new Vector3(0f, placementYOffset, 0f);
         Quaternion spawnRot = Quaternion.identity;
 
@@ -219,6 +236,11 @@ public class PlacementController : MonoBehaviour
         selectedFurnitureCell = targetCell;
 
         Debug.Log($"[PlacementController] Moved furniture to {targetCoord}");
+    }
+    public void SetFurnitureSet(GameObject[] newPrefabs)
+    {
+        furniturePrefabs = newPrefabs;
+        currentIndex = 0;
     }
 
     public void OnMoveUpButton() => MoveSelected(new Vector2Int(0, 1));

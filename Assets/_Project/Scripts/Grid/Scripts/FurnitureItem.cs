@@ -7,27 +7,21 @@ public class FurnitureItem : MonoBehaviour
     public string furnitureName;
 
     [Header("Grid Footprint")]
-    public Vector2Int gridSize = new Vector2Int(1, 1); // width x height in cells
+    public Vector2Int gridSize = new Vector2Int(1, 1);
 
     [Header("Placement Rules")]
     public bool canRotate = true;
-    public int levelUnlock = 1; // which level this furniture unlocks at
+    [Tooltip("1-indexed level this furniture unlocks at (Level 1 = bedroom, etc.)")]
+    public int levelUnlock = 1;
 
     [Header("Customization (optional)")]
     public Material[] colorVariants;
 
-    private int currentVariantIndex = 0;
-
-    public void SetColorVariant(int index)
+    // Returns true if the level this furniture requires has been unlocked.
+    // Assumes LevelProgress.IsUnlocked uses 0-indexed levels (matches
+    // LevelSelectUI's bubble loop, where bubble i = Level i+1).
+    public bool IsUnlockedForPlayer()
     {
-        if (colorVariants == null || colorVariants.Length == 0) return;
-        if (index < 0 || index >= colorVariants.Length) return;
-
-        currentVariantIndex = index;
-        var renderer = GetComponent<SpriteRenderer>();
-        if (renderer != null)
-        {
-            renderer.material = colorVariants[index];
-        }
+        return LevelProgress.IsUnlocked(levelUnlock - 1);
     }
 }
