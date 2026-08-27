@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Level5Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
   levelIndex: 5
-  sceneName: level5
+  sceneName: level1
   multiRoomEnabled: 0
   rooms: []
   requirements: []
   targetScoreToWin: 80
   paletteItemIds: []
+  itemSchemas: []
   starThresholds:
   - 50
   - 75

@@ -13,12 +13,23 @@ MonoBehaviour:
   m_Name: Level2Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
   levelIndex: 2
-  sceneName: level2
+  sceneName: level1
   multiRoomEnabled: 0
-  rooms: []
-  requirements: []
+  rooms:
+  - roomId: bedroom_1
+    roomTag: 1
+    roomOrigin: {x: -1.73, y: 0}
+    roomSize: {x: 10, y: 10}
+    fixedStructures: []
+  requirements:
+  - requirementId: '"hasbed"'
+    requiredCategory: 6
+    minCount: 1
+    minAvgScore: 0.6
   targetScoreToWin: 80
   paletteItemIds: []
+  itemSchemas:
+  - {fileID: 11400000, guid: 3f33d6d82ef90a54aaf75e186681b9f4, type: 2}
   starThresholds:
   - 50
   - 75

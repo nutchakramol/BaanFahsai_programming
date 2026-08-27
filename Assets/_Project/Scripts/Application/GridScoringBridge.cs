@@ -2,16 +2,17 @@
 // FILE: GridScoringBridge.cs
 // Connects Plyfah's grid placement system to the existing
 // LevelController/ScoringEngine, without modifying grid code.
-// Temporary single-room setup (bedroom_1) until Minny adds
-// full room data for other levels.
+// Reads level data dynamically via GameEvents.CurrentLevelData,
+// so one shared scene works for any level (1-5).
 // ===================================================
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GridScoringBridge : MonoBehaviour
 {
-    [Header("Level Data")]
+    [Header("Level Data (fallback for isolated testing only)")]
     [SerializeField] private LevelDataSO levelData;
     [SerializeField] private List<ItemSchemaSO> availableItems;
 
@@ -19,34 +20,43 @@ public class GridScoringBridge : MonoBehaviour
     [SerializeField] private string defaultRoomId = "bedroom_1";
 
     private LevelController _controller;
-
-    // Tracks which grid coordinates we've already reported as placed,
-    // so we don't re-send the same item every frame.
     private readonly HashSet<Vector2Int> _knownPlacements = new HashSet<Vector2Int>();
 
     private void Start()
     {
+        if (GameEvents.CurrentLevelData != null)
+        {
+            levelData = GameEvents.CurrentLevelData;
+        }
+
+        if (levelData == null)
+        {
+            Debug.LogError("[GridScoringBridge] No level data available — nothing selected and no fallback assigned.");
+            return;
+        }
+
+        if (levelData.itemSchemas != null && levelData.itemSchemas.Count > 0)
+        {
+            availableItems = levelData.itemSchemas;
+        }
+        // else: fall back to whatever was manually dragged into availableItems (isolated testing)
+
         _controller = new LevelController(levelData, availableItems);
     }
 
-    
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C)) // temporary test key for Check Level
+        if (Input.GetKeyDown(KeyCode.C))
         {
             CheckLevel();
         }
-        
-        if (GridManager.Instance == null || _controller == null)
-            {
-                Debug.LogWarning($"[GridScoringBridge] Skipping — GridManager null: {GridManager.Instance == null}, Controller null: {_controller == null}");
-                return;
-            }
+
+        if (GridManager.Instance == null || _controller == null) return;
 
         var occupiedCells = GridManager.Instance.GetAllOccupiedCells();
         foreach (var cell in occupiedCells)
         {
-            if (_knownPlacements.Contains(cell.Coordinate)) continue; // already reported
+            if (_knownPlacements.Contains(cell.Coordinate)) continue;
 
             FurnitureItem furniture = cell.OccupyingObject.GetComponent<FurnitureItem>();
             if (furniture == null)
@@ -55,8 +65,8 @@ public class GridScoringBridge : MonoBehaviour
                 continue;
             }
 
-            string schemaId = furniture.furnitureName; // matches ItemSchemaSO.itemId
-            string instanceId = $"{cell.Coordinate.x}_{cell.Coordinate.y}"; // stable per-cell ID
+            string schemaId = furniture.furnitureName;
+            string instanceId = $"{cell.Coordinate.x}_{cell.Coordinate.y}";
 
             _controller.PlaceOrMoveItem(instanceId, schemaId, cell.WorldPosition, defaultRoomId);
             _knownPlacements.Add(cell.Coordinate);
@@ -65,10 +75,13 @@ public class GridScoringBridge : MonoBehaviour
         }
     }
 
-    // Call this from a UI button to test scoring manually
     public void CheckLevel()
     {
-        if (_controller == null) return;
+        if (_controller == null)
+        {
+            Debug.LogError("[GridScoringBridge] Controller is null — cannot check level.");
+            return;
+        }
 
         var result = _controller.CheckLevel();
         int stars = StarRatingCalculator.ComputeStars(result.OverallScorePercent, levelData.starThresholds);
@@ -81,5 +94,8 @@ public class GridScoringBridge : MonoBehaviour
             LevelProgress.UnlockUpTo(levelData.levelIndex + 1);
             Debug.Log($"[GridScoringBridge] Unlocked level {levelData.levelIndex + 1}");
         }
+
+        MainMenuUI.ReturnToLevelSelectOnLoad = true;
+        SceneManager.LoadScene("SampleScene");
     }
-    }
+}
