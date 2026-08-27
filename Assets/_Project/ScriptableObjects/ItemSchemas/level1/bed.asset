@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Bed
   icon: {fileID: 7235992474168524971, guid: fba627037e8e0b14f92d5ba911ffc8f2, type: 3}
   prefab: {fileID: 107390632902148715, guid: a62e811e4a2858942bf3bea5af0bb5ca, type: 3}
-  category: 0
+  category: 6
   footprintSize: {x: 1, y: 1}
   heatZones: []
   appropriateRoomTags: 

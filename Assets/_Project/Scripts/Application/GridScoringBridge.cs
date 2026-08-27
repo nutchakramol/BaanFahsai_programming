@@ -32,6 +32,11 @@ public class GridScoringBridge : MonoBehaviour
     
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.C)) // temporary test key for Check Level
+        {
+            CheckLevel();
+        }
+        
         if (GridManager.Instance == null || _controller == null)
             {
                 Debug.LogWarning($"[GridScoringBridge] Skipping — GridManager null: {GridManager.Instance == null}, Controller null: {_controller == null}");
@@ -64,7 +69,17 @@ public class GridScoringBridge : MonoBehaviour
     public void CheckLevel()
     {
         if (_controller == null) return;
+
         var result = _controller.CheckLevel();
-        Debug.Log($"[GridScoringBridge] Level checked — Overall: {result.OverallScorePercent}%");
+        int stars = StarRatingCalculator.ComputeStars(result.OverallScorePercent, levelData.starThresholds);
+        bool canProceed = result.OverallScorePercent >= levelData.minScoreToPass;
+
+        Debug.Log($"[GridScoringBridge] Level checked — Overall: {result.OverallScorePercent}%, Stars: {stars}, Pass: {canProceed}");
+
+        if (canProceed)
+        {
+            LevelProgress.UnlockUpTo(levelData.levelIndex + 1);
+            Debug.Log($"[GridScoringBridge] Unlocked level {levelData.levelIndex + 1}");
+        }
     }
-}
+    }

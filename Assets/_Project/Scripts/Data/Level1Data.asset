@@ -21,7 +21,11 @@ MonoBehaviour:
     roomOrigin: {x: -1.72, y: 0}
     roomSize: {x: 10, y: 10}
     fixedStructures: []
-  requirements: []
+  requirements:
+  - requirementId: '"hasBED"'
+    requiredCategory: 6
+    minCount: 1
+    minAvgScore: 0.5
   targetScoreToWin: 80
   paletteItemIds: []
   starThresholds:
