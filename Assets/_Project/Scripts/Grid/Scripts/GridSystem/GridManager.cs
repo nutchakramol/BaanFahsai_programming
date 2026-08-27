@@ -112,4 +112,12 @@ public class GridManager : MonoBehaviour
         Vector3Int coord3D = new Vector3Int(coord2D.x, coord2D.y, z);
         return GetOrCreateCell(coord3D);
     }
+    public void SetActiveRoom(Grid newGrid, Tilemap[] newSurfaces)
+    {
+        tilemapGrid = newGrid;
+        placeableTilemaps = newSurfaces;
+        gridCells.Clear();
+        SelectedCell = null;
+        SelectedSurface = null;
+    }
 }

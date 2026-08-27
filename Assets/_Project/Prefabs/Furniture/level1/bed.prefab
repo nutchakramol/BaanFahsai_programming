@@ -105,8 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ab65492723c65840b5d43eee3a1ff92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
-  furnitureID: LV1_001
-  furnitureName: bed
+  furnitureID: 
+  furnitureName: 
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 1
