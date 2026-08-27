@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
   m_Name: Level5Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 0
-  sceneName: 
+  levelIndex: 5
+  sceneName: level5
   multiRoomEnabled: 0
   rooms: []
   requirements: []
