@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level2Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
   levelIndex: 2
-  sceneName: 2
+  sceneName: level2
   multiRoomEnabled: 0
   rooms: []
   requirements: []
