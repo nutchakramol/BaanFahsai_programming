@@ -112,7 +112,6 @@ public class GridManager : MonoBehaviour
         Vector3Int coord3D = new Vector3Int(coord2D.x, coord2D.y, z);
         return GetOrCreateCell(coord3D);
     }
-<<<<<<< HEAD
 
     /// <summary>
     /// Returns every currently occupied cell, so scoring/evaluation code
@@ -128,7 +127,8 @@ public class GridManager : MonoBehaviour
                 occupied.Add(cell);
         }
         return occupied;
-=======
+    }
+
     public void SetActiveRoom(Grid newGrid, Tilemap[] newSurfaces)
     {
         tilemapGrid = newGrid;
@@ -136,6 +136,5 @@ public class GridManager : MonoBehaviour
         gridCells.Clear();
         SelectedCell = null;
         SelectedSurface = null;
->>>>>>> origin/main
     }
 }
