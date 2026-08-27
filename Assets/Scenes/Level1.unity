@@ -1,4 +1,4 @@
-﻿%YAML 1.1
+%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!29 &1
 OcclusionCullingSettings:
@@ -3479,6 +3479,59 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5212487072382143211, guid: 183afe1642aa19647bafb054970f4325, type: 3}
   m_PrefabInstance: {fileID: 1901251673}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1079249786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1079249788}
+  - component: {fileID: 1079249787}
+  m_Layer: 0
+  m_Name: TestBridge
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1079249787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079249786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92cabbdc741720c47a8ef86a30422308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridScoringBridge
+  levelData: {fileID: 11400000, guid: f47a47b78516b98458f53f9afedfdbe9, type: 2}
+  availableItems:
+  - {fileID: 11400000, guid: 3f33d6d82ef90a54aaf75e186681b9f4, type: 2}
+  - {fileID: 11400000, guid: ea44a3f59d3e19c45b1563dc8d47a49b, type: 2}
+  - {fileID: 11400000, guid: ef6807f3fb92b3b44be4ff5ad127cc36, type: 2}
+  - {fileID: 11400000, guid: 2a7f02e3c7662a9418e223d33298b6f0, type: 2}
+  - {fileID: 11400000, guid: ab89dbce95fdb2a4d91ca3ebc1e009c0, type: 2}
+  - {fileID: 11400000, guid: bbfbeea5f5583da4092785aa1db3e878, type: 2}
+  defaultRoomId: bedroom_1
+--- !u!4 &1079249788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079249786}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.64789, y: -1.41975, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1173011518
 GameObject:
   m_ObjectHideFlags: 0
@@ -4865,13 +4918,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 107390632902148715, guid: a62e811e4a2858942bf3bea5af0bb5ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1584758064}
   m_SourcePrefab: {fileID: 100100000, guid: a62e811e4a2858942bf3bea5af0bb5ca, type: 3}
 --- !u!4 &1584758058 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2323453699335477515, guid: a62e811e4a2858942bf3bea5af0bb5ca, type: 3}
   m_PrefabInstance: {fileID: 1584758057}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1584758059 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 107390632902148715, guid: a62e811e4a2858942bf3bea5af0bb5ca, type: 3}
+  m_PrefabInstance: {fileID: 1584758057}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1584758064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584758059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92cabbdc741720c47a8ef86a30422308, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridScoringBridge
+  levelData: {fileID: 11400000, guid: f47a47b78516b98458f53f9afedfdbe9, type: 2}
+  availableItems:
+  - {fileID: 11400000, guid: 3f33d6d82ef90a54aaf75e186681b9f4, type: 2}
+  - {fileID: 11400000, guid: 2a7f02e3c7662a9418e223d33298b6f0, type: 2}
+  - {fileID: 11400000, guid: ea44a3f59d3e19c45b1563dc8d47a49b, type: 2}
+  - {fileID: 11400000, guid: ef6807f3fb92b3b44be4ff5ad127cc36, type: 2}
+  - {fileID: 11400000, guid: ab89dbce95fdb2a4d91ca3ebc1e009c0, type: 2}
+  - {fileID: 11400000, guid: bbfbeea5f5583da4092785aa1db3e878, type: 2}
+  defaultRoomId: bedroom_1
 --- !u!1 &1589710113
 GameObject:
   m_ObjectHideFlags: 0
@@ -6349,3 +6431,4 @@ SceneRoots:
   - {fileID: 2139383427}
   - {fileID: 699928508}
   - {fileID: 229513173}
+  - {fileID: 1079249788}

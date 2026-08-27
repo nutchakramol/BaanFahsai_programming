@@ -15,7 +15,12 @@ MonoBehaviour:
   levelIndex: 0
   sceneName: Level1
   multiRoomEnabled: 0
-  rooms: []
+  rooms:
+  - roomId: bedroom_1
+    roomTag: 1
+    roomOrigin: {x: -1.72, y: 0}
+    roomSize: {x: 10, y: 10}
+    fixedStructures: []
   requirements: []
   targetScoreToWin: 80
   paletteItemIds: []
