@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
   m_Name: Level2Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 2
-  sceneName: 2
+  levelIndex: 1
+  sceneName: 
   multiRoomEnabled: 0
   rooms: []
   requirements: []
@@ -24,17 +24,6 @@ MonoBehaviour:
   - 75
   - 95
   minScoreToPass: 30
-  npcName: Uncle Chan
+  npcName: 
   npcPortrait: {fileID: 0}
-  npcIntroDialogue:
-  - "Hello! I heard you did a wonderful job decorating Grandma Mali\u2019s room."
-  - I work as a gardener, so I come home covered in dirt every day.
-  - The problem is that my bathroom is still too empty and not very convenient to
-    use.
-  - "I\u2019d like to have both a shower and a bathtub, so I can choose depending
-    on the time I have."
-  - "I\u2019d also like the room to feel fresh, as if I were surrounded by nature."
-  - Maybe a small plant or some cute decorations would make it even nicer.
-  npcCompletionDialogue:
-  - "This is exactly the bathroom I wanted! It\u2019s clean, convenient, and still
-    feels fresh and natural. Thank you so much!"
+  npcIntroDialogue: 

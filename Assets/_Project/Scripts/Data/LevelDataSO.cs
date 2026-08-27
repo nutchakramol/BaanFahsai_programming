@@ -11,20 +11,23 @@ public class LevelDataSO : ScriptableObject
 {
     public int levelIndex;
     public string sceneName;
+
     public bool multiRoomEnabled;      // false for lvl 1-2, true for lvl 3-6
     public List<RoomDefinition> rooms = new List<RoomDefinition>();
     public List<LevelRequirement> requirements = new List<LevelRequirement>();
     public int targetScoreToWin = 80;  // e.g. percentage threshold
+
     [Header("Item Palette")]
     public List<string> paletteItemIds = new List<string>(); // schemaIds to spawn, one instance each
+
     [Header("Star Rating")]
     public float[] starThresholds = new float[] { 50f, 75f, 95f }; // % needed for 1..3 stars
     public float minScoreToPass = 30f; // minimum overall % required to unlock "Next Level"
+
     [Header("NPC Intro")]
     public string npcName;
     public Sprite npcPortrait;
-    public List<string> npcIntroDialogue = new List<string>();
-    public List<string> npcCompletionDialogue = new List<string>();
+    [TextArea] public string npcIntroDialogue;
 }
 
 [System.Serializable]
