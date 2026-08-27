@@ -53,6 +53,9 @@ TagManager:
   - name: furniture
     uniqueID: 315001287
     locked: 0
+  - name: button
+    uniqueID: 2922188623
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4115119876436882090}
   - component: {fileID: 482481092951758578}
+  - component: {fileID: 5634891479948643738}
   m_Layer: 0
   m_Name: plant
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -77,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 315001287
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5299341983969237341, guid: 31b71948ec739654fb6da637433f6aed, type: 3}
@@ -91,3 +92,21 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &5634891479948643738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4091162209023963251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab65492723c65840b5d43eee3a1ff92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
+  furnitureID: 
+  furnitureName: 
+  gridSize: {x: 1, y: 1}
+  canRotate: 1
+  levelUnlock: 1
+  colorVariants: []

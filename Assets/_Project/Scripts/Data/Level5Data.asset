@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
   m_Name: Level5Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 4
-  sceneName: 
+  levelIndex: 5
+  sceneName: level5
   multiRoomEnabled: 0
   rooms: []
   requirements: []
@@ -24,6 +24,14 @@ MonoBehaviour:
   - 75
   - 95
   minScoreToPass: 30
-  npcName: 
+  npcName: Tui
   npcPortrait: {fileID: 0}
-  npcIntroDialogue: 
+  npcIntroDialogue:
+  - "Hey! Are you the one who\u2019s going to help me decorate my attic?"
+  - "This is my room, but right now it\u2019s both dark and way too empty."
+  - I want it to be a room where I can play games, read books, and keep my collectibles.
+  - "I have so many toys, but I don\u2019t have anywhere to store them!"
+  - And I really want some cool lights.
+  - Can you turn this room into my dream room?
+  npcCompletionDialogue:
+  - Wow! This is my dream room! I want to stay here all day now!
