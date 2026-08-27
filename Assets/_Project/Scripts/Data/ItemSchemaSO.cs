@@ -28,7 +28,7 @@ public class ItemSchemaSO : ScriptableObject
     public List<RoomTag> appropriateRoomTags = new List<RoomTag>();
 }
 
-public enum ItemCategory { Seating, Lighting, Rug, Storage, Decor, Plant }
+public enum ItemCategory { Seating, Lighting, Rug, Storage, Decor, Plant, Bed, Table, Appliance, Sanitary, Electronics }
 public enum RoomTag { LivingRoom, Bedroom, Kitchen, Bathroom, Study }
 
 [System.Serializable]
