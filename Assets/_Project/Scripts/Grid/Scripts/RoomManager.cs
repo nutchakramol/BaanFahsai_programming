@@ -1,91 +1,110 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
-
-[System.Serializable]
-public class RoomEntry
-{
-    [Tooltip("Must match the sceneName field in your LevelDataSO for this room")]
-    public string roomName;
-
-    [Tooltip("Parent GameObject holding this room's Grid, Floor, and Walls")]
-    public GameObject roomRoot;
-
-    public Grid roomGrid;
-    public Tilemap floorTilemap;
-    public Tilemap wallLeftTilemap;
-    public Tilemap wallRightTilemap;
-
-    [Tooltip("This room's furniture set, e.g. drag everything from Furniture/level3 for Living Room")]
-    public GameObject[] furniturePrefabs;
-}
 
 public class RoomManager : MonoBehaviour
 {
-    public static RoomManager Instance { get; private set; }
+    [System.Serializable]
+    public class RoomData
+    {
+        public string roomName;
+
+        [Header("Room Root")]
+        public GameObject roomRoot;
+
+        [Header("Furniture Prefabs")]
+        public GameObject[] furniturePrefabs;
+    }
 
     [Header("All Rooms")]
-    public RoomEntry[] rooms;
+    public RoomData[] rooms;
 
-    [Header("Which room to show when the game starts")]
+    [Header("Starting Room")]
     public int startingRoomIndex = 0;
 
     private int currentRoomIndex = -1;
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
-    }
-
     private void Start()
     {
-        ShowRoom(startingRoomIndex);
+        SwitchRoom(startingRoomIndex);
     }
 
-    // Called from LevelSelectUI instead of SceneManager.LoadScene
-    public void ShowRoomByName(string roomName)
+    public void SwitchRoom(int index)
     {
-        for (int i = 0; i < rooms.Length; i++)
+        if (rooms == null || rooms.Length == 0)
         {
-            if (rooms[i].roomName == roomName)
-            {
-                ShowRoom(i);
-                return;
-            }
-        }
-        Debug.LogError($"[RoomManager] No room found named '{roomName}'");
-    }
-
-    public void ShowRoom(int index)
-    {
-        if (index < 0 || index >= rooms.Length)
-        {
-            Debug.LogError($"[RoomManager] Room index {index} out of range.");
+            Debug.LogError("[RoomManager] No rooms configured.");
             return;
         }
 
-        if (currentRoomIndex == index) return;
-
-        for (int i = 0; i < rooms.Length; i++)
+        if (index < 0 || index >= rooms.Length)
         {
-            if (rooms[i].roomRoot != null)
-                rooms[i].roomRoot.SetActive(false);
+            Debug.LogError($"[RoomManager] Invalid room index: {index}");
+            return;
         }
 
-        RoomEntry room = rooms[index];
+        // 1. Turn OFF every room
+        for (int i = 0; i < rooms.Length; i++)
+        {
+            if (rooms[i] != null && rooms[i].roomRoot != null)
+            {
+                rooms[i].roomRoot.SetActive(false);
+            }
+        }
 
-        if (room.roomRoot != null)
-            room.roomRoot.SetActive(true);
+        // 2. Get selected room
+        RoomData selectedRoom = rooms[index];
+
+        if (selectedRoom == null || selectedRoom.roomRoot == null)
+        {
+            Debug.LogError($"[RoomManager] Room {index} has no Room Root assigned.");
+            return;
+        }
+
+        // 3. Turn ON only selected room
+        selectedRoom.roomRoot.SetActive(true);
 
         currentRoomIndex = index;
 
-        Tilemap[] surfaces = new Tilemap[] { room.floorTilemap, room.wallLeftTilemap, room.wallRightTilemap };
-        if (GridManager.Instance != null)
-            GridManager.Instance.SetActiveRoom(room.roomGrid, surfaces);
-
+        // 4. Change furniture list
         if (PlacementController.Instance != null)
-            PlacementController.Instance.SetFurnitureSet(room.furniturePrefabs);
+        {
+            PlacementController.Instance.SetFurnitureSet(
+                selectedRoom.furniturePrefabs
+            );
+        }
+        else
+        {
+            Debug.LogError("[RoomManager] PlacementController.Instance not found.");
+        }
 
-        Debug.Log($"[RoomManager] Switched to room: {room.roomName}");
+        Debug.Log(
+            $"[RoomManager] Switched to {selectedRoom.roomName}, " +
+            $"Furniture count: {selectedRoom.furniturePrefabs?.Length ?? 0}"
+        );
+    }
+
+    // Button methods
+    public void ShowBedroom()
+    {
+        SwitchRoom(0);
+    }
+
+    public void ShowToilet()
+    {
+        SwitchRoom(1);
+    }
+
+    public void ShowAttic()
+    {
+        SwitchRoom(2);
+    }
+
+    public void ShowLivingRoom()
+    {
+        SwitchRoom(3);
+    }
+
+    public void ShowKitchen()
+    {
+        SwitchRoom(4);
     }
 }
