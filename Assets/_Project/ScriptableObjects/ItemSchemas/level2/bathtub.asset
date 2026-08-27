@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: bathtub
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: bathtub
+  displayName: Bathtub
+  icon: {fileID: -1078370065236338852, guid: 1a3641a62c59b8f4f84595fe1308ea93, type: 3}
+  prefab: {fileID: 3493526508131586713, guid: 4527c7e87cac6e946b2e6d5283612302, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

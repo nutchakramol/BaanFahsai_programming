@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: cabinet
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: cabinet
+  displayName: Cabinet
+  icon: {fileID: -7039772475811174324, guid: 422ddfde0b49c8a46b8d0847bc708f19, type: 3}
+  prefab: {fileID: 4094270073405072007, guid: 097dcc24c56201f42b490ef006fadd2f, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: tv
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: tv
+  displayName: Tv
+  icon: {fileID: -6438216443435693330, guid: 98e235de565d2cb459b5a8dec3a4740d, type: 3}
+  prefab: {fileID: 4536442493587426704, guid: 9251c061efc7b16449828c079d6ab8c2, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

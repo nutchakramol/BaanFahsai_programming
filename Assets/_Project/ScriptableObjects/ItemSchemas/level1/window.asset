@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: window
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: window
+  displayName: Window
+  icon: {fileID: -6877788054260218752, guid: df8973d53b76db548ac7f8037d34482f, type: 3}
+  prefab: {fileID: 2127685623290273078, guid: c07136e6c7f4111459a7d40e592342ec, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04c72a6054244f649a006584c4fd312d, type: 3}
+  m_Name: spider_web
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSchemaSO
+  itemId: spider_web
+  displayName: Spider web
+  icon: {fileID: -966466702988171720, guid: 48167a5eb444cdf4cbe718d7a4479f82, type: 3}
+  prefab: {fileID: 643415832193943660, guid: 44408c197f391174a977af9257719691, type: 3}
+  category: 0
+  footprintSize: {x: 1, y: 1}
+  heatZones: []
+  appropriateRoomTags: 
