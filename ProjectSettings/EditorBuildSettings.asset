@@ -7,10 +7,13 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+    guid: c3dad704f1f61564593212759dda8fcf
+  - enabled: 0
     path: Assets/_Project/Scenes/Rooms/Level1.unity
     guid: b69fd0959fd4fe847859af7e7b7a7387
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: c02112119ec4f2e49ae10e2baad07b23
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
