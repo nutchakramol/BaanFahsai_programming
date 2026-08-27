@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39543a5abc278b44a3304713952b627, type: 3}
   m_Name: Level1Data
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
-  levelIndex: 0
+  levelIndex: 1
   sceneName: Level1
   multiRoomEnabled: 0
   rooms: []
@@ -26,6 +26,15 @@ MonoBehaviour:
   - 80
   - 95
   minScoreToPass: 30
-  npcName: 
-  npcPortrait: {fileID: 0}
-  npcIntroDialogue: 
+  npcName: Grandma Mali
+  npcPortrait: {fileID: 5766485885808274625, guid: b593a487bb444bb4ca63bdf236d329f6, type: 3}
+  npcIntroDialogue:
+  - Hello, dear! Are you the one who is going to help me decorate my room?
+  - I just moved into my new house, and the bedroom is still completely empty.
+  - "I\u2019d like the room to feel warm and simple."
+  - I love reading books before going to bed.
+  - It would be wonderful to have a desk and a chair near the window.
+  - "Please take good care of this room. I can\u2019t wait to see my new bedroom!"
+  npcCompletionDialogue:
+  - "Wow... It\u2019s beautiful! The room feels just as warm and cozy as I imagined.
+    Thank you so much, dear!"
