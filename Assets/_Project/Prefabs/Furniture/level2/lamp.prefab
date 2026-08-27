@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: lamp
   gridSize: {x: 1, y: 1}
   canRotate: 1
   levelUnlock: 1

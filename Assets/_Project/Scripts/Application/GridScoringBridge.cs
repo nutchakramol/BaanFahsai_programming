@@ -31,20 +31,26 @@ public class GridScoringBridge : MonoBehaviour
 
         if (levelData == null)
         {
-            Debug.LogError("[GridScoringBridge] No level data available — nothing selected and no fallback assigned.");
+            Debug.LogError("[GridScoringBridge] No level data available.");
             return;
+        }
+
+        Debug.Log($"[GridScoringBridge] Using levelData: {levelData.name}, defaultRoomId: '{defaultRoomId}', rooms count: {levelData.rooms.Count}");
+
+        RoomManager roomManager = FindFirstObjectByType<RoomManager>();
+        if (roomManager != null)
+        {
+            roomManager.SwitchRoom(levelData.levelIndex);
         }
 
         if (levelData.itemSchemas != null && levelData.itemSchemas.Count > 0)
         {
             availableItems = levelData.itemSchemas;
         }
-        // else: fall back to whatever was manually dragged into availableItems (isolated testing)
 
         _controller = new LevelController(levelData, availableItems);
     }
-
-    private void Update()
+        private void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
