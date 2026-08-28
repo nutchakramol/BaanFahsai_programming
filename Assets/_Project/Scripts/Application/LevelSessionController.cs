@@ -17,8 +17,16 @@ public class LevelSessionController : MonoBehaviour
     private LevelDataSO _currentLevelData;
     private void Start()
     {
-        // Start with Level 1 when opening the scene directly.
-        if (defaultLevelData != null)
+        if (GameEvents.CurrentLevelData != null)
+        {
+            _currentLevelData = GameEvents.CurrentLevelData;
+
+            if (npcDialogueUI != null)
+                npcDialogueUI.Show(_currentLevelData, StartGameplay);
+            else
+                StartGameplay();
+        }
+        else if (defaultLevelData != null)
         {
             _currentLevelData = defaultLevelData;
 
@@ -30,7 +38,7 @@ public class LevelSessionController : MonoBehaviour
         else
         {
             Debug.LogError(
-                "LevelSessionController: Default Level Data is not assigned."
+                "LevelSessionController: No current or default Level Data assigned."
             );
         }
     }
