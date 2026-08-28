@@ -92,7 +92,7 @@ public class NPCDialogueUI : MonoBehaviour
                 if (_currentLineIndex >= _currentDialogue.Count - 1)
                     buttonText.text = "Start";
                 else
-                    buttonText.text = "→";
+                    buttonText.text = "NEXT ->";
             }
         }
     }
