@@ -35,7 +35,13 @@ public class GridScoringBridge : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[GridScoringBridge] Using levelData: {levelData.name}, defaultRoomId: '{defaultRoomId}', rooms count: {levelData.rooms.Count}");
+        // Hide the dev room-switcher buttons during real gameplay —
+        // room is locked to whichever room this level requires.
+        GameObject roomButtons = GameObject.Find("RoomButtons");
+        if (roomButtons != null)
+        {
+            roomButtons.SetActive(false);
+        }
 
         RoomManager roomManager = FindFirstObjectByType<RoomManager>();
         if (roomManager != null)
