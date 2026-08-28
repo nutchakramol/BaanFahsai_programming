@@ -6,24 +6,20 @@ public class RoomManager : MonoBehaviour
     public class RoomData
     {
         public string roomName;
-
-        [Header("Room Root")]
         public GameObject roomRoot;
-
-        [Header("Furniture Prefabs")]
         public GameObject[] furniturePrefabs;
     }
 
-    [Header("All Rooms")]
+    [Header("Rooms")]
     public RoomData[] rooms;
 
     [Header("Starting Room")]
     public int startingRoomIndex = 0;
 
-    private int currentRoomIndex = -1;
-
     private void Start()
     {
+        Debug.Log("[RoomManager] Start called");
+
         SwitchRoom(startingRoomIndex);
     }
 
@@ -31,40 +27,57 @@ public class RoomManager : MonoBehaviour
     {
         if (rooms == null || rooms.Length == 0)
         {
-            Debug.LogError("[RoomManager] No rooms configured.");
+            Debug.LogError("[RoomManager] Rooms array is empty.");
             return;
         }
 
         if (index < 0 || index >= rooms.Length)
         {
-            Debug.LogError($"[RoomManager] Invalid room index: {index}");
+            Debug.LogError(
+                $"[RoomManager] Invalid room index: {index}"
+            );
             return;
         }
 
-        // 1. Turn OFF every room
+        // Disable every room
         for (int i = 0; i < rooms.Length; i++)
         {
-            if (rooms[i] != null && rooms[i].roomRoot != null)
+            if (rooms[i] == null)
+                continue;
+
+            if (rooms[i].roomRoot == null)
             {
-                rooms[i].roomRoot.SetActive(false);
+                Debug.LogWarning(
+                    $"[RoomManager] Room {i} has no Room Root."
+                );
+                continue;
             }
+
+            rooms[i].roomRoot.SetActive(false);
+
+            Debug.Log(
+                $"[RoomManager] Disabled: {rooms[i].roomRoot.name}"
+            );
         }
 
-        // 2. Get selected room
         RoomData selectedRoom = rooms[index];
 
         if (selectedRoom == null || selectedRoom.roomRoot == null)
         {
-            Debug.LogError($"[RoomManager] Room {index} has no Room Root assigned.");
+            Debug.LogError(
+                $"[RoomManager] Selected room {index} has no Room Root."
+            );
             return;
         }
 
-        // 3. Turn ON only selected room
+        // Enable only selected room
         selectedRoom.roomRoot.SetActive(true);
 
-        currentRoomIndex = index;
+        Debug.Log(
+            $"[RoomManager] Enabled: {selectedRoom.roomRoot.name}"
+        );
 
-        // 4. Change furniture list
+        // Update furniture
         if (PlacementController.Instance != null)
         {
             PlacementController.Instance.SetFurnitureSet(
@@ -73,16 +86,12 @@ public class RoomManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("[RoomManager] PlacementController.Instance not found.");
+            Debug.LogWarning(
+                "[RoomManager] PlacementController not found."
+            );
         }
-
-        Debug.Log(
-            $"[RoomManager] Switched to {selectedRoom.roomName}, " +
-            $"Furniture count: {selectedRoom.furniturePrefabs?.Length ?? 0}"
-        );
     }
 
-    // Button methods
     public void ShowBedroom()
     {
         SwitchRoom(0);

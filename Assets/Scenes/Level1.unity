@@ -1471,6 +1471,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 278674131}
   m_CullTransparentMesh: 1
+--- !u!1 &340993986 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8529463064880577901, guid: dedf9289d75b9ac43ae39ec6e0cd43e9, type: 3}
+  m_PrefabInstance: {fileID: 1313293665}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &348075752 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7525865396244065516, guid: 0a80777ac2d0a4a45b051c31732b9ce8, type: 3}
@@ -3791,7 +3796,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7588175628699981845, guid: dedf9289d75b9ac43ae39ec6e0cd43e9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.07
       objectReference: {fileID: 0}
     - target: {fileID: 7588175628699981845, guid: dedf9289d75b9ac43ae39ec6e0cd43e9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5315,7 +5320,7 @@ MonoBehaviour:
     roomRoot: {fileID: 667769300}
     furniturePrefabs: []
   - roomName: LivingRoom
-    roomRoot: {fileID: 8529463064880577901, guid: dedf9289d75b9ac43ae39ec6e0cd43e9, type: 3}
+    roomRoot: {fileID: 340993986}
     furniturePrefabs: []
   - roomName: Kitchen
     roomRoot: {fileID: 1855530594}
@@ -6686,14 +6691,14 @@ Transform:
   m_GameObject: {fileID: 2121711930}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.87135, y: -0.92788, z: 0}
+  m_LocalPosition: {x: 4.42, y: -0.92788, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1979144304}
   - {fileID: 383450000}
   - {fileID: 1855530599}
   - {fileID: 667769305}
-  - {fileID: 1979144304}
   - {fileID: 1731627960}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6816,11 +6821,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7570590803256700386, guid: 48c995f9d2bcf2548b6638c4e52e08ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.87135
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7570590803256700386, guid: 48c995f9d2bcf2548b6638c4e52e08ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.92788
+      value: 0.07
       objectReference: {fileID: 0}
     - target: {fileID: 7570590803256700386, guid: 48c995f9d2bcf2548b6638c4e52e08ad, type: 3}
       propertyPath: m_LocalPosition.z
