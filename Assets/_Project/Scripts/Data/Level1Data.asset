@@ -22,12 +22,33 @@ MonoBehaviour:
     roomSize: {x: 10, y: 10}
     fixedStructures: []
   requirements:
-  - requirementId: '"hasBED"'
+  - requirementId: have bed
     requiredCategory: 6
     minCount: 1
-    minAvgScore: 0.5
+    minAvgScore: 0.3
+  - requirementId: have storage
+    requiredCategory: 3
+    minCount: 1
+    minAvgScore: 0.3
+  - requirementId: have rug
+    requiredCategory: 2
+    minCount: 1
+    minAvgScore: 0.3
+  - requirementId: have decor
+    requiredCategory: 4
+    minCount: 1
+    minAvgScore: 0.3
+  - requirementId: have table
+    requiredCategory: 7
+    minCount: 1
+    minAvgScore: 0.6
+  - requirementId: have lighting
+    requiredCategory: 1
+    minCount: 1
+    minAvgScore: 0.3
   targetScoreToWin: 80
   paletteItemIds: []
+  itemSchemas: []
   starThresholds:
   - 30
   - 50

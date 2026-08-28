@@ -90,6 +90,59 @@ public class PlacementController : MonoBehaviour
     }
 
     // =========================================================
+    // FOOTPRINT HELPERS (NEW — shared by preview, placement, move)
+    // =========================================================
+
+    private Vector2Int GetFootprintSize(GameObject prefab)
+    {
+        if (prefab == null) return Vector2Int.one;
+        FurnitureItem item = prefab.GetComponent<FurnitureItem>();
+        return item != null ? item.gridSize : Vector2Int.one;
+    }
+
+    private bool IsFootprintFree(Vector2Int origin, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                Vector3Int checkCoord = new Vector3Int(origin.x + x, origin.y + y, 0);
+                GridCell checkCell = GridManager.Instance.GetCell(checkCoord);
+
+                if (checkCell != null && checkCell.IsOccupied)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private void OccupyFootprint(Vector2Int origin, Vector2Int size, GameObject placed)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                Vector2Int checkCoord = new Vector2Int(origin.x + x, origin.y + y);
+                GridCell cell = GridManager.Instance.GetCellByCoord2D(checkCoord);
+                cell.SetOccupied(placed);
+            }
+        }
+    }
+
+    private void ClearFootprint(Vector2Int origin, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                Vector2Int checkCoord = new Vector2Int(origin.x + x, origin.y + y);
+                GridCell cell = GridManager.Instance.GetCellByCoord2D(checkCoord);
+                cell.ClearOccupied();
+            }
+        }
+    }
+
+    // =========================================================
     // PLACEMENT / SELECTION
     // =========================================================
 
@@ -110,12 +163,10 @@ public class PlacementController : MonoBehaviour
 
             if (
                 cell != null &&
-                !cell.IsOccupied &&
                 furniturePrefabs != null &&
                 furniturePrefabs.Length > 0
             )
             {
-                // Protect against invalid index
                 if (currentIndex < 0 || currentIndex >= furniturePrefabs.Length)
                 {
                     currentIndex = 0;
@@ -217,15 +268,6 @@ public class PlacementController : MonoBehaviour
             currentIndex = 0;
         }
 
-        if (cell.IsOccupied)
-        {
-            Debug.Log(
-                "[PlacementController] Cell is already occupied, can't place here."
-            );
-
-            return;
-        }
-
         GameObject prefab = furniturePrefabs[currentIndex];
 
         if (prefab == null)
@@ -233,6 +275,17 @@ public class PlacementController : MonoBehaviour
             Debug.LogError(
                 $"[PlacementController] Furniture prefab at index " +
                 $"{currentIndex} is null."
+            );
+
+            return;
+        }
+
+        // CHANGED: full footprint check instead of single-cell check
+        Vector2Int size = GetFootprintSize(prefab);
+        if (!IsFootprintFree(cell.Coordinate, size))
+        {
+            Debug.Log(
+                "[PlacementController] Footprint overlaps an occupied cell, can't place here."
             );
 
             return;
@@ -257,9 +310,9 @@ public class PlacementController : MonoBehaviour
         GameObject placed =
             Instantiate(prefab, spawnPos, spawnRot);
 
-        cell.SetOccupied(placed);
+        // CHANGED: occupy every cell in the footprint, not just the origin
+        OccupyFootprint(cell.Coordinate, size, placed);
 
-        // Auto-select newly placed furniture
         selectedFurniture = placed;
         selectedFurnitureCell = cell;
 
@@ -288,7 +341,10 @@ public class PlacementController : MonoBehaviour
 
         GameObject objectToDelete = cell.OccupyingObject;
 
-        cell.ClearOccupied();
+        // CHANGED: clear the whole footprint, not just the clicked cell
+        FurnitureItem item = objectToDelete != null ? objectToDelete.GetComponent<FurnitureItem>() : null;
+        Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
+        ClearFootprint(cell.Coordinate, size);
 
         if (objectToDelete != null)
         {
@@ -319,7 +375,6 @@ public class PlacementController : MonoBehaviour
 
         if (sr == null)
         {
-            // Sometimes SpriteRenderer may be on a child object
             sr = furniture.GetComponentInChildren<SpriteRenderer>();
         }
 
@@ -380,22 +435,28 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
-        if (targetCell.IsOccupied)
+        // CHANGED: full footprint check for move, clearing old footprint first
+        FurnitureItem item = selectedFurniture.GetComponent<FurnitureItem>();
+        Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
+
+        Vector2Int oldOrigin = selectedFurnitureCell.Coordinate;
+        ClearFootprint(oldOrigin, size); // temporarily clear so self-overlap doesn't block the check
+
+        if (!IsFootprintFree(targetCoord, size))
         {
             Debug.Log(
-                "[PlacementController] Can't move there — cell occupied."
+                "[PlacementController] Can't move there — footprint occupied."
             );
 
+            OccupyFootprint(oldOrigin, size, selectedFurniture); // restore
             return;
         }
-
-        selectedFurnitureCell.ClearOccupied();
 
         selectedFurniture.transform.position =
             targetCell.WorldPosition +
             new Vector3(0f, placementYOffset, 0f);
 
-        targetCell.SetOccupied(selectedFurniture);
+        OccupyFootprint(targetCoord, size, selectedFurniture);
 
         selectedFurnitureCell = targetCell;
 
@@ -414,8 +475,6 @@ public class PlacementController : MonoBehaviour
 
         currentIndex = 0;
 
-        // Prevent furniture selected in another room
-        // from remaining selected
         ClearSelection();
 
         int count =

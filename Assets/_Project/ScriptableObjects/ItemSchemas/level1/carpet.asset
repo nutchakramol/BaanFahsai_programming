@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Carpet
   icon: {fileID: -6730663849074467894, guid: 8a3e27df9c6bada42b56913cea052a9f, type: 3}
   prefab: {fileID: 6029928323946633983, guid: 86b97ad35e73501469204dc49c49adc5, type: 3}
-  category: 0
+  category: 2
   footprintSize: {x: 1, y: 1}
   heatZones: []
   appropriateRoomTags: 

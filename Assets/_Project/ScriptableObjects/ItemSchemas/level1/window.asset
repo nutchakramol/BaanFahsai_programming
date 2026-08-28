@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Window
   icon: {fileID: -6877788054260218752, guid: df8973d53b76db548ac7f8037d34482f, type: 3}
   prefab: {fileID: 2127685623290273078, guid: c07136e6c7f4111459a7d40e592342ec, type: 3}
-  category: 0
+  category: 4
   footprintSize: {x: 1, y: 1}
   heatZones: []
   appropriateRoomTags: 
