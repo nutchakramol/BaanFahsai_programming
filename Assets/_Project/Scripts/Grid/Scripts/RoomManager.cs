@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class RoomManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class RoomManager : MonoBehaviour
 
         [Header("Furniture Prefabs")]
         public GameObject[] furniturePrefabs;
+
+        [Header("Grid Reference")]
+        public Grid roomGrid;
+        public GridManager.SurfaceTilemap[] surfaceTilemaps;
     }
 
     [Header("All Rooms")]
@@ -41,7 +46,6 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
-        // 1. Turn OFF every room
         for (int i = 0; i < rooms.Length; i++)
         {
             if (rooms[i] != null && rooms[i].roomRoot != null)
@@ -50,7 +54,6 @@ public class RoomManager : MonoBehaviour
             }
         }
 
-        // 2. Get selected room
         RoomData selectedRoom = rooms[index];
 
         if (selectedRoom == null || selectedRoom.roomRoot == null)
@@ -59,12 +62,10 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
-        // 3. Turn ON only selected room
         selectedRoom.roomRoot.SetActive(true);
 
         currentRoomIndex = index;
 
-        // 4. Change furniture list
         if (PlacementController.Instance != null)
         {
             PlacementController.Instance.SetFurnitureSet(
@@ -76,35 +77,33 @@ public class RoomManager : MonoBehaviour
             Debug.LogError("[RoomManager] PlacementController.Instance not found.");
         }
 
+        // NEW: switch GridManager to this room's own grid + tilemaps
+        if (GridManager.Instance != null && selectedRoom.roomGrid != null)
+        {
+            GridManager.Instance.SetActiveRoom(selectedRoom.roomGrid, selectedRoom.surfaceTilemaps);
+        }
+        else
+        {
+            Debug.LogWarning($"[RoomManager] No grid/tilemap data configured for {selectedRoom.roomName}.");
+        }
+
         Debug.Log(
             $"[RoomManager] Switched to {selectedRoom.roomName}, " +
             $"Furniture count: {selectedRoom.furniturePrefabs?.Length ?? 0}"
         );
     }
 
-    // Button methods
-    public void ShowBedroom()
+    private void Update()
     {
-        SwitchRoom(0);
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchRoom(0); // Bedroom
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchRoom(1); // Toilet
+        if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchRoom(2); // LivingRoom
+        if (Input.GetKeyDown(KeyCode.Alpha4)) SwitchRoom(3); // Kitchen
+        if (Input.GetKeyDown(KeyCode.Alpha5)) SwitchRoom(4); // Attic
     }
-
-    public void ShowToilet()
-    {
-        SwitchRoom(1);
-    }
-
-    public void ShowAttic()
-    {
-        SwitchRoom(2);
-    }
-
-    public void ShowLivingRoom()
-    {
-        SwitchRoom(3);
-    }
-
-    public void ShowKitchen()
-    {
-        SwitchRoom(4);
-    }
+    public void ShowBedroom() { SwitchRoom(0); }
+    public void ShowToilet() { SwitchRoom(1); }
+    public void ShowAttic() { SwitchRoom(2); }
+    public void ShowLivingRoom() { SwitchRoom(3); }
+    public void ShowKitchen() { SwitchRoom(4); }
 }

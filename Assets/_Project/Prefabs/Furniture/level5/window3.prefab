@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5104479616385962137}
   - component: {fileID: 7092164779563058053}
+  - component: {fileID: 7928048765236307640}
   m_Layer: 0
   m_Name: window3
   m_TagString: Untagged
@@ -91,3 +92,22 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &7928048765236307640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 751593422292542751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ab65492723c65840b5d43eee3a1ff92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
+  furnitureID: 
+  furnitureName: 
+  gridSize: {x: 1, y: 1}
+  canRotate: 1
+  levelUnlock: 1
+  surface: 0
+  colorVariants: []

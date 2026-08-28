@@ -82,7 +82,6 @@ public class PlacementController : MonoBehaviour
 
         FurnitureItem item = prefab.GetComponent<FurnitureItem>();
 
-        // No FurnitureItem = no restriction
         if (item == null)
             return true;
 
@@ -90,7 +89,7 @@ public class PlacementController : MonoBehaviour
     }
 
     // =========================================================
-    // FOOTPRINT HELPERS (NEW — shared by preview, placement, move)
+    // FOOTPRINT HELPERS
     // =========================================================
 
     private Vector2Int GetFootprintSize(GameObject prefab)
@@ -150,12 +149,15 @@ public class PlacementController : MonoBehaviour
     {
         if (GridManager.Instance == null)
             return;
-
+    
+        // NEW: don't process world-space clicks if the pointer is over UI
+        if (UnityEngine.EventSystems.EventSystem.current != null &&
+            UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+    
         GridCell cell = GridManager.Instance.SelectedCell;
-
-        // -----------------------------------------
-        // Ghost Preview
-        // -----------------------------------------
 
         if (ghostPreview != null)
         {
@@ -181,11 +183,6 @@ public class PlacementController : MonoBehaviour
         if (cell == null)
             return;
 
-        // -----------------------------------------
-        // Left Click
-        // Select existing furniture OR place new
-        // -----------------------------------------
-
         if (Input.GetMouseButtonDown(0))
         {
             if (cell.IsOccupied)
@@ -203,22 +200,10 @@ public class PlacementController : MonoBehaviour
                 PlaceFurnitureAt(cell);
             }
         }
-
-        // -----------------------------------------
-        // Right Click
-        // Delete furniture
-        // -----------------------------------------
-
         else if (Input.GetMouseButtonDown(1))
         {
             DeleteFurniture(cell);
         }
-
-        // -----------------------------------------
-        // Middle Click
-        // Flip furniture
-        // -----------------------------------------
-
         else if (Input.GetMouseButtonDown(2))
         {
             FlipFurnitureHorizontal(cell);
@@ -280,12 +265,24 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
-        // CHANGED: full footprint check instead of single-cell check
+        // Full footprint check instead of single-cell check
         Vector2Int size = GetFootprintSize(prefab);
         if (!IsFootprintFree(cell.Coordinate, size))
         {
             Debug.Log(
                 "[PlacementController] Footprint overlaps an occupied cell, can't place here."
+            );
+
+            return;
+        }
+
+        // NEW: surface band check — item must match the tilemap's surface type
+        FurnitureItem furnitureCheck = prefab.GetComponent<FurnitureItem>();
+        if (furnitureCheck != null && GridManager.Instance.SelectedSurfaceBand != furnitureCheck.surface)
+        {
+            Debug.Log(
+                $"[PlacementController] {prefab.name} requires {furnitureCheck.surface} surface, " +
+                $"but this cell is {GridManager.Instance.SelectedSurfaceBand}."
             );
 
             return;
@@ -310,7 +307,6 @@ public class PlacementController : MonoBehaviour
         GameObject placed =
             Instantiate(prefab, spawnPos, spawnRot);
 
-        // CHANGED: occupy every cell in the footprint, not just the origin
         OccupyFootprint(cell.Coordinate, size, placed);
 
         selectedFurniture = placed;
@@ -341,7 +337,6 @@ public class PlacementController : MonoBehaviour
 
         GameObject objectToDelete = cell.OccupyingObject;
 
-        // CHANGED: clear the whole footprint, not just the clicked cell
         FurnitureItem item = objectToDelete != null ? objectToDelete.GetComponent<FurnitureItem>() : null;
         Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
         ClearFootprint(cell.Coordinate, size);
@@ -435,12 +430,11 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
-        // CHANGED: full footprint check for move, clearing old footprint first
         FurnitureItem item = selectedFurniture.GetComponent<FurnitureItem>();
         Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
 
         Vector2Int oldOrigin = selectedFurnitureCell.Coordinate;
-        ClearFootprint(oldOrigin, size); // temporarily clear so self-overlap doesn't block the check
+        ClearFootprint(oldOrigin, size);
 
         if (!IsFootprintFree(targetCoord, size))
         {
@@ -448,7 +442,7 @@ public class PlacementController : MonoBehaviour
                 "[PlacementController] Can't move there — footprint occupied."
             );
 
-            OccupyFootprint(oldOrigin, size, selectedFurniture); // restore
+            OccupyFootprint(oldOrigin, size, selectedFurniture);
             return;
         }
 

@@ -33,23 +33,31 @@ public class GhostPreview : MonoBehaviour
     /// </summary>
     public void UpdatePreview(GameObject furniturePrefab, GridCell originCell)
     {
+        Debug.Log($"[GhostPreview] UpdatePreview called. Prefab: {furniturePrefab?.name}, Cell: {originCell?.Coordinate}");
+    
         if (furniturePrefab == null || originCell == null)
         {
             Hide();
             return;
         }
-
+    
         FurnitureItem item = furniturePrefab.GetComponent<FurnitureItem>();
         Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
-        Debug.Log($"[GhostPreview] Reading size: {size} from prefab: {furniturePrefab.name}");
-
-        bool canPlace = CheckFootprintFree(originCell.Coordinate, size);
+    
+        bool footprintFree = CheckFootprintFree(originCell.Coordinate, size);
+    
+        bool surfaceMatches = true;
+        if (item != null && GridManager.Instance != null)
+        {
+            surfaceMatches = GridManager.Instance.SelectedSurfaceBand == item.surface;
+        }
+    
+        bool canPlace = footprintFree && surfaceMatches;
         Color previewColor = canPlace ? validColor : blockedColor;
-
+    
         UpdateFurnitureSprite(furniturePrefab, originCell, previewColor);
         UpdateFootprintHighlights(originCell.Coordinate, size, previewColor);
     }
-
     private void UpdateFurnitureSprite(GameObject furniturePrefab, GridCell originCell, Color previewColor)
     {
         if (furnitureSpriteRenderer == null) return;

@@ -1,5 +1,7 @@
 using UnityEngine;
 
+public enum SurfaceBand { Floor, Wall, Ceiling, Countertop }
+
 public class FurnitureItem : MonoBehaviour
 {
     [Header("Identity")]
@@ -13,13 +15,12 @@ public class FurnitureItem : MonoBehaviour
     public bool canRotate = true;
     [Tooltip("1-indexed level this furniture unlocks at (Level 1 = bedroom, etc.)")]
     public int levelUnlock = 1;
+    [Tooltip("Which surface this item can be placed on")]
+    public SurfaceBand surface = SurfaceBand.Floor;
 
     [Header("Customization (optional)")]
     public Material[] colorVariants;
 
-    // Returns true if the level this furniture requires has been unlocked.
-    // Assumes LevelProgress.IsUnlocked uses 0-indexed levels (matches
-    // LevelSelectUI's bubble loop, where bubble i = Level i+1).
     public bool IsUnlockedForPlayer()
     {
         return LevelProgress.IsUnlocked(levelUnlock - 1);
