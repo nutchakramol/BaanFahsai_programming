@@ -35,7 +35,7 @@ MonoBehaviour:
   - 95
   minScoreToPass: 30
   npcName: Tui
-  npcPortrait: {fileID: 0}
+  npcPortrait: {fileID: -7608338550258991267, guid: 22fa0232b73fef2449283befa8476427, type: 3}
   npcIntroDialogue:
   - "Hey! Are you the one who\u2019s going to help me decorate my attic?"
   - "This is my room, but right now it\u2019s both dark and way too empty."

@@ -36,7 +36,7 @@ MonoBehaviour:
   - 95
   minScoreToPass: 30
   npcName: ToiToiNoi
-  npcPortrait: {fileID: 0}
+  npcPortrait: {fileID: -3190437382039167500, guid: 5431ebf544be9b14397fcef02b7c0f70, type: 3}
   npcIntroDialogue:
   - "Hey! I heard you\u2019re the one who decorated Uncle Chan\u2019s place."
   - I want to turn this room into a living room for me and my friends.
