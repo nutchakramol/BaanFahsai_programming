@@ -36,7 +36,7 @@ MonoBehaviour:
   - 95
   minScoreToPass: 30
   npcName: Uncle Chan
-  npcPortrait: {fileID: 0}
+  npcPortrait: {fileID: -23107399414326868, guid: 107dc3a3b2183b54a9b253942e968ddb, type: 3}
   npcIntroDialogue:
   - "Hello! I heard you did a wonderful job decorating Grandma Mali\u2019s room."
   - I work as a gardener, so I come home covered in dirt every day.

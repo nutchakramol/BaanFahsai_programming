@@ -16,7 +16,29 @@ MonoBehaviour:
   displayName: Bathtub
   icon: {fileID: -1078370065236338852, guid: 1a3641a62c59b8f4f84595fe1308ea93, type: 3}
   prefab: {fileID: 3493526508131586713, guid: 4527c7e87cac6e946b2e6d5283612302, type: 3}
-  category: 0
+  category: 9
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: 
+    worldPosition: {x: 0, y: 0}
+    innerRadius: 0
+    outerRadius: 0
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 0
+  - zoneLabel: 
+    worldPosition: {x: 0, y: 0}
+    innerRadius: 0
+    outerRadius: 0
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 0
   appropriateRoomTags: 

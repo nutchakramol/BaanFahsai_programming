@@ -57,14 +57,15 @@ MonoBehaviour:
   - 95
   minScoreToPass: 30
   npcName: Grandma Mali
-  npcPortrait: {fileID: 5766485885808274625, guid: b593a487bb444bb4ca63bdf236d329f6, type: 3}
+  npcPortrait: {fileID: -5761559135803546278, guid: 82edd5edbe22e6542908fe3e553f2854, type: 3}
   npcIntroDialogue:
   - Hello, dear! Are you the one who is going to help me decorate my room?
   - I just moved into my new house, and the bedroom is still completely empty.
   - "I\u2019d like the room to feel warm and simple."
   - I love reading books before going to bed.
   - It would be wonderful to have a desk and a chair near the window.
-  - "Please take good care of this room. I can\u2019t wait to see my new bedroom!"
+  - "Please take good care of this room. I can\u2019t wait to see my new bedroom
+    !"
   npcCompletionDialogue:
   - "Wow... It\u2019s beautiful! The room feels just as warm and cozy as I imagined.
     Thank you so much, dear!"

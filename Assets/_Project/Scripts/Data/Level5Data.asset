@@ -35,13 +35,13 @@ MonoBehaviour:
   - 95
   minScoreToPass: 30
   npcName: Tui
-  npcPortrait: {fileID: 0}
+  npcPortrait: {fileID: -7608338550258991267, guid: 22fa0232b73fef2449283befa8476427, type: 3}
   npcIntroDialogue:
   - "Hey! Are you the one who\u2019s going to help me decorate my attic?"
   - "This is my room, but right now it\u2019s both dark and way too empty."
   - I want it to be a room where I can play games, read books, and keep my collectibles.
   - "I have so many toys, but I don\u2019t have anywhere to store them!"
-  - And I really want some cool lights.
+  - And I really want some cool lights !!!
   - Can you turn this room into my dream room?
   npcCompletionDialogue:
   - Wow! This is my dream room! I want to stay here all day now!

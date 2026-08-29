@@ -22,6 +22,8 @@ public class NPCDialogueUI : MonoBehaviour
         if (panel != null)
             panel.SetActive(false);
 
+        gameObject.SetActive(false); // NEW — whole NPCDialogueUI (incl. backdrop) starts hidden
+
         if (continueButton != null)
             continueButton.onClick.AddListener(HandleContinue);
     }
@@ -36,6 +38,8 @@ public class NPCDialogueUI : MonoBehaviour
             Debug.LogError("NPCDialogueUI: LevelData is null.");
             return;
         }
+
+        gameObject.SetActive(true); // NEW — show the whole NPCDialogueUI, incl. backdrop
 
         _onDialogueFinished = onContinue;
 
@@ -116,6 +120,8 @@ public class NPCDialogueUI : MonoBehaviour
         if (panel != null)
             panel.SetActive(false);
 
+        gameObject.SetActive(false); // NEW — hide the whole NPCDialogueUI, incl. backdrop
+
         Action callback = _onDialogueFinished;
 
         _onDialogueFinished = null;
@@ -135,6 +141,8 @@ public class NPCDialogueUI : MonoBehaviour
             Debug.LogError("NPCDialogueUI: LevelData is null.");
             return;
         }
+
+        gameObject.SetActive(true); // NEW — show the whole NPCDialogueUI, incl. backdrop
 
         _onDialogueFinished = onFinished;
 
