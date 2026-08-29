@@ -1585,11 +1585,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 405612762}
   m_CullTransparentMesh: 1
-<<<<<<< HEAD
 --- !u!1 &424256752
-=======
---- !u!1 &510196507
->>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1597,7 +1593,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< HEAD
   - component: {fileID: 424256753}
   - component: {fileID: 424256754}
   m_Layer: 0
@@ -1644,8 +1639,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-=======
->>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
   - component: {fileID: 540816282}
   - component: {fileID: 540816286}
   - component: {fileID: 540816285}
