@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Cupboard
   icon: {fileID: 9037358386381975392, guid: 2a81a812927bc6b40b05644e6907f273, type: 3}
   prefab: {fileID: 237672204816395137, guid: 0a80777ac2d0a4a45b051c31732b9ce8, type: 3}
-  category: 0
+  category: 3
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in room
+    worldPosition: {x: 0, y: 0}
+    innerRadius: 1.5
+    outerRadius: 4
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

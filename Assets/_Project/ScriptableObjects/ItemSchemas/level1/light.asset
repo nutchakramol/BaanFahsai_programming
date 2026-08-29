@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Light
   icon: {fileID: 8423191903164793606, guid: 58e8f7e283ee09948a17ecdf120dbfe0, type: 3}
   prefab: {fileID: 7067410679969108951, guid: 183afe1642aa19647bafb054970f4325, type: 3}
-  category: 0
+  category: 1
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in room
+    worldPosition: {x: 0, y: 0}
+    innerRadius: 1.5
+    outerRadius: 4
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

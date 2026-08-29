@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Desk
   icon: {fileID: 322130390546448358, guid: 12dafa7f2ad29304ba5ab7ca3589cfaa, type: 3}
   prefab: {fileID: 5613119166332869625, guid: 5dc9f9ae9eb150243ae2d6d36a3e6125, type: 3}
-  category: 0
+  category: 7
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: near window
+    worldPosition: {x: 0, y: 0}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

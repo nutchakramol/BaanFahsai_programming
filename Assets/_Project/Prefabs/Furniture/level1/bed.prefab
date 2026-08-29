@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: bed
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 1
