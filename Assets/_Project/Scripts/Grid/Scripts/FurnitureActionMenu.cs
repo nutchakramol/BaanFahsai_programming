@@ -3,6 +3,7 @@ using UnityEngine;
 public class FurnitureActionMenu : MonoBehaviour
 {
     [Header("References")]
+<<<<<<< HEAD:Assets/_Project/Scripts/Grid/Scripts/FurnitureActionMenu.cs
     [Tooltip("The parent Canvas this panel lives under")]
     public Canvas parentCanvas;
 
@@ -11,6 +12,12 @@ public class FurnitureActionMenu : MonoBehaviour
 
     [Header("Positioning")]
     [Tooltip("Offset above the furniture in world units, so the menu doesn't cover the piece")]
+=======
+    public Canvas parentCanvas;
+    public Camera uiCamera;
+
+    [Header("Positioning")]
+>>>>>>> refs/remotes/origin/Gridsystem_pf:Assets/Scripts/FurnitureActionMenu.cs
     public Vector3 worldOffset = new Vector3(0f, 1f, 0f);
 
     private RectTransform rect;
@@ -50,8 +57,11 @@ public class FurnitureActionMenu : MonoBehaviour
             canvasRect, screenPos, uiCamera, out Vector2 localPoint);
 
         rect.anchoredPosition = localPoint;
+<<<<<<< HEAD:Assets/_Project/Scripts/Grid/Scripts/FurnitureActionMenu.cs
 
         // TEMP DIAGNOSTIC
         Debug.Log($"WorldPos: {worldPos} | ScreenPos: {screenPos} | LocalPoint: {localPoint} | Screen: {Screen.width}x{Screen.height} | CanvasRect size: {canvasRect.rect.width}x{canvasRect.rect.height}");
+=======
+>>>>>>> refs/remotes/origin/Gridsystem_pf:Assets/Scripts/FurnitureActionMenu.cs
     }
 }
