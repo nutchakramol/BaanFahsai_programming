@@ -3265,53 +3265,6 @@ MonoBehaviour:
   highlightOrder: 100
   furnitureOrder: 101
   highlightYOffset: 0.02
---- !u!1 &1405103008
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1405103010}
-  - component: {fileID: 1405103009}
-  m_Layer: 0
-  m_Name: _ThemeSwitcher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1405103009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405103008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d28ad111929f4840838808acba235ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TilemapThemeSwitcher
-  floorTilemap: {fileID: 925401772}
-  wallLeftTilemap: {fileID: 1285309486}
-  wallRightTilemap: {fileID: 589221055}
---- !u!4 &1405103010
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405103008}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.34867, y: -0.02952, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1839735485 &1437111469 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 6251788331200512923, guid: d01fe416e61cd754e9ee476348451268, type: 3}
@@ -8104,6 +8057,5 @@ SceneRoots:
   - {fileID: 1589710115}
   - {fileID: 699928508}
   - {fileID: 229513173}
-  - {fileID: 1405103010}
   - {fileID: 1210785465}
   - {fileID: 424256753}
