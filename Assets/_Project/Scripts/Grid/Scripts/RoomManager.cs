@@ -159,29 +159,9 @@ public class RoomManager : MonoBehaviour
     }
 
     // =====================================================
-    // TEMPORARY KEYBOARD TESTING
-    // =====================================================
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            SwitchRoom(0); // Bedroom
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            SwitchRoom(1); // Toilet
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            SwitchRoom(2); // Attic
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            SwitchRoom(3); // LivingRoom
-
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            SwitchRoom(4); // Kitchen
-    }
-
-    // =====================================================
     // UI BUTTON METHODS
+    // (kept in case anything still references them via OnClick —
+    // safe to leave unused; remove later once confirmed nothing calls them)
     // =====================================================
 
     public void ShowBedroom()
