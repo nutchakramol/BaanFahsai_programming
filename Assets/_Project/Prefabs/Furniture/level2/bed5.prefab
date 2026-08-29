@@ -108,5 +108,6 @@ MonoBehaviour:
   furnitureName: bed5
   gridSize: {x: 2, y: 2}
   canRotate: 1
-  levelUnlock: 1
+  levelUnlock: 2
+  surface: 0
   colorVariants: []

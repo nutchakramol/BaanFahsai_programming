@@ -109,4 +109,5 @@ MonoBehaviour:
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 3
+  surface: 0
   colorVariants: []

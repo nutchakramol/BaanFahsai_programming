@@ -94,7 +94,7 @@ public class GridManager : MonoBehaviour
         Vector2 mousePos =
             Mouse.current.position.ReadValue();
 
-        Vector3 screenPosition =
+        Vector3 screenPos =
             new Vector3(
                 mousePos.x,
                 mousePos.y,
@@ -102,64 +102,102 @@ public class GridManager : MonoBehaviour
             );
 
         Vector3 worldPos =
-            MainCam.ScreenToWorldPoint(screenPosition);
+            MainCam.ScreenToWorldPoint(screenPos);
 
         worldPos.z = 0f;
 
-        // Detect which Tilemap the mouse is currently over.
-        RaycastHit2D hit =
-            Physics2D.Raycast(
+        // =====================================================
+        // CHECK ALL COLLIDERS UNDER MOUSE
+        // =====================================================
+
+        RaycastHit2D[] hits =
+            Physics2D.RaycastAll(
                 worldPos,
                 Vector2.zero
             );
 
-        Tilemap hitSurface = null;
+        Tilemap selectedTilemap = null;
+        SurfaceBand selectedBand = SurfaceBand.Floor;
 
-        SurfaceBand hitBand =
-            SurfaceBand.Floor;
+        // =====================================================
+        // FIND REGISTERED TILEMAP THAT ACTUALLY HAS A TILE HERE
+        // =====================================================
 
-        if (hit.collider != null)
+        foreach (RaycastHit2D hit in hits)
         {
+            if (hit.collider == null)
+                continue;
+
             Tilemap hitTilemap =
                 hit.collider.GetComponent<Tilemap>();
 
-            // Sometimes collider can be on a child.
             if (hitTilemap == null)
             {
                 hitTilemap =
                     hit.collider.GetComponentInParent<Tilemap>();
             }
 
-            if (hitTilemap != null &&
-                surfaceTilemaps != null)
+            if (hitTilemap == null)
+                continue;
+
+            if (surfaceTilemaps == null)
+                continue;
+
+            foreach (SurfaceTilemap surface in surfaceTilemaps)
             {
-                foreach (SurfaceTilemap entry in surfaceTilemaps)
+                if (surface == null ||
+                    surface.tilemap == null)
                 {
-                    if (entry == null)
-                        continue;
-
-                    if (entry.tilemap == hitTilemap)
-                    {
-                        hitSurface =
-                            entry.tilemap;
-
-                        hitBand =
-                            entry.band;
-
-                        break;
-                    }
+                    continue;
                 }
+
+                if (surface.tilemap != hitTilemap)
+                    continue;
+
+                // Convert mouse position to THIS tilemap's cell
+                Vector3Int tileCoord =
+                    hitTilemap.WorldToCell(worldPos);
+
+                // Collider may overlap the area even if there
+                // is no tile at this exact position.
+                if (!hitTilemap.HasTile(tileCoord))
+                    continue;
+
+                // Found a valid surface.
+                selectedTilemap =
+                    hitTilemap;
+
+                selectedBand =
+                    surface.band;
+
+                // Prefer Floor when multiple surfaces overlap.
+                if (surface.band == SurfaceBand.Floor)
+                {
+                    break;
+                }
+            }
+
+            if (selectedTilemap != null &&
+                selectedBand == SurfaceBand.Floor)
+            {
+                break;
             }
         }
 
-        // Mouse is not over a registered placeable surface.
-        if (hitSurface == null)
+        // =====================================================
+        // NO VALID SURFACE
+        // =====================================================
+
+        if (selectedTilemap == null)
         {
             SelectedCell = null;
             SelectedSurface = null;
-
             return;
         }
+
+        // =====================================================
+        // GRID CELL
+        // =====================================================
 
         Vector3Int cellCoord =
             tilemapGrid.WorldToCell(worldPos);
@@ -171,20 +209,17 @@ public class GridManager : MonoBehaviour
             cellCoord;
 
         SelectedSurface =
-            hitSurface;
+            selectedTilemap;
 
         SelectedSurfaceBand =
-            hitBand;
+            selectedBand;
 
-        // Uncomment only when debugging.
-        /*
+        // Temporary debug
         Debug.Log(
-            $"[GridManager] Mouse world: {worldPos}, " +
-            $"Cell coord: {cellCoord}, " +
-            $"Surface: {hitBand}, " +
-            $"Cell center: {SelectedCell.WorldPosition}"
+            $"[GridManager] Surface = {SelectedSurfaceBand}, " +
+            $"Tilemap = {SelectedSurface.name}, " +
+            $"Cell = {cellCoord}"
         );
-        */
     }
 
     // =========================================================
