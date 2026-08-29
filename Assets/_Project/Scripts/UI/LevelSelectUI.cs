@@ -15,6 +15,9 @@ public class LevelSelectUI : MonoBehaviour
     private readonly List<VisualElement> levelBubbles = new();
 
     [SerializeField] private List<LevelDataSO> levels;
+    [Header("To Be Continued Popup")]
+    [SerializeField] private Sprite toBeContinuedSprite;
+    private VisualElement toBeContinuedPopup;
     private int selectedLevel = 0;
 
     private int LevelCount => levels != null ? levels.Count : 0;
@@ -43,7 +46,6 @@ public class LevelSelectUI : MonoBehaviour
     {
         uiDocument = GetComponent<UIDocument>();
     }
-
     public void Setup()
     {
         if (uiDocument == null)
@@ -115,6 +117,8 @@ public class LevelSelectUI : MonoBehaviour
 
         levelBubbles.Clear();
         CreateLevels();
+
+        CreateToBeContinuedPopup();
 
         selectedLevel = 0;
         isAnimating = false;
@@ -342,7 +346,14 @@ public class LevelSelectUI : MonoBehaviour
             return;
 
         if (selectedLevel >= LevelCount - 1)
+        {
+            selectedLevel = LevelCount;
+            StartAnimation();
+            levelArea.schedule
+                .Execute(() => ShowToBeContinuedPopup())
+                .StartingIn((long)(AnimationDuration * 1000));
             return;
+        }
 
         selectedLevel++;
         StartAnimation();
@@ -581,6 +592,142 @@ public class LevelSelectUI : MonoBehaviour
         }
     }
 
+// =========================================================
+// ADD: TO BE CONTINUED POPUP
+// =========================================================
+
+    private void CreateToBeContinuedPopup()
+    {
+        if (toBeContinuedPopup != null)
+            toBeContinuedPopup.RemoveFromHierarchy();
+
+        toBeContinuedPopup = new VisualElement();
+
+        toBeContinuedPopup.name = "ToBeContinuedPopup";
+
+        toBeContinuedPopup.style.position = Position.Absolute;
+        toBeContinuedPopup.style.left = 0;
+        toBeContinuedPopup.style.right = 0;
+        toBeContinuedPopup.style.top = 0;
+        toBeContinuedPopup.style.bottom = 0;
+
+        toBeContinuedPopup.style.justifyContent =
+            Justify.Center;
+
+        toBeContinuedPopup.style.alignItems =
+            Align.Center;
+
+        toBeContinuedPopup.style.backgroundColor =
+            new Color(0f, 0f, 0f, 0.35f);
+
+        VisualElement messageBox =
+            new VisualElement();
+
+        messageBox.name = "MessageBox";
+
+        messageBox.style.width = 600;
+        messageBox.style.height = 400;
+
+        if (toBeContinuedSprite != null)
+        {
+            messageBox.style.backgroundImage =
+                Background.FromSprite(
+                    toBeContinuedSprite
+                );
+        }
+
+        messageBox.style.backgroundRepeat =
+            new BackgroundRepeat(
+                Repeat.NoRepeat,
+                Repeat.NoRepeat
+            );
+
+        messageBox.style.backgroundSize =
+            new BackgroundSize(
+                Length.Percent(100),
+                Length.Percent(100)
+            );
+
+        messageBox.style.justifyContent =
+            Justify.Center;
+
+        messageBox.style.alignItems =
+            Align.Center;
+
+        Label message =
+            new Label("To be continue...");
+
+        message.name =
+            "ToBeContinuedText";
+
+        message.style.color =
+            Color.black;
+
+        // ตัวหนา
+        message.style.unityFontStyleAndWeight =
+            FontStyle.Bold;
+
+        message.style.fontSize = 42;
+
+        message.style.unityTextAlign =
+            TextAnchor.MiddleCenter;
+
+        message.style.marginBottom = 35;
+
+        messageBox.Add(message);
+
+        Button closeButton =
+            new Button(HideToBeContinuedPopup);
+
+        closeButton.name =
+            "ToBeContinuedCloseButton";
+
+        closeButton.text = "OK";
+
+        closeButton.style.width = 150;
+        closeButton.style.height = 60;
+
+        closeButton.style.fontSize = 26;
+
+        closeButton.style.unityFontStyleAndWeight =
+            FontStyle.Bold;
+
+        closeButton.style.color =
+            Color.black;
+
+        messageBox.Add(closeButton);
+
+        toBeContinuedPopup.Add(messageBox);
+
+        toBeContinuedPopup.style.display =
+            DisplayStyle.None;
+
+        root.Add(toBeContinuedPopup);
+    }
+
+    // ////////////////////
+
+    private void ShowToBeContinuedPopup()
+    {
+        if (toBeContinuedPopup == null)
+            CreateToBeContinuedPopup();
+
+        toBeContinuedPopup.style.display =
+            DisplayStyle.Flex;
+    }
+
+    // ////////////////////
+
+    private void HideToBeContinuedPopup()
+    {
+        if (toBeContinuedPopup == null)
+            return;
+
+        toBeContinuedPopup.style.display =
+            DisplayStyle.None;
+    }
+
+    // ////////////////////
     private void ConfirmLevel()
     {
         if (!LevelProgress.IsUnlocked(selectedLevel))

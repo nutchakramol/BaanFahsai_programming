@@ -119,7 +119,16 @@ public class RoomManager : MonoBehaviour
         );
     }
 
+<<<<<<< HEAD
     // Button methods
+=======
+    // =====================================================
+    // UI BUTTON METHODS
+    // (kept in case anything still references them via OnClick —
+    // safe to leave unused; remove later once confirmed nothing calls them)
+    // =====================================================
+
+>>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
     public void ShowBedroom()
     {
         SwitchRoom(0);

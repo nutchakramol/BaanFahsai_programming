@@ -236,6 +236,7 @@ MonoBehaviour:
   m_FontFeatureTable:
     m_MultipleSubstitutionRecords: []
     m_LigatureSubstitutionRecords: []
+<<<<<<< HEAD
     m_GlyphPairAdjustmentRecords:
     - m_FirstAdjustmentRecord:
         m_GlyphIndex: 3
@@ -8847,6 +8848,9 @@ MonoBehaviour:
           m_XAdvance: 0
           m_YAdvance: 0
       m_FeatureLookupFlags: 5579584
+=======
+    m_GlyphPairAdjustmentRecords: []
+>>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
     m_MarkToBaseAdjustmentRecords: []
     m_MarkToMarkAdjustmentRecords: []
   m_ShouldReimportFontFeatures: 0
@@ -8938,9 +8942,15 @@ Texture2D:
     Hash: 00000000000000000000000000000000
   m_IsAlphaChannelOptional: 0
   serializedVersion: 4
+<<<<<<< HEAD
   m_Width: 1
   m_Height: 1
   m_CompleteImageSize: 1
+=======
+  m_Width: 0
+  m_Height: 0
+  m_CompleteImageSize: 0
+>>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1
@@ -8965,8 +8975,13 @@ Texture2D:
   m_LightmapFormat: 0
   m_ColorSpace: 0
   m_PlatformBlob: 
+<<<<<<< HEAD
   image data: 1
   _typelessdata: 00
+=======
+  image data: 0
+  _typelessdata: 
+>>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
   m_StreamData:
     serializedVersion: 2
     offset: 0

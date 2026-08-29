@@ -106,8 +106,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
   furnitureName: 
+<<<<<<< HEAD
   gridSize: {x: 1, y: 1}
   canRotate: 1
   levelUnlock: 1
   surface: 0
+=======
+  gridSize: {x: 2, y: 2}
+  canRotate: 1
+  levelUnlock: 5
+  surface: 1
+>>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
   colorVariants: []

@@ -13,8 +13,10 @@ public class LevelSessionController : MonoBehaviour
     [SerializeField] private UIDocument gameplayUIDocument;
     [SerializeField] private NPCDialogueUI npcDialogueUI;
     [SerializeField] private LevelDataSO defaultLevelData;
+
     private LevelController _currentLevelController;
     private LevelDataSO _currentLevelData;
+
     private void Start()
     {
         if (GameEvents.CurrentLevelData != null)
@@ -63,8 +65,6 @@ public class LevelSessionController : MonoBehaviour
             return;
         }
 
-        // IMPORTANT:
-        // This is the selected level's data.
         _currentLevelData = levelData;
 
         Debug.Log(
@@ -126,8 +126,31 @@ public class LevelSessionController : MonoBehaviour
             }
         }
 
+        // NEW: lock the grid/placement system to this level's room
+        RoomManager roomManager = FindFirstObjectByType<RoomManager>();
+        if (roomManager != null)
+        {
+            roomManager.SwitchRoom(_currentLevelData.levelIndex);
+        }
+        else
+        {
+            Debug.LogWarning("LevelSessionController: No RoomManager found in scene.");
+        }
+
         if (gameplayUIDocument != null)
             gameplayUIDocument.gameObject.SetActive(true);
+    }
+
+    // NEW: call this from a "Check Level" UI button
+    public void CheckLevel()
+    {
+        if (_currentLevelController == null)
+        {
+            Debug.LogError("LevelSessionController: No active level controller — nothing to check.");
+            return;
+        }
+
+        _currentLevelController.CheckLevel();
     }
 
     private void HandleLevelChecked(
