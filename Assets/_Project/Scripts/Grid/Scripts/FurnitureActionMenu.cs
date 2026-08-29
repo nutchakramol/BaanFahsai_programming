@@ -3,21 +3,21 @@ using UnityEngine;
 public class FurnitureActionMenu : MonoBehaviour
 {
     [Header("References")]
-<<<<<<< HEAD:Assets/_Project/Scripts/Grid/Scripts/FurnitureActionMenu.cs
     [Tooltip("The parent Canvas this panel lives under")]
     public Canvas parentCanvas;
 
-    [Tooltip("Optional: camera used by the Canvas if Render Mode is 'Screen Space - Camera' or 'World Space'. Leave empty if Canvas is 'Screen Space - Overlay'.")]
+    [Tooltip(
+        "Optional: camera used by the Canvas if Render Mode is " +
+        "'Screen Space - Camera' or 'World Space'. " +
+        "Leave empty if Canvas is 'Screen Space - Overlay'."
+    )]
     public Camera uiCamera;
 
     [Header("Positioning")]
-    [Tooltip("Offset above the furniture in world units, so the menu doesn't cover the piece")]
-=======
-    public Canvas parentCanvas;
-    public Camera uiCamera;
-
-    [Header("Positioning")]
->>>>>>> refs/remotes/origin/Gridsystem_pf:Assets/Scripts/FurnitureActionMenu.cs
+    [Tooltip(
+        "Offset above the furniture in world units, " +
+        "so the menu doesn't cover the piece"
+    )]
     public Vector3 worldOffset = new Vector3(0f, 1f, 0f);
 
     private RectTransform rect;
@@ -26,8 +26,17 @@ public class FurnitureActionMenu : MonoBehaviour
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
+
         if (parentCanvas != null)
+        {
             canvasRect = parentCanvas.GetComponent<RectTransform>();
+        }
+        else
+        {
+            Debug.LogError(
+                "[FurnitureActionMenu] Parent Canvas is not assigned."
+            );
+        }
 
         gameObject.SetActive(false);
     }
@@ -40,28 +49,57 @@ public class FurnitureActionMenu : MonoBehaviour
             return;
         }
 
-        GameObject selected = PlacementController.Instance.SelectedFurniture;
+        GameObject selected =
+            PlacementController.Instance.SelectedFurniture;
 
         if (selected == null)
         {
-            if (gameObject.activeSelf) gameObject.SetActive(false);
+            if (gameObject.activeSelf)
+                gameObject.SetActive(false);
+
             return;
         }
 
-        if (!gameObject.activeSelf) gameObject.SetActive(true);
+        if (canvasRect == null)
+            return;
 
-        Vector3 worldPos = selected.transform.position + worldOffset;
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvasRect, screenPos, uiCamera, out Vector2 localPoint);
+        Vector3 worldPos =
+            selected.transform.position + worldOffset;
 
-        rect.anchoredPosition = localPoint;
-<<<<<<< HEAD:Assets/_Project/Scripts/Grid/Scripts/FurnitureActionMenu.cs
+        Camera worldCamera = Camera.main;
 
-        // TEMP DIAGNOSTIC
-        Debug.Log($"WorldPos: {worldPos} | ScreenPos: {screenPos} | LocalPoint: {localPoint} | Screen: {Screen.width}x{Screen.height} | CanvasRect size: {canvasRect.rect.width}x{canvasRect.rect.height}");
-=======
->>>>>>> refs/remotes/origin/Gridsystem_pf:Assets/Scripts/FurnitureActionMenu.cs
+        if (worldCamera == null)
+        {
+            Debug.LogError(
+                "[FurnitureActionMenu] No Main Camera found."
+            );
+            return;
+        }
+
+        Vector3 screenPos =
+            worldCamera.WorldToScreenPoint(worldPos);
+
+        // Screen Space - Overlay must use NULL camera.
+        Camera conversionCamera = null;
+
+        if (parentCanvas != null &&
+            parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+        {
+            conversionCamera = uiCamera != null
+                ? uiCamera
+                : parentCanvas.worldCamera;
+        }
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect,
+                screenPos,
+                conversionCamera,
+                out Vector2 localPoint))
+        {
+            rect.anchoredPosition = localPoint;
+        }
     }
 }

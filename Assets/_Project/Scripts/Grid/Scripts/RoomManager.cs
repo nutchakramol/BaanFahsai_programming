@@ -1,14 +1,15 @@
 using UnityEngine;
 
-
-
 public class RoomManager : MonoBehaviour
 {
     [System.Serializable]
     public class RoomData
     {
+        [Header("Room")]
         public string roomName;
         public GameObject roomRoot;
+
+        [Header("Furniture")]
         public GameObject[] furniturePrefabs;
 
         [Header("Placed Furniture Parent")]
@@ -20,8 +21,17 @@ public class RoomManager : MonoBehaviour
 
         public GridManager.SurfaceTilemap[] surfaceTilemaps;
     }
+
+    // =====================================================
+    // HOTBAR
+    // =====================================================
+
     [Header("Furniture Hotbar")]
     public FurnitureHotbarUI furnitureHotbarUI;
+
+    // =====================================================
+    // ROOMS
+    // =====================================================
 
     [Header("Rooms")]
     public RoomData[] rooms;
@@ -31,6 +41,27 @@ public class RoomManager : MonoBehaviour
 
     private int currentRoomIndex = -1;
 
+    public int CurrentRoomIndex => currentRoomIndex;
+
+    public RoomData CurrentRoom
+    {
+        get
+        {
+            if (rooms == null)
+                return null;
+
+            if (currentRoomIndex < 0 ||
+                currentRoomIndex >= rooms.Length)
+                return null;
+
+            return rooms[currentRoomIndex];
+        }
+    }
+
+    // =====================================================
+    // START
+    // =====================================================
+
     private void Start()
     {
         Debug.Log("[RoomManager] Start called");
@@ -38,11 +69,21 @@ public class RoomManager : MonoBehaviour
         SwitchRoom(startingRoomIndex);
     }
 
+    // =====================================================
+    // SWITCH ROOM
+    // =====================================================
+
     public void SwitchRoom(int index)
     {
+        // -------------------------------------------------
+        // Validate rooms
+        // -------------------------------------------------
+
         if (rooms == null || rooms.Length == 0)
         {
-            Debug.LogError("[RoomManager] Rooms array is empty.");
+            Debug.LogError(
+                "[RoomManager] Rooms array is empty."
+            );
             return;
         }
 
@@ -54,37 +95,59 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
-        // 1. Turn OFF every room
+        RoomData selectedRoom = rooms[index];
+
+        if (selectedRoom == null)
+        {
+            Debug.LogError(
+                $"[RoomManager] Room {index} is null."
+            );
+            return;
+        }
+
+        if (selectedRoom.roomRoot == null)
+        {
+            Debug.LogError(
+                $"[RoomManager] Room {index} " +
+                $"({selectedRoom.roomName}) has no Room Root."
+            );
+            return;
+        }
+
+        // -------------------------------------------------
+        // 1. Disable every room
+        // -------------------------------------------------
+
         for (int i = 0; i < rooms.Length; i++)
         {
-            if (rooms[i] != null && rooms[i].roomRoot != null)
+            if (rooms[i] != null &&
+                rooms[i].roomRoot != null)
             {
                 rooms[i].roomRoot.SetActive(false);
             }
         }
 
-        // 2. Get selected room
-        RoomData selectedRoom = rooms[index];
+        // -------------------------------------------------
+        // 2. Enable selected room
+        // -------------------------------------------------
 
-        if (selectedRoom == null ||
-            selectedRoom.roomRoot == null)
-        {
-            Debug.LogError($"[RoomManager] Room {index} has no Room Root assigned.");
-            return;
-        }
-
-        // 3. Turn ON only selected room
         selectedRoom.roomRoot.SetActive(true);
 
         currentRoomIndex = index;
 
-        // 4. Change furniture list
+        // -------------------------------------------------
+        // 3. Placement Controller
+        // -------------------------------------------------
+
         if (PlacementController.Instance != null)
         {
+            // Give this room's furniture list
             PlacementController.Instance.SetFurnitureSet(
                 selectedRoom.furniturePrefabs
             );
 
+            // Make newly placed furniture become children
+            // of this room's PlacedFurniture object.
             PlacementController.Instance.SetPlacedFurnitureParent(
                 selectedRoom.placedFurnitureParent
             );
@@ -97,38 +160,65 @@ public class RoomManager : MonoBehaviour
         }
 
         // -------------------------------------------------
-        // 5. Switch GridManager to this room
+        // 4. Furniture Hotbar
         // -------------------------------------------------
 
-        if (GridManager.Instance != null &&
-            selectedRoom.roomGrid != null)
+        if (furnitureHotbarUI != null)
         {
-            GridManager.Instance.SetActiveRoom(
-                selectedRoom.roomGrid,
-                selectedRoom.surfaceTilemaps
+            furnitureHotbarUI.SetFurnitureList(
+                selectedRoom.furniturePrefabs
             );
         }
         else
         {
-            Debug.LogError("[RoomManager] PlacementController.Instance not found.");
+            Debug.LogWarning(
+                "[RoomManager] FurnitureHotbarUI is not assigned."
+            );
         }
 
+        // -------------------------------------------------
+        // 5. Grid Manager
+        // -------------------------------------------------
+
+        if (GridManager.Instance != null)
+        {
+            if (selectedRoom.roomGrid != null)
+            {
+                GridManager.Instance.SetActiveRoom(
+                    selectedRoom.roomGrid,
+                    selectedRoom.surfaceTilemaps
+                );
+            }
+            else
+            {
+                Debug.LogError(
+                    $"[RoomManager] {selectedRoom.roomName} " +
+                    "has no Room Grid assigned."
+                );
+            }
+        }
+        else
+        {
+            Debug.LogError(
+                "[RoomManager] GridManager.Instance not found."
+            );
+        }
+
+        // -------------------------------------------------
+        // Debug
+        // -------------------------------------------------
+
         Debug.Log(
-            $"[RoomManager] Switched to {selectedRoom.roomName}, " +
-            $"Furniture count: {selectedRoom.furniturePrefabs?.Length ?? 0}"
+            $"[RoomManager] Switched to {selectedRoom.roomName}. " +
+            $"Index: {index}, " +
+            $"Furniture: {selectedRoom.furniturePrefabs?.Length ?? 0}"
         );
     }
 
-<<<<<<< HEAD
-    // Button methods
-=======
     // =====================================================
     // UI BUTTON METHODS
-    // (kept in case anything still references them via OnClick —
-    // safe to leave unused; remove later once confirmed nothing calls them)
     // =====================================================
 
->>>>>>> 249b34640243cb215cb1f1d626033eaf080576c2
     public void ShowBedroom()
     {
         SwitchRoom(0);
@@ -139,17 +229,17 @@ public class RoomManager : MonoBehaviour
         SwitchRoom(1);
     }
 
-    public void ShowAttic()
+    public void ShowLivingRoom()
     {
         SwitchRoom(2);
     }
 
-    public void ShowLivingRoom()
+    public void ShowKitchen()
     {
         SwitchRoom(3);
     }
 
-    public void ShowKitchen()
+    public void ShowAttic()
     {
         SwitchRoom(4);
     }
