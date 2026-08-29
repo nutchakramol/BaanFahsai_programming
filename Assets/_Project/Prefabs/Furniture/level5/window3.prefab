@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5104479616385962137}
   - component: {fileID: 7092164779563058053}
-  - component: {fileID: -4162318576279214059}
+  - component: {fileID: 7928048765236307640}
   m_Layer: 0
   m_Name: window3
   m_TagString: Untagged
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &-4162318576279214059
+--- !u!114 &7928048765236307640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,4 +109,5 @@ MonoBehaviour:
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 5
+  surface: 1
   colorVariants: []

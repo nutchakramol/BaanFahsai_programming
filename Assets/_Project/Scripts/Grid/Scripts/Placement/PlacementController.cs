@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlacementController : MonoBehaviour
 {
-    public static PlacementController Instance { get; private set; }
+    public static PlacementController Instance
+    {
+        get;
+        private set;
+    }
 
     [Header("Furniture List")]
-    [Tooltip("Drag your furniture prefabs here (each should have a SpriteRenderer)")]
     public GameObject[] furniturePrefabs;
 
     [Header("Placement Settings")]
-    [Tooltip("Small vertical offset so the sprite doesn't Z-fight with the floor")]
     public float placementYOffset = 0.05f;
 
     [Header("Ghost Preview")]
@@ -18,14 +21,25 @@ public class PlacementController : MonoBehaviour
     private int currentIndex = 0;
 
     private GameObject selectedFurniture;
+
     private GridCell selectedFurnitureCell;
 
-    public GameObject SelectedFurniture => selectedFurniture;
-    public GridCell SelectedFurnitureCell => selectedFurnitureCell;
+    private Transform placedFurnitureParent;
+
+    public GameObject SelectedFurniture =>
+        selectedFurniture;
+
+    public GridCell SelectedFurnitureCell =>
+        selectedFurnitureCell;
+
+    // =========================================================
+    // UNITY
+    // =========================================================
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null &&
+            Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -37,7 +51,9 @@ public class PlacementController : MonoBehaviour
     private void Update()
     {
         HandleCycling();
+
         HandlePlacementAndSelection();
+
         HandleDeselect();
     }
 
@@ -47,25 +63,40 @@ public class PlacementController : MonoBehaviour
 
     private void HandleCycling()
     {
-        if (furniturePrefabs == null || furniturePrefabs.Length == 0)
+        if (furniturePrefabs == null ||
+            furniturePrefabs.Length == 0)
+        {
             return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            int direction = Input.GetKey(KeyCode.LeftShift) ? -1 : 1;
+            int direction =
+                Input.GetKey(KeyCode.LeftShift)
+                    ? -1
+                    : 1;
+
             int attempts = 0;
 
             do
             {
                 currentIndex =
-                    (currentIndex + direction + furniturePrefabs.Length)
+                    (
+                        currentIndex +
+                        direction +
+                        furniturePrefabs.Length
+                    )
                     % furniturePrefabs.Length;
 
                 attempts++;
             }
             while (
-                !IsFurnitureUnlocked(furniturePrefabs[currentIndex])
-                && attempts < furniturePrefabs.Length
+                !IsFurnitureUnlocked(
+                    furniturePrefabs[currentIndex]
+                )
+                &&
+                attempts <
+                furniturePrefabs.Length
             );
 
             Debug.Log(
@@ -75,14 +106,15 @@ public class PlacementController : MonoBehaviour
         }
     }
 
-    private bool IsFurnitureUnlocked(GameObject prefab)
+    private bool IsFurnitureUnlocked(
+        GameObject prefab)
     {
         if (prefab == null)
             return false;
 
-        FurnitureItem item = prefab.GetComponent<FurnitureItem>();
+        FurnitureItem item =
+            prefab.GetComponent<FurnitureItem>();
 
-        // No FurnitureItem = no restriction
         if (item == null)
             return true;
 
@@ -90,53 +122,126 @@ public class PlacementController : MonoBehaviour
     }
 
     // =========================================================
-    // FOOTPRINT HELPERS (NEW — shared by preview, placement, move)
+    // FOOTPRINT
     // =========================================================
 
-    private Vector2Int GetFootprintSize(GameObject prefab)
+    private Vector2Int GetFootprintSize(
+        GameObject prefab)
     {
-        if (prefab == null) return Vector2Int.one;
-        FurnitureItem item = prefab.GetComponent<FurnitureItem>();
-        return item != null ? item.gridSize : Vector2Int.one;
+        if (prefab == null)
+            return Vector2Int.one;
+
+        FurnitureItem item =
+            prefab.GetComponent<FurnitureItem>();
+
+        if (item == null)
+            return Vector2Int.one;
+
+        Vector2Int size =
+            item.gridSize;
+
+        if (size.x <= 0)
+            size.x = 1;
+
+        if (size.y <= 0)
+            size.y = 1;
+
+        return size;
     }
 
-    private bool IsFootprintFree(Vector2Int origin, Vector2Int size)
+    private bool IsFootprintFree(
+        Vector2Int origin,
+        Vector2Int size)
     {
-        for (int x = 0; x < size.x; x++)
-        {
-            for (int y = 0; y < size.y; y++)
-            {
-                Vector3Int checkCoord = new Vector3Int(origin.x + x, origin.y + y, 0);
-                GridCell checkCell = GridManager.Instance.GetCell(checkCoord);
+        if (GridManager.Instance == null)
+            return false;
 
-                if (checkCell != null && checkCell.IsOccupied)
+        for (int x = 0;
+             x < size.x;
+             x++)
+        {
+            for (int y = 0;
+                 y < size.y;
+                 y++)
+            {
+                Vector3Int checkCoord =
+                    new Vector3Int(
+                        origin.x + x,
+                        origin.y + y,
+                        0
+                    );
+
+                GridCell checkCell =
+                    GridManager.Instance
+                        .GetCell(checkCoord);
+
+                if (checkCell != null &&
+                    checkCell.IsOccupied)
+                {
                     return false;
+                }
             }
         }
+
         return true;
     }
 
-    private void OccupyFootprint(Vector2Int origin, Vector2Int size, GameObject placed)
+    private void OccupyFootprint(
+        Vector2Int origin,
+        Vector2Int size,
+        GameObject placed)
     {
-        for (int x = 0; x < size.x; x++)
+        for (int x = 0;
+             x < size.x;
+             x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = 0;
+                 y < size.y;
+                 y++)
             {
-                Vector2Int checkCoord = new Vector2Int(origin.x + x, origin.y + y);
-                GridCell cell = GridManager.Instance.GetCellByCoord2D(checkCoord);
-                cell.SetOccupied(placed);
+                Vector2Int checkCoord =
+                    new Vector2Int(
+                        origin.x + x,
+                        origin.y + y
+                    );
+
+                GridCell cell =
+                    GridManager.Instance
+                        .GetCellByCoord2D(
+                            checkCoord
+                        );
+
+                cell.SetOccupied(
+                    placed
+                );
             }
         }
     }
 
-    private void ClearFootprint(Vector2Int origin, Vector2Int size)
+    private void ClearFootprint(
+        Vector2Int origin,
+        Vector2Int size)
     {
-        for (int x = 0; x < size.x; x++)
+        for (int x = 0;
+             x < size.x;
+             x++)
         {
-            for (int y = 0; y < size.y; y++)
+            for (int y = 0;
+                 y < size.y;
+                 y++)
             {
-                Vector2Int checkCoord = new Vector2Int(origin.x + x, origin.y + y);
-                GridCell cell = GridManager.Instance.GetCellByCoord2D(checkCoord);
+                Vector2Int checkCoord =
+                    new Vector2Int(
+                        origin.x + x,
+                        origin.y + y
+                    );
+
+                GridCell cell =
+                    GridManager.Instance
+                        .GetCellByCoord2D(
+                            checkCoord
+                        );
+
                 cell.ClearOccupied();
             }
         }
@@ -151,77 +256,107 @@ public class PlacementController : MonoBehaviour
         if (GridManager.Instance == null)
             return;
 
-        GridCell cell = GridManager.Instance.SelectedCell;
+        GridCell cell =
+            GridManager.Instance.SelectedCell;
 
-        // -----------------------------------------
-        // Ghost Preview
-        // -----------------------------------------
+        // =====================================================
+        // IMPORTANT:
+        // Always update preview BEFORE checking UI.
+        // =====================================================
 
         if (ghostPreview != null)
         {
-            GameObject previewPrefab = null;
+            GameObject previewPrefab =
+                null;
 
-            if (
-                cell != null &&
+            if (cell != null &&
                 furniturePrefabs != null &&
-                furniturePrefabs.Length > 0
-            )
+                furniturePrefabs.Length > 0)
             {
-                if (currentIndex < 0 || currentIndex >= furniturePrefabs.Length)
+                if (currentIndex < 0 ||
+                    currentIndex >=
+                    furniturePrefabs.Length)
                 {
                     currentIndex = 0;
                 }
 
-                previewPrefab = furniturePrefabs[currentIndex];
+                previewPrefab =
+                    furniturePrefabs[currentIndex];
             }
 
-            ghostPreview.UpdatePreview(previewPrefab, cell);
+            ghostPreview.UpdatePreview(
+                previewPrefab,
+                cell
+            );
         }
 
         if (cell == null)
             return;
 
-        // -----------------------------------------
-        // Left Click
-        // Select existing furniture OR place new
-        // -----------------------------------------
+        // =====================================================
+        // UI PROTECTION
+        //
+        // Only block CLICKING.
+        // Do NOT block GhostPreview above.
+        // =====================================================
+
+        if (EventSystem.current != null &&
+            EventSystem.current
+                .IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        // =====================================================
+        // LEFT CLICK
+        // =====================================================
 
         if (Input.GetMouseButtonDown(0))
         {
             if (cell.IsOccupied)
             {
-                selectedFurniture = cell.OccupyingObject;
-                selectedFurnitureCell = cell;
+                selectedFurniture =
+                    cell.OccupyingObject;
 
-                Debug.Log(
-                    $"[PlacementController] Selected placed furniture: " +
-                    $"{selectedFurniture.name}"
-                );
+                selectedFurnitureCell =
+                    cell;
+
+                if (selectedFurniture != null)
+                {
+                    Debug.Log(
+                        $"[PlacementController] Selected: " +
+                        $"{selectedFurniture.name}"
+                    );
+                }
             }
             else
             {
-                PlaceFurnitureAt(cell);
+                PlaceFurnitureAt(
+                    cell
+                );
             }
         }
 
-        // -----------------------------------------
-        // Right Click
-        // Delete furniture
-        // -----------------------------------------
+        // =====================================================
+        // RIGHT CLICK
+        // =====================================================
 
         else if (Input.GetMouseButtonDown(1))
         {
-            DeleteFurniture(cell);
+            DeleteFurniture(
+                cell
+            );
         }
 
-        // -----------------------------------------
-        // Middle Click
-        // Flip furniture
-        // -----------------------------------------
+        // =====================================================
+        // MIDDLE CLICK
+        // =====================================================
 
         else if (Input.GetMouseButtonDown(2))
         {
-            FlipFurnitureHorizontal(cell);
+            FlipFurnitureHorizontal(
+                cell
+            );
         }
     }
 
@@ -231,30 +366,41 @@ public class PlacementController : MonoBehaviour
 
     private void HandleDeselect()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(
+                KeyCode.Escape))
         {
             ClearSelection();
 
-            Debug.Log("[PlacementController] Selection cleared.");
+            Debug.Log(
+                "[PlacementController] Selection cleared."
+            );
         }
     }
 
     private void ClearSelection()
     {
-        selectedFurniture = null;
-        selectedFurnitureCell = null;
+        selectedFurniture =
+            null;
+
+        selectedFurnitureCell =
+            null;
     }
 
     // =========================================================
-    // PLACE FURNITURE
+    // PLACE
     // =========================================================
 
-    private void PlaceFurnitureAt(GridCell cell)
+    private void PlaceFurnitureAt(
+        GridCell cell)
     {
         if (cell == null)
             return;
 
-        if (furniturePrefabs == null || furniturePrefabs.Length == 0)
+        if (GridManager.Instance == null)
+            return;
+
+        if (furniturePrefabs == null ||
+            furniturePrefabs.Length == 0)
         {
             Debug.LogWarning(
                 "[PlacementController] No furniture prefabs assigned."
@@ -263,58 +409,131 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
-        if (currentIndex < 0 || currentIndex >= furniturePrefabs.Length)
+        if (currentIndex < 0 ||
+            currentIndex >=
+            furniturePrefabs.Length)
         {
             currentIndex = 0;
         }
 
-        GameObject prefab = furniturePrefabs[currentIndex];
+        GameObject prefab =
+            furniturePrefabs[currentIndex];
 
         if (prefab == null)
         {
             Debug.LogError(
-                $"[PlacementController] Furniture prefab at index " +
-                $"{currentIndex} is null."
+                $"[PlacementController] Furniture prefab " +
+                $"at index {currentIndex} is null."
             );
 
             return;
         }
 
-        // CHANGED: full footprint check instead of single-cell check
-        Vector2Int size = GetFootprintSize(prefab);
-        if (!IsFootprintFree(cell.Coordinate, size))
-        {
-            Debug.Log(
-                "[PlacementController] Footprint overlaps an occupied cell, can't place here."
-            );
-
-            return;
-        }
+        // =====================================================
+        // LOCK CHECK
+        // =====================================================
 
         if (!IsFurnitureUnlocked(prefab))
         {
             Debug.Log(
-                $"[PlacementController] {prefab.name} is locked " +
-                $"(requires a higher level)."
+                $"[PlacementController] {prefab.name} is locked."
             );
 
             return;
         }
 
+        // =====================================================
+        // SURFACE CHECK
+        // =====================================================
+
+        FurnitureItem furnitureItem =
+            prefab.GetComponent<FurnitureItem>();
+
+        if (furnitureItem != null)
+        {
+            if (GridManager.Instance
+                    .SelectedSurfaceBand
+                != furnitureItem.surface)
+            {
+                Debug.Log(
+                    $"[PlacementController] {prefab.name} requires " +
+                    $"{furnitureItem.surface}, but selected surface is " +
+                    $"{GridManager.Instance.SelectedSurfaceBand}."
+                );
+
+                return;
+            }
+        }
+
+        // =====================================================
+        // FOOTPRINT CHECK
+        // =====================================================
+
+        Vector2Int size =
+            GetFootprintSize(prefab);
+
+        if (!IsFootprintFree(
+                cell.Coordinate,
+                size))
+        {
+            Debug.Log(
+                "[PlacementController] Can't place here. " +
+                "Footprint overlaps occupied cells."
+            );
+
+            return;
+        }
+
+        // =====================================================
+        // SPAWN
+        // =====================================================
+
         Vector3 spawnPos =
             cell.WorldPosition +
-            new Vector3(0f, placementYOffset, 0f);
+            new Vector3(
+                0f,
+                placementYOffset,
+                0f
+            );
 
-        Quaternion spawnRot = Quaternion.identity;
+        GameObject placed;
 
-        GameObject placed =
-            Instantiate(prefab, spawnPos, spawnRot);
+        if (placedFurnitureParent != null)
+        {
+            placed =
+                Instantiate(
+                    prefab,
+                    spawnPos,
+                    Quaternion.identity,
+                    placedFurnitureParent
+                );
+        }
+        else
+        {
+            placed =
+                Instantiate(
+                    prefab,
+                    spawnPos,
+                    Quaternion.identity
+                );
 
-        // CHANGED: occupy every cell in the footprint, not just the origin
-        OccupyFootprint(cell.Coordinate, size, placed);
+            Debug.LogWarning(
+                "[PlacementController] PlacedFurniture parent is null. " +
+                "Furniture was created at scene root."
+            );
+        }
 
-        selectedFurniture = placed;
-        selectedFurnitureCell = cell;
+        OccupyFootprint(
+            cell.Coordinate,
+            size,
+            placed
+        );
+
+        selectedFurniture =
+            placed;
+
+        selectedFurnitureCell =
+            cell;
 
         Debug.Log(
             $"[PlacementController] Placed {prefab.name} " +
@@ -326,33 +545,66 @@ public class PlacementController : MonoBehaviour
     // DELETE
     // =========================================================
 
-    private void DeleteFurniture(GridCell cell)
+    private void DeleteFurniture(
+        GridCell cell)
     {
-        if (cell == null)
+        if (cell == null ||
+            !cell.IsOccupied)
+        {
             return;
+        }
 
-        if (!cell.IsOccupied)
+        GameObject objectToDelete =
+            cell.OccupyingObject;
+
+        if (objectToDelete == null)
+        {
+            cell.ClearOccupied();
             return;
+        }
 
-        if (selectedFurnitureCell == cell)
+        FurnitureItem item =
+            objectToDelete
+                .GetComponent<FurnitureItem>();
+
+        Vector2Int size =
+            item != null
+                ? item.gridSize
+                : Vector2Int.one;
+
+        /*
+         * NOTE:
+         * selectedFurnitureCell is currently being used
+         * as the origin of selected furniture.
+         */
+        Vector2Int origin =
+            cell.Coordinate;
+
+        if (objectToDelete ==
+                selectedFurniture &&
+            selectedFurnitureCell != null)
+        {
+            origin =
+                selectedFurnitureCell.Coordinate;
+        }
+
+        ClearFootprint(
+            origin,
+            size
+        );
+
+        if (objectToDelete ==
+            selectedFurniture)
         {
             ClearSelection();
         }
 
-        GameObject objectToDelete = cell.OccupyingObject;
-
-        // CHANGED: clear the whole footprint, not just the clicked cell
-        FurnitureItem item = objectToDelete != null ? objectToDelete.GetComponent<FurnitureItem>() : null;
-        Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
-        ClearFootprint(cell.Coordinate, size);
-
-        if (objectToDelete != null)
-        {
-            Destroy(objectToDelete);
-        }
+        Destroy(
+            objectToDelete
+        );
 
         Debug.Log(
-            $"[PlacementController] Deleted furniture at {cell.Coordinate}"
+            $"[PlacementController] Deleted furniture at {origin}"
         );
     }
 
@@ -360,22 +612,30 @@ public class PlacementController : MonoBehaviour
     // FLIP
     // =========================================================
 
-    private void FlipFurnitureHorizontal(GridCell cell)
+    private void FlipFurnitureHorizontal(
+        GridCell cell)
     {
-        if (cell == null || !cell.IsOccupied)
+        if (cell == null ||
+            !cell.IsOccupied)
+        {
             return;
+        }
 
-        GameObject furniture = cell.OccupyingObject;
+        GameObject furniture =
+            cell.OccupyingObject;
 
         if (furniture == null)
             return;
 
         SpriteRenderer sr =
-            furniture.GetComponent<SpriteRenderer>();
+            furniture
+                .GetComponent<SpriteRenderer>();
 
         if (sr == null)
         {
-            sr = furniture.GetComponentInChildren<SpriteRenderer>();
+            sr =
+                furniture
+                    .GetComponentInChildren<SpriteRenderer>();
         }
 
         if (sr == null)
@@ -388,11 +648,11 @@ public class PlacementController : MonoBehaviour
             return;
         }
 
-        sr.flipX = !sr.flipX;
+        sr.flipX =
+            !sr.flipX;
 
         Debug.Log(
-            $"[PlacementController] Flipped {furniture.name} " +
-            $"(flipX = {sr.flipX})"
+            $"[PlacementController] Flipped {furniture.name}."
         );
     }
 
@@ -400,65 +660,87 @@ public class PlacementController : MonoBehaviour
     // MOVE
     // =========================================================
 
-    public void MoveSelected(Vector2Int direction)
+    public void MoveSelected(
+        Vector2Int direction)
     {
-        if (selectedFurniture == null || selectedFurnitureCell == null)
+        if (selectedFurniture == null ||
+            selectedFurnitureCell == null)
         {
             Debug.Log(
-                "[PlacementController] No furniture selected to move."
+                "[PlacementController] No furniture selected."
             );
 
             return;
         }
 
         if (GridManager.Instance == null)
-        {
-            Debug.LogError(
-                "[PlacementController] GridManager.Instance not found."
-            );
-
             return;
-        }
+
+        Vector2Int oldOrigin =
+            selectedFurnitureCell.Coordinate;
 
         Vector2Int targetCoord =
-            selectedFurnitureCell.Coordinate + direction;
+            oldOrigin +
+            direction;
 
         GridCell targetCell =
-            GridManager.Instance.GetCellByCoord2D(targetCoord);
+            GridManager.Instance
+                .GetCellByCoord2D(
+                    targetCoord
+                );
 
         if (targetCell == null)
-        {
-            Debug.Log(
-                "[PlacementController] Can't move there — invalid cell."
-            );
-
             return;
-        }
 
-        // CHANGED: full footprint check for move, clearing old footprint first
-        FurnitureItem item = selectedFurniture.GetComponent<FurnitureItem>();
-        Vector2Int size = item != null ? item.gridSize : Vector2Int.one;
+        FurnitureItem item =
+            selectedFurniture
+                .GetComponent<FurnitureItem>();
 
-        Vector2Int oldOrigin = selectedFurnitureCell.Coordinate;
-        ClearFootprint(oldOrigin, size); // temporarily clear so self-overlap doesn't block the check
+        Vector2Int size =
+            item != null
+                ? item.gridSize
+                : Vector2Int.one;
 
-        if (!IsFootprintFree(targetCoord, size))
+        // Temporarily clear old cells.
+        ClearFootprint(
+            oldOrigin,
+            size
+        );
+
+        if (!IsFootprintFree(
+                targetCoord,
+                size))
         {
-            Debug.Log(
-                "[PlacementController] Can't move there — footprint occupied."
+            // Restore original occupancy.
+            OccupyFootprint(
+                oldOrigin,
+                size,
+                selectedFurniture
             );
 
-            OccupyFootprint(oldOrigin, size, selectedFurniture); // restore
+            Debug.Log(
+                "[PlacementController] Can't move there."
+            );
+
             return;
         }
 
         selectedFurniture.transform.position =
             targetCell.WorldPosition +
-            new Vector3(0f, placementYOffset, 0f);
+            new Vector3(
+                0f,
+                placementYOffset,
+                0f
+            );
 
-        OccupyFootprint(targetCoord, size, selectedFurniture);
+        OccupyFootprint(
+            targetCoord,
+            size,
+            selectedFurniture
+        );
 
-        selectedFurnitureCell = targetCell;
+        selectedFurnitureCell =
+            targetCell;
 
         Debug.Log(
             $"[PlacementController] Moved furniture to {targetCoord}"
@@ -466,14 +748,17 @@ public class PlacementController : MonoBehaviour
     }
 
     // =========================================================
-    // ROOM MANAGER SUPPORT
+    // ROOM SUPPORT
     // =========================================================
 
-    public void SetFurnitureSet(GameObject[] newPrefabs)
+    public void SetFurnitureSet(
+        GameObject[] newPrefabs)
     {
-        furniturePrefabs = newPrefabs;
+        furniturePrefabs =
+            newPrefabs;
 
-        currentIndex = 0;
+        currentIndex =
+            0;
 
         ClearSelection();
 
@@ -483,31 +768,82 @@ public class PlacementController : MonoBehaviour
                 : 0;
 
         Debug.Log(
-            $"[PlacementController] Furniture set changed. Count: {count}"
+            $"[PlacementController] Furniture set changed. " +
+            $"Count: {count}"
         );
+    }
 
-        if (count == 0)
+    public void SetPlacedFurnitureParent(
+        Transform parent)
+    {
+        placedFurnitureParent =
+            parent;
+
+        if (parent != null)
         {
-            Debug.LogWarning(
-                "[PlacementController] Current room has no furniture prefabs assigned."
+            Debug.Log(
+                $"[PlacementController] PlacedFurniture parent: " +
+                $"{parent.name}"
             );
         }
     }
 
     // =========================================================
-    // UI BUTTON METHODS
+    // HOTBAR
+    // =========================================================
+
+    public void SelectFurniture(
+        int index)
+    {
+        if (furniturePrefabs == null ||
+            furniturePrefabs.Length == 0)
+        {
+            return;
+        }
+
+        if (index < 0 ||
+            index >= furniturePrefabs.Length)
+        {
+            Debug.LogWarning(
+                $"[PlacementController] Invalid furniture index: {index}"
+            );
+
+            return;
+        }
+
+        GameObject prefab =
+            furniturePrefabs[index];
+
+        if (prefab == null)
+            return;
+
+        if (!IsFurnitureUnlocked(
+                prefab))
+        {
+            Debug.Log(
+                $"[PlacementController] {prefab.name} is locked."
+            );
+
+            return;
+        }
+
+        currentIndex =
+            index;
+
+        Debug.Log(
+            $"[PlacementController] Selected furniture: " +
+            $"{prefab.name}"
+        );
+    }
+
+    // =========================================================
+    // UI ACTION BUTTONS
     // =========================================================
 
     public void OnPlaceButton()
     {
         if (GridManager.Instance == null)
-        {
-            Debug.LogError(
-                "[PlacementController] GridManager.Instance not found."
-            );
-
             return;
-        }
 
         GridCell cell =
             GridManager.Instance.SelectedCell;
@@ -515,66 +851,68 @@ public class PlacementController : MonoBehaviour
         if (cell == null)
         {
             Debug.Log(
-                "[PlacementController] No cell hovered to place into."
+                "[PlacementController] No cell selected."
             );
 
             return;
         }
 
-        PlaceFurnitureAt(cell);
+        PlaceFurnitureAt(
+            cell
+        );
     }
 
     public void OnDeleteButton()
     {
-        if (
-            selectedFurniture == null ||
-            selectedFurnitureCell == null
-        )
+        if (selectedFurniture == null ||
+            selectedFurnitureCell == null)
         {
-            Debug.Log(
-                "[PlacementController] No furniture selected to delete."
-            );
-
             return;
         }
 
-        DeleteFurniture(selectedFurnitureCell);
+        DeleteFurniture(
+            selectedFurnitureCell
+        );
     }
 
     public void OnFlipButton()
     {
-        if (
-            selectedFurniture == null ||
-            selectedFurnitureCell == null
-        )
+        if (selectedFurniture == null ||
+            selectedFurnitureCell == null)
         {
-            Debug.Log(
-                "[PlacementController] No furniture selected to flip."
-            );
-
             return;
         }
 
-        FlipFurnitureHorizontal(selectedFurnitureCell);
+        FlipFurnitureHorizontal(
+            selectedFurnitureCell
+        );
     }
 
     public void OnMoveUpButton()
     {
-        MoveSelected(new Vector2Int(0, 1));
+        MoveSelected(
+            new Vector2Int(0, 1)
+        );
     }
 
     public void OnMoveDownButton()
     {
-        MoveSelected(new Vector2Int(0, -1));
+        MoveSelected(
+            new Vector2Int(0, -1)
+        );
     }
 
     public void OnMoveLeftButton()
     {
-        MoveSelected(new Vector2Int(-1, 0));
+        MoveSelected(
+            new Vector2Int(-1, 0)
+        );
     }
 
     public void OnMoveRightButton()
     {
-        MoveSelected(new Vector2Int(1, 0));
+        MoveSelected(
+            new Vector2Int(1, 0)
+        );
     }
 }
