@@ -21,8 +21,10 @@ public class LevelSessionController : MonoBehaviour
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI percentText;
     [SerializeField] private UnityEngine.UI.Button retryButton;
+
     private LevelController _currentLevelController;
     private LevelDataSO _currentLevelData;
+    private readonly HashSet<Vector2Int> _knownPlacements = new HashSet<Vector2Int>();
 
     private void Awake()
     {
@@ -31,13 +33,14 @@ public class LevelSessionController : MonoBehaviour
 
         if (checkButton != null)
         {
-            checkButton.gameObject.SetActive(false); // NEW — hidden until gameplay starts
+            checkButton.gameObject.SetActive(false); // hidden until gameplay starts
             checkButton.onClick.AddListener(CheckLevel);
         }
 
         if (retryButton != null)
             retryButton.onClick.AddListener(HandleRetry);
     }
+
     private void Start()
     {
         if (GameEvents.CurrentLevelData != null)
@@ -64,6 +67,27 @@ public class LevelSessionController : MonoBehaviour
                 "LevelSessionController: No current or default Level Data assigned."
             );
         }
+    }
+
+    private void Update()
+    {
+        if (_currentLevelController == null || GridManager.Instance == null) return;
+
+        var occupiedCells = GridManager.Instance.GetAllOccupiedCells();
+
+        foreach (var cell in occupiedCells)
+        {
+            if (_knownPlacements.Contains(cell.Coordinate)) continue;
+
+            FurnitureItem furniture = cell.OccupyingObject.GetComponent<FurnitureItem>();
+            if (furniture == null) continue;
+
+            string schemaId = furniture.furnitureName;
+            string instanceId = $"{cell.Coordinate.x}_{cell.Coordinate.y}";
+            string roomId = _currentLevelData.rooms.Count > 0 ? _currentLevelData.rooms[0].roomId : "";
+
+            Debug.Log($"[LevelSessionController] Reporting placement at cell.WorldPosition: {cell.WorldPosition}");
+            _currentLevelController.PlaceOrMoveItem(instanceId, schemaId, cell.LocalPosition, roomId);        }   
     }
 
     private void OnEnable()
@@ -114,6 +138,8 @@ public class LevelSessionController : MonoBehaviour
             return;
         }
 
+        _knownPlacements.Clear();
+
         _currentLevelController =
             new LevelController(_currentLevelData, allSchemas);
 
@@ -162,8 +188,7 @@ public class LevelSessionController : MonoBehaviour
             gameplayUIDocument.gameObject.SetActive(true);
 
         if (checkButton != null)
-            checkButton.gameObject.SetActive(true); // NEW — show Check button now that NPC dialogue is done
-
+            checkButton.gameObject.SetActive(true);
 
         if (resultPanel != null)
             resultPanel.SetActive(false);

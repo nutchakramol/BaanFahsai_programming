@@ -41,12 +41,12 @@ MonoBehaviour:
   - requirementId: have table
     requiredCategory: 7
     minCount: 1
-    minAvgScore: 0.6
+    minAvgScore: 0.4
   - requirementId: have lighting
     requiredCategory: 1
     minCount: 1
     minAvgScore: 0.3
-  targetScoreToWin: 80
+  targetScoreToWin: 50
   paletteItemIds: []
   itemSchemas: []
   starThresholds:

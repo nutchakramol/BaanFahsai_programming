@@ -22,7 +22,7 @@ MonoBehaviour:
   - zoneLabel: anywhere in the room
     worldPosition: {x: -6, y: -0.5}
     innerRadius: 2
-    outerRadius: 6
+    outerRadius: 5
     falloffCurve:
       serializedVersion: 2
       m_Curve: []

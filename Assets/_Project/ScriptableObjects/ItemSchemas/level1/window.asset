@@ -21,8 +21,8 @@ MonoBehaviour:
   heatZones:
   - zoneLabel: on wall (right)
     worldPosition: {x: 0, y: 2}
-    innerRadius: 0.5
-    outerRadius: 2
+    innerRadius: 2
+    outerRadius: 5
     falloffCurve:
       serializedVersion: 2
       m_Curve: []
@@ -32,8 +32,8 @@ MonoBehaviour:
     weight: 1.5
   - zoneLabel: on wall (left)
     worldPosition: {x: -4, y: 5}
-    innerRadius: 0.5
-    outerRadius: 2
+    innerRadius: 2
+    outerRadius: 5
     falloffCurve:
       serializedVersion: 2
       m_Curve: []

@@ -22,7 +22,7 @@ MonoBehaviour:
   - zoneLabel: anywhere in room
     worldPosition: {x: -6, y: -0.5}
     innerRadius: 2
-    outerRadius: 6
+    outerRadius: 5
     falloffCurve:
       serializedVersion: 2
       m_Curve: []
@@ -32,8 +32,8 @@ MonoBehaviour:
     weight: 1
   - zoneLabel: near wall (left)
     worldPosition: {x: -6, y: -3}
-    innerRadius: 0.5
-    outerRadius: 2
+    innerRadius: 2
+    outerRadius: 5
     falloffCurve:
       serializedVersion: 2
       m_Curve: []
@@ -43,8 +43,8 @@ MonoBehaviour:
     weight: 1.5
   - zoneLabel: near wall (right)
     worldPosition: {x: -2, y: 1}
-    innerRadius: 0.5
-    outerRadius: 2
+    innerRadius: 2
+    outerRadius: 5
     falloffCurve:
       serializedVersion: 2
       m_Curve: []
