@@ -2,21 +2,27 @@ using UnityEngine;
 
 public static class StarRatingCalculator
 {
-    /// <summary>
-    /// Converts an overall score percent (0-100) into a star count (0-5),
-    /// based on ascending thresholds. E.g. thresholds [30,50,65,80,95]:
-    /// score >= 30 -> 1 star, >= 50 -> 2 stars, ... >= 95 -> 5 stars.
-    /// </summary>
-    public static int ComputeStars(float overallScorePercent, float[] thresholds)
-    {
-        if (thresholds == null || thresholds.Length == 0) return 0;
+    private const float PassThreshold = 50f;
+    private const float OneStarThreshold = 51f;
+    private const float TwoStarThreshold = 75f;
+    private const float ThreeStarThreshold = 90f;
 
-        int stars = 0;
-        for (int i = 0; i < thresholds.Length; i++)
-        {
-            if (overallScorePercent >= thresholds[i])
-                stars = i + 1;
-        }
-        return Mathf.Clamp(stars, 0, 5);
+    /// <summary>
+    /// Converts an overall score percent (0-100) into a star count (0-3),
+    /// using fixed thresholds: 51-74% = 1 star, 75-89% = 2 stars, 90-100% = 3 stars.
+    /// Below 51% still returns 0 stars (display layer decides how to color them).
+    /// </summary>
+    public static int ComputeStars(float overallScorePercent)
+    {
+        if (overallScorePercent >= ThreeStarThreshold) return 3;
+        if (overallScorePercent >= TwoStarThreshold) return 2;
+        if (overallScorePercent >= OneStarThreshold) return 1;
+        return 0;
+    }
+
+    /// <summary>True if the score meets the 50% pass threshold.</summary>
+    public static bool HasPassed(float overallScorePercent)
+    {
+        return overallScorePercent > PassThreshold;
     }
 }
