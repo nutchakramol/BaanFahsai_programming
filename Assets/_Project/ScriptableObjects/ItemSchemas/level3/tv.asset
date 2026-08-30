@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Tv
   icon: {fileID: -6438216443435693330, guid: 98e235de565d2cb459b5a8dec3a4740d, type: 3}
   prefab: {fileID: 4536442493587426704, guid: 9251c061efc7b16449828c079d6ab8c2, type: 3}
-  category: 0
+  category: 10
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

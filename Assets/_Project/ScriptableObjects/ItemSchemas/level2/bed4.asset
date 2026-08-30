@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Bed4
   icon: {fileID: -8688910480350348910, guid: f498dd38e3bd54b47b050149d7879b3e, type: 3}
   prefab: {fileID: 8112129910268592025, guid: f2a1d0fda5222764eb5c4d991bf0d9b1, type: 3}
-  category: 0
+  category: 6
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

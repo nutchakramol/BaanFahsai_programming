@@ -18,5 +18,27 @@ MonoBehaviour:
   prefab: {fileID: 2127685623290273078, guid: c07136e6c7f4111459a7d40e592342ec, type: 3}
   category: 4
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: on wall (right)
+    worldPosition: {x: 0, y: 2}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: on wall (left)
+    worldPosition: {x: -4, y: 5}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

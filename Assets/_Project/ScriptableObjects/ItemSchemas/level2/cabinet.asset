@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Cabinet
   icon: {fileID: -7039772475811174324, guid: 422ddfde0b49c8a46b8d0847bc708f19, type: 3}
   prefab: {fileID: 4094270073405072007, guid: 097dcc24c56201f42b490ef006fadd2f, type: 3}
-  category: 0
+  category: 3
   footprintSize: {x: 1, y: 1}
   heatZones: []
   appropriateRoomTags: 

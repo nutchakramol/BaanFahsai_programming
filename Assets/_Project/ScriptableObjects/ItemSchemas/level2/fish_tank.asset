@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Fish tank
   icon: {fileID: 3589850620817120259, guid: e008bf49ef9687243ab3b6e9c47f54c9, type: 3}
   prefab: {fileID: 568393556667371984, guid: d0d401a5570e53e49a7b46c0995f4d66, type: 3}
-  category: 0
+  category: 4
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

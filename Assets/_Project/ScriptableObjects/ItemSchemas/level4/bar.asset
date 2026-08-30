@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Bar
   icon: {fileID: 1824777350089454896, guid: 1e91bb9d96ecb8e41ae9e926f613846c, type: 3}
   prefab: {fileID: 74625100585546817, guid: 78d8b24202734534b81fc03ba4f5b9ec, type: 3}
-  category: 0
+  category: 7
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

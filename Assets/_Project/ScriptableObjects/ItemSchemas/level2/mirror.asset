@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Mirror
   icon: {fileID: -2084348082026221834, guid: 40a32806112a48240b40aff92a1bf7db, type: 3}
   prefab: {fileID: 5767475146268718144, guid: 1b216c8c69308ea43bd2f6830b3d3222, type: 3}
-  category: 0
+  category: 4
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

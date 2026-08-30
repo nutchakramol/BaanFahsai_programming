@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Shower sink
   icon: {fileID: -4011562595641134091, guid: 5f2c4e86bb7d3f44298151033014bd21, type: 3}
   prefab: {fileID: 8643938219496806788, guid: 9ffeb357207962949bd965a4c517a992, type: 3}
-  category: 0
+  category: 9
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 
