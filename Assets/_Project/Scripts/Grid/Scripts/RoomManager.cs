@@ -22,6 +22,15 @@ public class RoomManager : MonoBehaviour
         public GridManager.SurfaceTilemap[] surfaceTilemaps;
     }
 
+
+    // =====================================================
+    // BACKGROUND MANAGER
+    // =====================================================
+
+    [Header("Background")]
+    [SerializeField]
+    private RoomBackgroundManager backgroundManager;
+
     // =====================================================
     // HOTBAR
     // =====================================================
@@ -134,6 +143,21 @@ public class RoomManager : MonoBehaviour
         selectedRoom.roomRoot.SetActive(true);
 
         currentRoomIndex = index;
+
+        // -------------------------------------------------
+        // 2b. Background
+        // -------------------------------------------------
+
+        if (backgroundManager != null)
+        {
+            backgroundManager.SetRoomBackground(selectedRoom.roomName);
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[RoomManager] BackgroundManager is not assigned."
+            );
+        }
 
         // -------------------------------------------------
         // 3. Placement Controller
