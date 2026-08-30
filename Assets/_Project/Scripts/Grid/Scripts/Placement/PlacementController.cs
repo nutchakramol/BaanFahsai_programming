@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 
 public class PlacementController : MonoBehaviour
 {
@@ -220,7 +221,6 @@ public class PlacementController : MonoBehaviour
     {
         if (GridManager.Instance == null)
             return false;
-
         for (int x = 0;
              x < size.x;
              x++)
@@ -235,13 +235,11 @@ public class PlacementController : MonoBehaviour
                         origin.y + y,
                         0
                     );
-
                 GridCell checkCell =
                     GridManager.Instance
                         .GetCell(
                             checkCoord
                         );
-
                 if (checkCell != null &&
                     checkCell.IsOccupied)
                 {
@@ -249,11 +247,9 @@ public class PlacementController : MonoBehaviour
                 }
             }
         }
-
         return true;
-    }
-
-    private void OccupyFootprint(
+        }
+        private void OccupyFootprint(
         Vector2Int origin,
         Vector2Int size,
         GameObject placed)
@@ -325,6 +321,7 @@ public class PlacementController : MonoBehaviour
 
         GridCell cell =
             GridManager.Instance.SelectedCell;
+        Debug.Log($"[PlacementController] cell: {cell?.Coordinate}, ghostPreview assigned: {ghostPreview != null}");
 
         // =====================================================
         // GHOST PREVIEW
@@ -550,11 +547,9 @@ public class PlacementController : MonoBehaviour
                 "[PlacementController] Can't place here. " +
                 "Footprint overlaps occupied cells."
             );
-
             return;
         }
-
-        // =====================================================
+                // =====================================================
         // SPAWN
         // =====================================================
 
@@ -782,8 +777,7 @@ public class PlacementController : MonoBehaviour
         if (!IsFootprintFree(
                 targetCoord,
                 size))
-        {
-            // Restore old occupancy.
+        {                        // Restore old occupancy.
             OccupyFootprint(
                 oldOrigin,
                 size,
