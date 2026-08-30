@@ -310,14 +310,13 @@ public class LevelController
 
         int stars =
             StarRatingCalculator.ComputeStars(
-                result.OverallScorePercent,
-                _levelData.starThresholds
+                result.OverallScorePercent
             );
-
         bool canProceed =
-            result.OverallScorePercent >=
-            _levelData.minScoreToPass;
-
+            StarRatingCalculator.HasPassed(
+                result.OverallScorePercent
+            );
+            
         GameEvents.RaiseLevelChecked(
             stars,
             result.OverallScorePercent,
