@@ -180,6 +180,36 @@ public class GridManager : MonoBehaviour
         // -----------------------------------------------------
         // Fallback surface
         // -----------------------------------------------------
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log(
+                $"========== SURFACE DEBUG ==========\n" +
+                $"Mouse World = {worldPos}\n" +
+                $"Preferred Surface = {PreferredSurfaceBand}\n" +
+                $"Hit Count = {hits.Length}"
+            );
+
+            foreach (RaycastHit2D debugHit in hits)
+            {
+                if (debugHit.collider == null)
+                    continue;
+
+                Tilemap tm =
+                    debugHit.collider.GetComponent<Tilemap>();
+
+                if (tm == null)
+                {
+                    tm =
+                        debugHit.collider
+                            .GetComponentInParent<Tilemap>();
+                }
+
+                Debug.Log(
+                    $"Collider = {debugHit.collider.name}, " +
+                    $"Tilemap = {(tm != null ? tm.name : "NONE")}"
+                );
+            }
+        }
 
         Tilemap fallbackTilemap = null;
 
