@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Toilet
   icon: {fileID: -8806758135501145626, guid: 85262aba94aee4145a033164656f3095, type: 3}
   prefab: {fileID: 8485559049167859407, guid: 5edb56e38719d1c458b6c6f3ac632c62, type: 3}
-  category: 0
+  category: 9
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

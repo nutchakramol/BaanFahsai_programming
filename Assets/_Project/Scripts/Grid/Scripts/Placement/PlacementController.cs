@@ -375,30 +375,8 @@ public class PlacementController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (cell.IsOccupied)
-            {
-                selectedFurniture =
-                    cell.OccupyingObject;
-
-                selectedFurnitureCell =
-                    cell;
-
-                if (selectedFurniture != null)
-                {
-                    Debug.Log(
-                        $"[PlacementController] Selected: " +
-                        $"{selectedFurniture.name}"
-                    );
-                }
-            }
-            else
-            {
-                PlaceFurnitureAt(
-                    cell
-                );
-            }
+            PlaceFurnitureAt(cell);
         }
-
         // =====================================================
         // RIGHT CLICK
         // =====================================================
@@ -539,16 +517,6 @@ public class PlacementController : MonoBehaviour
                 prefab
             );
 
-        if (!IsFootprintFree(
-                cell.Coordinate,
-                size))
-        {
-            Debug.Log(
-                "[PlacementController] Can't place here. " +
-                "Footprint overlaps occupied cells."
-            );
-            return;
-        }
                 // =====================================================
         // SPAWN
         // =====================================================
@@ -774,22 +742,6 @@ public class PlacementController : MonoBehaviour
             size
         );
 
-        if (!IsFootprintFree(
-                targetCoord,
-                size))
-        {                        // Restore old occupancy.
-            OccupyFootprint(
-                oldOrigin,
-                size,
-                selectedFurniture
-            );
-
-            Debug.Log(
-                "[PlacementController] Can't move there."
-            );
-
-            return;
-        }
 
         selectedFurniture.transform.position =
             targetCell.WorldPosition +

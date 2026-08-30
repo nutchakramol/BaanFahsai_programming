@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Sofa table
   icon: {fileID: -4627143446912941206, guid: 33fc5949cb2e24746829592e67034923, type: 3}
   prefab: {fileID: 1855505424144714847, guid: a74432e0057beba4e9022e7ec9d14619, type: 3}
-  category: 0
+  category: 7
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

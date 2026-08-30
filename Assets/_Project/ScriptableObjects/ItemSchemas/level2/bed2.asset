@@ -18,5 +18,16 @@ MonoBehaviour:
   prefab: {fileID: 5819008028065586295, guid: d0bd4982ac3f03d4eadf84eb828714c6, type: 3}
   category: 6
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

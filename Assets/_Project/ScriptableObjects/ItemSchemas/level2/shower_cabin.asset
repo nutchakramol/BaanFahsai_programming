@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Shower cabin
   icon: {fileID: 1025892167079591331, guid: e598eab150c9f454eb29bc78507449e1, type: 3}
   prefab: {fileID: 5575417086901329875, guid: 8471237038c4b8e468981c318cba0042, type: 3}
-  category: 0
+  category: 9
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 
