@@ -86,9 +86,8 @@ public class LevelSessionController : MonoBehaviour
             string instanceId = $"{cell.Coordinate.x}_{cell.Coordinate.y}";
             string roomId = _currentLevelData.rooms.Count > 0 ? _currentLevelData.rooms[0].roomId : "";
 
-            _currentLevelController.PlaceOrMoveItem(instanceId, schemaId, cell.WorldPosition, roomId);
-            _knownPlacements.Add(cell.Coordinate);
-        }
+            Debug.Log($"[LevelSessionController] Reporting placement at cell.WorldPosition: {cell.WorldPosition}");
+            _currentLevelController.PlaceOrMoveItem(instanceId, schemaId, cell.LocalPosition, roomId);        }   
     }
 
     private void OnEnable()

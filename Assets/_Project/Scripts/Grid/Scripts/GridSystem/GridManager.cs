@@ -42,6 +42,8 @@ public class GridManager : MonoBehaviour
 
         if (tilemapGrid == null)
             Debug.LogError("[GridManager] tilemapGrid is not assigned in the Inspector");
+        else
+            Debug.Log($"[GridManager] tilemapGrid: {tilemapGrid.name}, GetCellCenterWorld(0,0,0): {tilemapGrid.GetCellCenterWorld(Vector3Int.zero)}");
     }
 
     private void Update()
@@ -99,13 +101,22 @@ public class GridManager : MonoBehaviour
     {
         if (!gridCells.TryGetValue(cellCoord, out GridCell cell))
         {
+            // World-space position — used for actual furniture rendering position.
             Vector3 cellWorldCenter = tilemapGrid.GetCellCenterWorld(cellCoord);
-            cell = new GridCell(new Vector2Int(cellCoord.x, cellCoord.y), cellWorldCenter);
+
+            // Local-space position — used for scoring math (heat zones), so it
+            // stays in small, consistent room-local units regardless of any
+            // visual scaling applied higher in the hierarchy (e.g. Rooms parent).
+            Vector3 cellLocalCenter = tilemapGrid.CellToLocalInterpolated(
+                new Vector3(cellCoord.x + 0.5f, cellCoord.y + 0.5f, cellCoord.z)
+            );
+
+            cell = new GridCell(new Vector2Int(cellCoord.x, cellCoord.y), cellWorldCenter, cellLocalCenter);
             gridCells[cellCoord] = cell;
         }
         return cell;
     }
-
+    
     private void LateUpdate()
     {
         if (highlightObject == null) return;

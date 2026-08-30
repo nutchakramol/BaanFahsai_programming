@@ -21,20 +21,24 @@ public static class ScoringEngine
             return 1f; // no spatial requirement = always "correct" spatially
 
         float bestScore = 0f;
-
         foreach (var zone in schema.heatZones)
         {
             float distance = Vector2.Distance(item.WorldPosition, zone.worldPosition);
             float zoneScore = EvaluateZoneFalloff(distance, zone);
+
+            Debug.Log($"[Proximity] Item at {item.WorldPosition}, zone '{zone.zoneLabel}' at {zone.worldPosition}, distance: {distance}, zoneScore: {zoneScore}");
+
             bestScore = Mathf.Max(bestScore, zoneScore * zone.weight);
         }
-
         return Mathf.Clamp01(bestScore);
     }
 
     /// <summary>
     /// Continuous radii-based falloff: full score inside innerRadius,
     /// decays via curve between inner/outer, zero beyond outerRadius.
+    /// Falls back to a simple linear fade if the curve has no keyframes
+    /// (empty AnimationCurve evaluates to 0 everywhere, which silently
+    /// broke proximity scoring — this guards against that).
     /// </summary>
     private static float EvaluateZoneFalloff(float distance, HeatZoneDefinition zone)
     {
@@ -42,7 +46,11 @@ public static class ScoringEngine
         if (distance >= zone.outerRadius) return 0f;
 
         float t = (distance - zone.innerRadius) / (zone.outerRadius - zone.innerRadius);
-        return zone.falloffCurve.Evaluate(t);
+
+        if (zone.falloffCurve != null && zone.falloffCurve.length > 0)
+            return zone.falloffCurve.Evaluate(t);
+
+        return 1f - t; // linear fade fallback
     }
 
     /// <summary>
@@ -86,21 +94,17 @@ public static class ScoringEngine
         List<LevelRequirement> requirements)
     {
         var result = new LevelScoreResult();
-
         foreach (var req in requirements)
         {
             var matchingItems = placedItems
                 .Where(p => schemaLookup[p.ItemSchemaId].category == req.requiredCategory)
                 .ToList();
-
             var scores = matchingItems.Select(p =>
                 ComputeItemScore(p, schemaLookup[p.ItemSchemaId], roomTagLookup[p.CurrentRoomId])
             ).ToList();
-
             float avgScore = scores.Count > 0 ? scores.Average() : 0f;
             bool countMet = matchingItems.Count >= req.minCount;
             bool scoreMet = avgScore >= req.minAvgScore;
-
             result.RequirementResults.Add(new RequirementResult
             {
                 RequirementId = req.requirementId,
@@ -110,20 +114,41 @@ public static class ScoringEngine
             });
         }
 
-        result.OverallScorePercent = result.RequirementResults.Count > 0
-            ? result.RequirementResults.Average(r => r.AverageScore) * 100f
+        foreach (var reqResult in result.RequirementResults)
+        {
+            Debug.Log($"[ScoringEngine] Requirement: {reqResult.RequirementId}, ItemsPlaced: {reqResult.ItemsPlaced}, AvgScore: {reqResult.AverageScore}, Satisfied: {reqResult.Satisfied}");
+        }
+
+        var attemptedRequirements = result.RequirementResults
+            .Where(r => r.ItemsPlaced > 0)
+            .ToList();
+
+        float qualityScore = attemptedRequirements.Count > 0
+            ? attemptedRequirements.Average(r => r.AverageScore)
             : 0f;
+
+        int totalRequirements = result.RequirementResults.Count;
+        int satisfiedRequirements = result.RequirementResults.Count(r => r.Satisfied);
+
+        float completionRatio = totalRequirements > 0
+            ? (float)satisfiedRequirements / totalRequirements
+            : 0f;
+
+        result.OverallScorePercent = qualityScore * completionRatio * 100f;
+        Debug.Log($"[ScoringEngine] Attempted requirements: {attemptedRequirements.Count}, Overall: {result.OverallScorePercent}%");
 
         return result;
     }
 }
 
+[System.Serializable]
 public class LevelScoreResult
 {
     public List<RequirementResult> RequirementResults = new List<RequirementResult>();
     public float OverallScorePercent;
 }
 
+[System.Serializable]
 public class RequirementResult
 {
     public string RequirementId;
