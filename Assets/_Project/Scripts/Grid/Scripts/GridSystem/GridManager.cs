@@ -20,56 +20,28 @@ public class GridManager : MonoBehaviour
     [Header("Placeable Surfaces")]
     public SurfaceTilemap[] surfaceTilemaps;
 
+    [Header("Selection Highlight")]
+    public GameObject highlightObject;
+
     public Camera MainCam { get; private set; }
 
-    private struct CellKey
-    {
-        public int surfaceId;
-        public Vector3Int coord;
-
-        public CellKey(Tilemap surface, Vector3Int coord)
-        {
-            surfaceId = surface != null ? surface.GetInstanceID() : 0;
-            this.coord = coord;
-        }
-    }
-
-    private readonly Dictionary<CellKey, GridCell> gridCells =
-        new Dictionary<CellKey, GridCell>();
+    private Dictionary<Vector3Int, GridCell> gridCells = new Dictionary<Vector3Int, GridCell>();
 
     public GridCell SelectedCell { get; private set; }
     public Vector3Int SelectedCellCoord { get; private set; }
     public Tilemap SelectedSurface { get; private set; }
     public SurfaceBand SelectedSurfaceBand { get; private set; }
 
-    public SurfaceBand PreferredSurfaceBand { get; private set; } = SurfaceBand.Floor;
+    private SurfaceBand _preferredSurfaceBand = SurfaceBand.Floor;
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         MainCam = Camera.main;
 
-        if (MainCam == null)
-        {
-            Debug.LogError(
-                "[GridManager] Main Camera not found. " +
-                "Make sure the gameplay camera has the MainCamera tag."
-            );
-        }
-
         if (tilemapGrid == null)
-        {
-            Debug.LogWarning(
-                "[GridManager] tilemapGrid is not assigned yet. " +
-                "RoomManager should assign it when the room starts."
-            );
-        }
+            Debug.LogError("[GridManager] tilemapGrid is not assigned in the Inspector");
     }
 
     private void Update()
@@ -77,199 +49,112 @@ public class GridManager : MonoBehaviour
         HandleCellSelection();
     }
 
-    public void SetPreferredSurfaceBand(SurfaceBand band)
-    {
-        PreferredSurfaceBand = band;
-    }
-
     private void HandleCellSelection()
     {
-        if (MainCam == null)
-        {
-            MainCam = Camera.main;
-            if (MainCam == null)
-                return;
-        }
-
-        if (tilemapGrid == null || Mouse.current == null)
-            return;
+        if (MainCam == null || tilemapGrid == null) return;
+        if (Mouse.current == null) return;
 
         Vector2 mousePos = Mouse.current.position.ReadValue();
-
-        Vector3 screenPos = new Vector3(
-            mousePos.x,
-            mousePos.y,
-            MainCam.nearClipPlane + 10f
-        );
-
-        Vector3 worldPos = MainCam.ScreenToWorldPoint(screenPos);
+        Vector3 worldPos = MainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, MainCam.nearClipPlane + 10f));
         worldPos.z = 0f;
 
-        Collider2D[] hits = Physics2D.OverlapPointAll(worldPos);
+        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-        Tilemap fallbackTilemap = null;
-        SurfaceBand fallbackBand = SurfaceBand.Floor;
-        Vector3Int fallbackCoord = Vector3Int.zero;
+        Tilemap hitSurface = null;
+        SurfaceBand hitBand = SurfaceBand.Floor;
 
-        Tilemap preferredTilemap = null;
-        SurfaceBand preferredBand = PreferredSurfaceBand;
-        Vector3Int preferredCoord = Vector3Int.zero;
-
-        foreach (Collider2D hit in hits)
+        if (hit.collider != null)
         {
-            if (hit == null)
-                continue;
-
-            Tilemap hitTilemap = hit.GetComponent<Tilemap>();
-
-            if (hitTilemap == null)
-                hitTilemap = hit.GetComponentInParent<Tilemap>();
-
-            if (hitTilemap == null || surfaceTilemaps == null)
-                continue;
-
-            foreach (SurfaceTilemap surface in surfaceTilemaps)
+            Tilemap hitTilemap = hit.collider.GetComponent<Tilemap>();
+            if (hitTilemap != null && surfaceTilemaps != null)
             {
-                if (surface == null || surface.tilemap == null)
-                    continue;
-
-                if (surface.tilemap != hitTilemap)
-                    continue;
-
-                Vector3Int tileCoord = hitTilemap.WorldToCell(worldPos);
-
-                if (!hitTilemap.HasTile(tileCoord))
-                    continue;
-
-                if (fallbackTilemap == null)
+                foreach (var entry in surfaceTilemaps)
                 {
-                    fallbackTilemap = hitTilemap;
-                    fallbackBand = surface.band;
-                    fallbackCoord = tileCoord;
-                }
-
-                if (surface.band == PreferredSurfaceBand)
-                {
-                    preferredTilemap = hitTilemap;
-                    preferredBand = surface.band;
-                    preferredCoord = tileCoord;
-                    break;
+                    if (entry.tilemap == hitTilemap)
+                    {
+                        hitSurface = entry.tilemap;
+                        hitBand = entry.band;
+                        break;
+                    }
                 }
             }
-
-            if (preferredTilemap != null)
-                break;
         }
 
-        Tilemap selectedTilemap;
-        SurfaceBand selectedBand;
-        Vector3Int selectedCoord;
-
-        if (preferredTilemap != null)
-        {
-            selectedTilemap = preferredTilemap;
-            selectedBand = preferredBand;
-            selectedCoord = preferredCoord;
-        }
-        else if (fallbackTilemap != null)
-        {
-            selectedTilemap = fallbackTilemap;
-            selectedBand = fallbackBand;
-            selectedCoord = fallbackCoord;
-        }
-        else
+        if (hitSurface == null)
         {
             SelectedCell = null;
             SelectedSurface = null;
             return;
         }
 
-        SelectedSurface = selectedTilemap;
-        SelectedSurfaceBand = selectedBand;
-        SelectedCellCoord = selectedCoord;
-        SelectedCell = GetOrCreateCell(selectedCoord, selectedTilemap);
+        Vector3Int cellCoord = tilemapGrid.WorldToCell(worldPos);
+
+        SelectedCell = GetOrCreateCell(cellCoord);
+        SelectedCellCoord = cellCoord;
+        SelectedSurface = hitSurface;
+        SelectedSurfaceBand = hitBand;
     }
 
-    private GridCell GetOrCreateCell(Vector3Int cellCoord, Tilemap surface)
+    private GridCell GetOrCreateCell(Vector3Int cellCoord)
     {
-        CellKey key = new CellKey(surface, cellCoord);
-
-        if (!gridCells.TryGetValue(key, out GridCell cell))
+        if (!gridCells.TryGetValue(cellCoord, out GridCell cell))
         {
-            Vector3 worldCenter =
-                surface != null
-                    ? surface.GetCellCenterWorld(cellCoord)
-                    : tilemapGrid.GetCellCenterWorld(cellCoord);
-
-            cell = new GridCell(
-                new Vector2Int(cellCoord.x, cellCoord.y),
-                worldCenter
-            );
-
-            gridCells[key] = cell;
+            Vector3 cellWorldCenter = tilemapGrid.GetCellCenterWorld(cellCoord);
+            cell = new GridCell(new Vector2Int(cellCoord.x, cellCoord.y), cellWorldCenter);
+            gridCells[cellCoord] = cell;
         }
-
         return cell;
+    }
+
+    private void LateUpdate()
+    {
+        if (highlightObject == null) return;
+
+        if (SelectedCell != null)
+        {
+            highlightObject.SetActive(true);
+            highlightObject.transform.position = SelectedCell.WorldPosition;
+        }
+        else
+        {
+            highlightObject.SetActive(false);
+        }
     }
 
     public GridCell GetCell(Vector3Int coord)
     {
-        if (SelectedSurface == null)
-            return null;
-
-        CellKey key = new CellKey(SelectedSurface, coord);
-        gridCells.TryGetValue(key, out GridCell cell);
+        gridCells.TryGetValue(coord, out GridCell cell);
         return cell;
     }
 
     public GridCell GetCellByCoord2D(Vector2Int coord2D, int z = 0)
     {
-        if (SelectedSurface == null)
-            return null;
-
-        Vector3Int coord3D = new Vector3Int(
-            coord2D.x,
-            coord2D.y,
-            z
-        );
-
-        return GetOrCreateCell(coord3D, SelectedSurface);
+        Vector3Int coord3D = new Vector3Int(coord2D.x, coord2D.y, z);
+        return GetOrCreateCell(coord3D);
     }
 
     public List<GridCell> GetAllOccupiedCells()
     {
         List<GridCell> occupied = new List<GridCell>();
-
-        foreach (GridCell cell in gridCells.Values)
+        foreach (var cell in gridCells.Values)
         {
             if (cell.IsOccupied)
                 occupied.Add(cell);
         }
-
         return occupied;
     }
 
     public void SetActiveRoom(Grid newGrid, SurfaceTilemap[] newSurfaces)
     {
-        if (newGrid == null)
-        {
-            Debug.LogError(
-                "[GridManager] SetActiveRoom received a null Grid."
-            );
-            return;
-        }
-
         tilemapGrid = newGrid;
         surfaceTilemaps = newSurfaces;
-
         gridCells.Clear();
         SelectedCell = null;
         SelectedSurface = null;
+    }
 
-        Debug.Log(
-            $"[GridManager] Active room changed. " +
-            $"Grid: {newGrid.name}, " +
-            $"Surfaces: {(newSurfaces != null ? newSurfaces.Length : 0)}"
-        );
+    public void SetPreferredSurfaceBand(SurfaceBand band)
+    {
+        _preferredSurfaceBand = band;
     }
 }
