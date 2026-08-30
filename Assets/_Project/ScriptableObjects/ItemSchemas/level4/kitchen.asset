@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Kitchen
   icon: {fileID: -8072591114664276155, guid: 74149008d018a0c40a722a0f499eabe6, type: 3}
   prefab: {fileID: 2373969391291344813, guid: 580ebba127c985142ae985cd2b7dbffd, type: 3}
-  category: 0
+  category: 8
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: near wall (left)
+    worldPosition: {x: -6, y: -3}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

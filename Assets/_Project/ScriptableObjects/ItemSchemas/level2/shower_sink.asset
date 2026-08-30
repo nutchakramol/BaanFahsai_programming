@@ -30,4 +30,26 @@ MonoBehaviour:
       m_PostInfinity: 0
       m_RotationOrder: 0
     weight: 1
+  - zoneLabel: near wall (right)
+    worldPosition: {x: -2, y: 1}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: near wall (left)
+    worldPosition: {x: -6, y: -3}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

@@ -16,7 +16,29 @@ MonoBehaviour:
   displayName: Range hood
   icon: {fileID: 6203059290615345688, guid: 3a5ddad9dc1923549a5c7ebd1b32b503, type: 3}
   prefab: {fileID: 6208648987944893958, guid: 0536d3f8cbede9841aa7bb3c301168ea, type: 3}
-  category: 0
+  category: 8
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: on wall (right)
+    worldPosition: {x: 0, y: 2}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: on wall (left)
+    worldPosition: {x: -4, y: 5}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

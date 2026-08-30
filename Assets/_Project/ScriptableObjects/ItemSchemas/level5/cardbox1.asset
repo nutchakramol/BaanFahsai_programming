@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Cardbox1
   icon: {fileID: 3877437224819569527, guid: 93761ada980216246a857466855df64a, type: 3}
   prefab: {fileID: 5846778945282150508, guid: 0feb6f72dfb98ac4382667be663147c2, type: 3}
-  category: 0
+  category: 3
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

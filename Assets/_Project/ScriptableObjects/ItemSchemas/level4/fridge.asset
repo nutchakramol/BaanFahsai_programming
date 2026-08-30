@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Fridge
   icon: {fileID: 5712910031516796360, guid: 6bd6339bc366cac46b8af84538750d1f, type: 3}
   prefab: {fileID: 5462588576255889437, guid: fd7e6f730698f304bac61d9a0f57bc1a, type: 3}
-  category: 0
+  category: 8
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: near wall (left)
+    worldPosition: {x: -6, y: -3}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

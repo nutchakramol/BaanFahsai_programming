@@ -16,7 +16,29 @@ MonoBehaviour:
   displayName: Oven
   icon: {fileID: 2826756938296143012, guid: 2d898ac561c869f4dbb260bcc7c691f8, type: 3}
   prefab: {fileID: 7698656833303117446, guid: bb4c4165a32191e4093531943cac9a59, type: 3}
-  category: 0
+  category: 8
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: near wall (left)
+    worldPosition: {x: -6, y: -3}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: near wall (right)
+    worldPosition: {x: -2, y: 1}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

@@ -16,7 +16,40 @@ MonoBehaviour:
   displayName: Spider web
   icon: {fileID: -966466702988171720, guid: 48167a5eb444cdf4cbe718d7a4479f82, type: 3}
   prefab: {fileID: 643415832193943660, guid: 44408c197f391174a977af9257719691, type: 3}
-  category: 0
+  category: 4
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
+  - zoneLabel: on wall (right)
+    worldPosition: {x: 0, y: 2}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: on wall (left)
+    worldPosition: {x: -4, y: 5}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

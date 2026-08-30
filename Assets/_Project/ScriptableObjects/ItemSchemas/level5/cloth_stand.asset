@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Cloth stand
   icon: {fileID: 1577463048642658242, guid: 6f18bb24c41dc3940a376b9ff55e8ac8, type: 3}
   prefab: {fileID: 9106126556459281422, guid: c92f97c2a2a955d4ab4c7f37c4d841eb, type: 3}
-  category: 0
+  category: 3
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

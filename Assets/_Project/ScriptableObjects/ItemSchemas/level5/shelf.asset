@@ -16,7 +16,40 @@ MonoBehaviour:
   displayName: Shelf
   icon: {fileID: 5795814407860715475, guid: d8d532e71dbc0be479552eec0349ae7c, type: 3}
   prefab: {fileID: 135516987622384275, guid: e39e4c6600e5b0b4a8bc198d9ef03bd7, type: 3}
-  category: 0
+  category: 3
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
+  - zoneLabel: near wall (left)
+    worldPosition: {x: -6, y: -3}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: near wall (right)
+    worldPosition: {x: -2, y: 1}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 

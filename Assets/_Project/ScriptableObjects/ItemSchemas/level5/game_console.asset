@@ -16,7 +16,18 @@ MonoBehaviour:
   displayName: Game console
   icon: {fileID: 6390626519073505332, guid: ae8235de3f0e71b4ea7c47d76654e7ff, type: 3}
   prefab: {fileID: 5607175277265242944, guid: fe1e99a3cce05e544ac325dd275eefc8, type: 3}
-  category: 0
+  category: 10
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: anywhere in the room
+    worldPosition: {x: -6, y: -0.5}
+    innerRadius: 2
+    outerRadius: 6
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1
   appropriateRoomTags: 

@@ -16,7 +16,29 @@ MonoBehaviour:
   displayName: Window3
   icon: {fileID: -7503698964060047574, guid: ce164ab823e70ff42907b56317ec0261, type: 3}
   prefab: {fileID: 751593422292542751, guid: ae1f1a37ce5446e43b187e326a4979ed, type: 3}
-  category: 0
+  category: 4
   footprintSize: {x: 1, y: 1}
-  heatZones: []
+  heatZones:
+  - zoneLabel: on wall (right)
+    worldPosition: {x: 0, y: 2}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
+  - zoneLabel: on wall (left)
+    worldPosition: {x: -4, y: 5}
+    innerRadius: 0.5
+    outerRadius: 2
+    falloffCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    weight: 1.5
   appropriateRoomTags: 
