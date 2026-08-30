@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: painting1
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 3
+  surface: 0
   colorVariants: []

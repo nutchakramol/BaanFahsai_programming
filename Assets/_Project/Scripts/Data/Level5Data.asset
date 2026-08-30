@@ -16,17 +16,17 @@ MonoBehaviour:
   sceneName: level1
   multiRoomEnabled: 0
   rooms:
-  - roomId: bedroom_1
-    roomTag: 1
+  - roomId: attic_1
+    roomTag: 4
     roomOrigin: {x: -1.73, y: 0}
     roomSize: {x: 10, y: 10}
     fixedStructures: []
   requirements:
-  - requirementId: '"beddd"'
-    requiredCategory: 6
-    minCount: 1
-    minAvgScore: 0.5
-  targetScoreToWin: 80
+  - requirementId: have lighting
+    requiredCategory: 0
+    minCount: 4
+    minAvgScore: 0.3
+  targetScoreToWin: 50
   paletteItemIds: []
   itemSchemas: []
   starThresholds:
