@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 315001287
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1577463048642658242, guid: 6f18bb24c41dc3940a376b9ff55e8ac8, type: 3}
@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: cloth_stand
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 5
+  surface: 0
   colorVariants: []

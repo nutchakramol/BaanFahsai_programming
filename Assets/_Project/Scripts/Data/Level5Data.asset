@@ -23,9 +23,17 @@ MonoBehaviour:
     fixedStructures: []
   requirements:
   - requirementId: have lighting
-    requiredCategory: 0
-    minCount: 4
+    requiredCategory: 4
+    minCount: 2
     minAvgScore: 0.3
+  - requirementId: have lighting
+    requiredCategory: 3
+    minCount: 1
+    minAvgScore: 0.6
+  - requirementId: have lighting
+    requiredCategory: 10
+    minCount: 1
+    minAvgScore: 0.2
   targetScoreToWin: 50
   paletteItemIds: []
   itemSchemas: []

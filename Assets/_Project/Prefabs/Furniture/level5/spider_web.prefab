@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 315001287
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -966466702988171720, guid: 48167a5eb444cdf4cbe718d7a4479f82, type: 3}
@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: spider_web
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 5
+  surface: 0
   colorVariants: []
