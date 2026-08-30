@@ -16,17 +16,21 @@ MonoBehaviour:
   sceneName: Level1
   multiRoomEnabled: 0
   rooms:
-  - roomId: bedroom_1
-    roomTag: 1
+  - roomId: kitchen_1
+    roomTag: 2
     roomOrigin: {x: -1.73, y: 0}
     roomSize: {x: 10, y: 10}
     fixedStructures: []
   requirements:
-  - requirementId: '"bed"'
-    requiredCategory: 6
+  - requirementId: have table
+    requiredCategory: 7
     minCount: 1
-    minAvgScore: 0.5
-  targetScoreToWin: 80
+    minAvgScore: 0.3
+  - requirementId: have sanitary
+    requiredCategory: 0
+    minCount: 3
+    minAvgScore: 0.3
+  targetScoreToWin: 50
   paletteItemIds: []
   itemSchemas: []
   starThresholds:

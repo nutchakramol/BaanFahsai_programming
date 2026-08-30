@@ -16,17 +16,37 @@ MonoBehaviour:
   sceneName: level1
   multiRoomEnabled: 0
   rooms:
-  - roomId: bedroom_1
-    roomTag: 1
+  - roomId: livingroom_1
+    roomTag: 0
     roomOrigin: {x: -1.73, y: 0}
     roomSize: {x: 10, y: 10}
     fixedStructures: []
   requirements:
-  - requirementId: '"hb"'
-    requiredCategory: 6
+  - requirementId: have seating
+    requiredCategory: 0
+    minCount: 2
+    minAvgScore: 0.3
+  - requirementId: have electronics
+    requiredCategory: 10
+    minCount: 1
+    minAvgScore: 0.3
+  - requirementId: have storage
+    requiredCategory: 3
+    minCount: 1
+    minAvgScore: 0.3
+  - requirementId: have decor
+    requiredCategory: 4
+    minCount: 2
+    minAvgScore: 0.3
+  - requirementId: have rug
+    requiredCategory: 2
+    minCount: 1
+    minAvgScore: 0.3
+  - requirementId: have table
+    requiredCategory: 7
     minCount: 1
     minAvgScore: 0.5
-  targetScoreToWin: 80
+  targetScoreToWin: 50
   paletteItemIds: []
   itemSchemas:
   - {fileID: 11400000, guid: 3f33d6d82ef90a54aaf75e186681b9f4, type: 2}
