@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class LevelSessionController : MonoBehaviour
 {
@@ -14,9 +16,28 @@ public class LevelSessionController : MonoBehaviour
     [SerializeField] private NPCDialogueUI npcDialogueUI;
     [SerializeField] private LevelDataSO defaultLevelData;
 
+    [Header("Check / Result UI")]
+    [SerializeField] private UnityEngine.UI.Button checkButton;
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private TextMeshProUGUI percentText;
+    [SerializeField] private UnityEngine.UI.Button retryButton;
     private LevelController _currentLevelController;
     private LevelDataSO _currentLevelData;
 
+    private void Awake()
+    {
+        if (resultPanel != null)
+            resultPanel.SetActive(false);
+
+        if (checkButton != null)
+        {
+            checkButton.gameObject.SetActive(false); // NEW — hidden until gameplay starts
+            checkButton.onClick.AddListener(CheckLevel);
+        }
+
+        if (retryButton != null)
+            retryButton.onClick.AddListener(HandleRetry);
+    }
     private void Start()
     {
         if (GameEvents.CurrentLevelData != null)
@@ -126,7 +147,7 @@ public class LevelSessionController : MonoBehaviour
             }
         }
 
-        // NEW: lock the grid/placement system to this level's room
+        // Lock the grid/placement system to this level's room
         RoomManager roomManager = FindFirstObjectByType<RoomManager>();
         if (roomManager != null)
         {
@@ -139,9 +160,16 @@ public class LevelSessionController : MonoBehaviour
 
         if (gameplayUIDocument != null)
             gameplayUIDocument.gameObject.SetActive(true);
+
+        if (checkButton != null)
+            checkButton.gameObject.SetActive(true); // NEW — show Check button now that NPC dialogue is done
+
+
+        if (resultPanel != null)
+            resultPanel.SetActive(false);
     }
 
-    // NEW: call this from a "Check Level" UI button
+    // Call this from the Check button
     public void CheckLevel()
     {
         if (_currentLevelController == null)
@@ -158,11 +186,27 @@ public class LevelSessionController : MonoBehaviour
         float overallPercent,
         bool canProceed)
     {
-        if (canProceed && _currentLevelData != null)
+        if (_currentLevelData == null) return;
+
+        if (canProceed)
         {
-            LevelProgress.UnlockUpTo(
-                _currentLevelData.levelIndex + 1
-            );
+            LevelProgress.CompleteLevel(_currentLevelData.levelIndex, stars);
         }
+        else
+        {
+            LevelProgress.SaveStarsOnly(_currentLevelData.levelIndex, stars);
+        }
+
+        if (percentText != null)
+            percentText.text = $"{overallPercent:F0}%";
+
+        if (resultPanel != null)
+            resultPanel.SetActive(true);
+    }
+
+    private void HandleRetry()
+    {
+        if (resultPanel != null)
+            resultPanel.SetActive(false);
     }
 }
