@@ -22,8 +22,34 @@ public class GridManager : MonoBehaviour
 
     public Camera MainCam { get; private set; }
 
-    private Dictionary<Vector3Int, GridCell> gridCells =
-        new Dictionary<Vector3Int, GridCell>();
+    // =========================================================
+    // CELL KEY
+    // =========================================================
+
+    // Floor and Wall can have the same cell coordinate.
+    // This makes them separate cells internally.
+    private struct CellKey
+    {
+        public int surfaceId;
+        public Vector3Int coordinate;
+
+        public CellKey(Tilemap surface, Vector3Int coordinate)
+        {
+            surfaceId =
+                surface != null
+                    ? surface.GetInstanceID()
+                    : 0;
+
+            this.coordinate = coordinate;
+        }
+    }
+
+    private readonly Dictionary<CellKey, GridCell> gridCells =
+        new Dictionary<CellKey, GridCell>();
+
+    // =========================================================
+    // CURRENT SELECTION
+    // =========================================================
 
     public GridCell SelectedCell { get; private set; }
 
@@ -34,12 +60,31 @@ public class GridManager : MonoBehaviour
     public SurfaceBand SelectedSurfaceBand { get; private set; }
 
     // =========================================================
+    // PREFERRED SURFACE
+    // =========================================================
+
+    // PlacementController tells us which surface the currently
+    // selected furniture wants.
+    //
+    // Example:
+    // bed    -> Floor
+    // window -> Wall
+    //
+    // This solves Floor/Wall collider overlap.
+    public SurfaceBand PreferredSurfaceBand
+    {
+        get;
+        private set;
+    } = SurfaceBand.Floor;
+
+    // =========================================================
     // UNITY
     // =========================================================
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null &&
+            Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -53,7 +98,7 @@ public class GridManager : MonoBehaviour
         {
             Debug.LogError(
                 "[GridManager] Main Camera not found. " +
-                "Make sure your gameplay camera has the MainCamera tag."
+                "Make sure the gameplay camera has the MainCamera tag."
             );
         }
 
@@ -61,7 +106,7 @@ public class GridManager : MonoBehaviour
         {
             Debug.LogWarning(
                 "[GridManager] tilemapGrid is not assigned yet. " +
-                "RoomManager should assign it when the room starts."
+                "RoomManager should assign it."
             );
         }
     }
@@ -69,6 +114,16 @@ public class GridManager : MonoBehaviour
     private void Update()
     {
         HandleCellSelection();
+    }
+
+    // =========================================================
+    // PREFERRED SURFACE
+    // =========================================================
+
+    public void SetPreferredSurfaceBand(
+        SurfaceBand band)
+    {
+        PreferredSurfaceBand = band;
     }
 
     // =========================================================
@@ -91,6 +146,10 @@ public class GridManager : MonoBehaviour
         if (Mouse.current == null)
             return;
 
+        // -----------------------------------------------------
+        // Mouse screen -> world
+        // -----------------------------------------------------
+
         Vector2 mousePos =
             Mouse.current.position.ReadValue();
 
@@ -102,13 +161,15 @@ public class GridManager : MonoBehaviour
             );
 
         Vector3 worldPos =
-            MainCam.ScreenToWorldPoint(screenPos);
+            MainCam.ScreenToWorldPoint(
+                screenPos
+            );
 
         worldPos.z = 0f;
 
-        // =====================================================
-        // CHECK ALL COLLIDERS UNDER MOUSE
-        // =====================================================
+        // -----------------------------------------------------
+        // Find every collider under the pointer
+        // -----------------------------------------------------
 
         RaycastHit2D[] hits =
             Physics2D.RaycastAll(
@@ -116,11 +177,32 @@ public class GridManager : MonoBehaviour
                 Vector2.zero
             );
 
-        Tilemap selectedTilemap = null;
-        SurfaceBand selectedBand = SurfaceBand.Floor;
+        // -----------------------------------------------------
+        // Fallback surface
+        // -----------------------------------------------------
+
+        Tilemap fallbackTilemap = null;
+
+        SurfaceBand fallbackBand =
+            SurfaceBand.Floor;
+
+        Vector3Int fallbackCoord =
+            Vector3Int.zero;
+
+        // -----------------------------------------------------
+        // Preferred surface
+        // -----------------------------------------------------
+
+        Tilemap preferredTilemap = null;
+
+        SurfaceBand preferredBand =
+            PreferredSurfaceBand;
+
+        Vector3Int preferredCoord =
+            Vector3Int.zero;
 
         // =====================================================
-        // FIND REGISTERED TILEMAP THAT ACTUALLY HAS A TILE HERE
+        // SEARCH SURFACES
         // =====================================================
 
         foreach (RaycastHit2D hit in hits)
@@ -134,7 +216,8 @@ public class GridManager : MonoBehaviour
             if (hitTilemap == null)
             {
                 hitTilemap =
-                    hit.collider.GetComponentInParent<Tilemap>();
+                    hit.collider
+                        .GetComponentInParent<Tilemap>();
             }
 
             if (hitTilemap == null)
@@ -143,7 +226,8 @@ public class GridManager : MonoBehaviour
             if (surfaceTilemaps == null)
                 continue;
 
-            foreach (SurfaceTilemap surface in surfaceTilemaps)
+            foreach (SurfaceTilemap surface
+                     in surfaceTilemaps)
             {
                 if (surface == null ||
                     surface.tilemap == null)
@@ -154,59 +238,103 @@ public class GridManager : MonoBehaviour
                 if (surface.tilemap != hitTilemap)
                     continue;
 
-                // Convert mouse position to THIS tilemap's cell
-                Vector3Int tileCoord =
-                    hitTilemap.WorldToCell(worldPos);
+                // ---------------------------------------------
+                // Check actual tile
+                // ---------------------------------------------
 
-                // Collider may overlap the area even if there
-                // is no tile at this exact position.
+                Vector3Int tileCoord =
+                    hitTilemap.WorldToCell(
+                        worldPos
+                    );
+
+                // Collider may overlap this location even when
+                // the Tilemap itself has no tile there.
                 if (!hitTilemap.HasTile(tileCoord))
                     continue;
 
-                // Found a valid surface.
-                selectedTilemap =
-                    hitTilemap;
+                // ---------------------------------------------
+                // First valid result becomes fallback
+                // ---------------------------------------------
 
-                selectedBand =
-                    surface.band;
-
-                // Prefer Floor when multiple surfaces overlap.
-                if (surface.band == SurfaceBand.Floor)
+                if (fallbackTilemap == null)
                 {
+                    fallbackTilemap =
+                        hitTilemap;
+
+                    fallbackBand =
+                        surface.band;
+
+                    fallbackCoord =
+                        tileCoord;
+                }
+
+                // ---------------------------------------------
+                // Furniture-required surface wins
+                // ---------------------------------------------
+
+                if (surface.band ==
+                    PreferredSurfaceBand)
+                {
+                    preferredTilemap =
+                        hitTilemap;
+
+                    preferredBand =
+                        surface.band;
+
+                    preferredCoord =
+                        tileCoord;
+
                     break;
                 }
             }
 
-            if (selectedTilemap != null &&
-                selectedBand == SurfaceBand.Floor)
-            {
+            if (preferredTilemap != null)
                 break;
-            }
         }
 
         // =====================================================
-        // NO VALID SURFACE
+        // CHOOSE RESULT
         // =====================================================
 
-        if (selectedTilemap == null)
+        Tilemap selectedTilemap;
+
+        SurfaceBand selectedBand;
+
+        Vector3Int selectedCoord;
+
+        if (preferredTilemap != null)
+        {
+            selectedTilemap =
+                preferredTilemap;
+
+            selectedBand =
+                preferredBand;
+
+            selectedCoord =
+                preferredCoord;
+        }
+        else if (fallbackTilemap != null)
+        {
+            selectedTilemap =
+                fallbackTilemap;
+
+            selectedBand =
+                fallbackBand;
+
+            selectedCoord =
+                fallbackCoord;
+        }
+        else
         {
             SelectedCell = null;
             SelectedSurface = null;
+
             return;
         }
 
         // =====================================================
-        // GRID CELL
+        // SAVE SELECTION
         // =====================================================
-
-        Vector3Int cellCoord =
-            tilemapGrid.WorldToCell(worldPos);
-
-        SelectedCell =
-            GetOrCreateCell(cellCoord);
-
-        SelectedCellCoord =
-            cellCoord;
 
         SelectedSurface =
             selectedTilemap;
@@ -214,12 +342,25 @@ public class GridManager : MonoBehaviour
         SelectedSurfaceBand =
             selectedBand;
 
-        // Temporary debug
+        SelectedCellCoord =
+            selectedCoord;
+
+        SelectedCell =
+            GetOrCreateCell(
+                selectedCoord,
+                selectedTilemap
+            );
+
+        // Uncomment only while debugging.
+        /*
         Debug.Log(
-            $"[GridManager] Surface = {SelectedSurfaceBand}, " +
+            $"[GridManager] " +
+            $"Preferred = {PreferredSurfaceBand}, " +
+            $"Selected = {SelectedSurfaceBand}, " +
             $"Tilemap = {SelectedSurface.name}, " +
-            $"Cell = {cellCoord}"
+            $"Cell = {SelectedCellCoord}"
         );
+        */
     }
 
     // =========================================================
@@ -227,16 +368,35 @@ public class GridManager : MonoBehaviour
     // =========================================================
 
     private GridCell GetOrCreateCell(
-        Vector3Int cellCoord)
+        Vector3Int cellCoord,
+        Tilemap surface)
     {
+        CellKey key =
+            new CellKey(
+                surface,
+                cellCoord
+            );
+
         if (!gridCells.TryGetValue(
-                cellCoord,
+                key,
                 out GridCell cell))
         {
-            Vector3 cellWorldCenter =
-                tilemapGrid.GetCellCenterWorld(
-                    cellCoord
-                );
+            Vector3 worldCenter;
+
+            if (surface != null)
+            {
+                worldCenter =
+                    surface.GetCellCenterWorld(
+                        cellCoord
+                    );
+            }
+            else
+            {
+                worldCenter =
+                    tilemapGrid.GetCellCenterWorld(
+                        cellCoord
+                    );
+            }
 
             cell =
                 new GridCell(
@@ -244,21 +404,34 @@ public class GridManager : MonoBehaviour
                         cellCoord.x,
                         cellCoord.y
                     ),
-                    cellWorldCenter
+                    worldCenter
                 );
 
-            gridCells[cellCoord] =
+            gridCells[key] =
                 cell;
         }
 
         return cell;
     }
 
+    // =========================================================
+    // GET CELL
+    // =========================================================
+
     public GridCell GetCell(
         Vector3Int coord)
     {
+        if (SelectedSurface == null)
+            return null;
+
+        CellKey key =
+            new CellKey(
+                SelectedSurface,
+                coord
+            );
+
         gridCells.TryGetValue(
-            coord,
+            key,
             out GridCell cell
         );
 
@@ -277,7 +450,8 @@ public class GridManager : MonoBehaviour
             );
 
         return GetOrCreateCell(
-            coord3D
+            coord3D,
+            SelectedSurface
         );
     }
 
@@ -290,7 +464,8 @@ public class GridManager : MonoBehaviour
         List<GridCell> occupied =
             new List<GridCell>();
 
-        foreach (GridCell cell in gridCells.Values)
+        foreach (GridCell cell
+                 in gridCells.Values)
         {
             if (cell.IsOccupied)
             {
@@ -312,7 +487,7 @@ public class GridManager : MonoBehaviour
         if (newGrid == null)
         {
             Debug.LogError(
-                "[GridManager] SetActiveRoom received a null Grid."
+                "[GridManager] SetActiveRoom received null Grid."
             );
 
             return;
@@ -324,7 +499,7 @@ public class GridManager : MonoBehaviour
         surfaceTilemaps =
             newSurfaces;
 
-        // Each room gets its own cell cache.
+        // New room = new cached grid cells.
         gridCells.Clear();
 
         SelectedCell =
@@ -336,8 +511,8 @@ public class GridManager : MonoBehaviour
         Debug.Log(
             $"[GridManager] Active room changed. " +
             $"Grid: {newGrid.name}, " +
-            $"Surfaces: {(newSurfaces != null ? newSurfaces.Length : 0)}"
+            $"Surfaces: " +
+            $"{(newSurfaces != null ? newSurfaces.Length : 0)}"
         );
     }
-    
 }

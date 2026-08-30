@@ -48,6 +48,11 @@ public class PlacementController : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        UpdatePreferredSurface();
+    }
+
     private void Update()
     {
         HandleCycling();
@@ -58,7 +63,61 @@ public class PlacementController : MonoBehaviour
     }
 
     // =========================================================
-    // FURNITURE CYCLING
+    // FURNITURE SURFACE
+    // =========================================================
+
+    private void UpdatePreferredSurface()
+    {
+        if (GridManager.Instance == null)
+            return;
+
+        if (furniturePrefabs == null ||
+            furniturePrefabs.Length == 0)
+        {
+            GridManager.Instance
+                .SetPreferredSurfaceBand(
+                    SurfaceBand.Floor
+                );
+
+            return;
+        }
+
+        if (currentIndex < 0 ||
+            currentIndex >=
+            furniturePrefabs.Length)
+        {
+            currentIndex = 0;
+        }
+
+        GameObject prefab =
+            furniturePrefabs[currentIndex];
+
+        if (prefab == null)
+        {
+            GridManager.Instance
+                .SetPreferredSurfaceBand(
+                    SurfaceBand.Floor
+                );
+
+            return;
+        }
+
+        FurnitureItem item =
+            prefab.GetComponent<FurnitureItem>();
+
+        SurfaceBand band =
+            item != null
+                ? item.surface
+                : SurfaceBand.Floor;
+
+        GridManager.Instance
+            .SetPreferredSurfaceBand(
+                band
+            );
+    }
+
+    // =========================================================
+    // CYCLING
     // =========================================================
 
     private void HandleCycling()
@@ -99,12 +158,18 @@ public class PlacementController : MonoBehaviour
                 furniturePrefabs.Length
             );
 
+            UpdatePreferredSurface();
+
             Debug.Log(
                 $"[PlacementController] Selected furniture: " +
                 $"{furniturePrefabs[currentIndex].name}"
             );
         }
     }
+
+    // =========================================================
+    // LOCK
+    // =========================================================
 
     private bool IsFurnitureUnlocked(
         GameObject prefab)
@@ -173,7 +238,9 @@ public class PlacementController : MonoBehaviour
 
                 GridCell checkCell =
                     GridManager.Instance
-                        .GetCell(checkCoord);
+                        .GetCell(
+                            checkCoord
+                        );
 
                 if (checkCell != null &&
                     checkCell.IsOccupied)
@@ -260,8 +327,7 @@ public class PlacementController : MonoBehaviour
             GridManager.Instance.SelectedCell;
 
         // =====================================================
-        // IMPORTANT:
-        // Always update preview BEFORE checking UI.
+        // GHOST PREVIEW
         // =====================================================
 
         if (ghostPreview != null)
@@ -278,6 +344,8 @@ public class PlacementController : MonoBehaviour
                     furniturePrefabs.Length)
                 {
                     currentIndex = 0;
+
+                    UpdatePreferredSurface();
                 }
 
                 previewPrefab =
@@ -294,10 +362,7 @@ public class PlacementController : MonoBehaviour
             return;
 
         // =====================================================
-        // UI PROTECTION
-        //
-        // Only block CLICKING.
-        // Do NOT block GhostPreview above.
+        // BLOCK CLICK THROUGH UI
         // =====================================================
 
         if (EventSystem.current != null &&
@@ -414,6 +479,8 @@ public class PlacementController : MonoBehaviour
             furniturePrefabs.Length)
         {
             currentIndex = 0;
+
+            UpdatePreferredSurface();
         }
 
         GameObject prefab =
@@ -430,7 +497,7 @@ public class PlacementController : MonoBehaviour
         }
 
         // =====================================================
-        // LOCK CHECK
+        // LOCK
         // =====================================================
 
         if (!IsFurnitureUnlocked(prefab))
@@ -443,7 +510,7 @@ public class PlacementController : MonoBehaviour
         }
 
         // =====================================================
-        // SURFACE CHECK
+        // SURFACE
         // =====================================================
 
         FurnitureItem furnitureItem =
@@ -457,7 +524,8 @@ public class PlacementController : MonoBehaviour
             {
                 Debug.Log(
                     $"[PlacementController] {prefab.name} requires " +
-                    $"{furnitureItem.surface}, but selected surface is " +
+                    $"{furnitureItem.surface}, " +
+                    $"but selected surface is " +
                     $"{GridManager.Instance.SelectedSurfaceBand}."
                 );
 
@@ -466,11 +534,13 @@ public class PlacementController : MonoBehaviour
         }
 
         // =====================================================
-        // FOOTPRINT CHECK
+        // FOOTPRINT
         // =====================================================
 
         Vector2Int size =
-            GetFootprintSize(prefab);
+            GetFootprintSize(
+                prefab
+            );
 
         if (!IsFootprintFree(
                 cell.Coordinate,
@@ -488,6 +558,11 @@ public class PlacementController : MonoBehaviour
         // SPAWN
         // =====================================================
 
+        // IMPORTANT:
+        // cell.WorldPosition now comes from the selected Tilemap.
+        //
+        // Floor furniture -> Floor Tilemap cell center
+        // Wall furniture  -> Wall Tilemap cell center
         Vector3 spawnPos =
             cell.WorldPosition +
             new Vector3(
@@ -519,7 +594,7 @@ public class PlacementController : MonoBehaviour
 
             Debug.LogWarning(
                 "[PlacementController] PlacedFurniture parent is null. " +
-                "Furniture was created at scene root."
+                "Furniture created at scene root."
             );
         }
 
@@ -537,6 +612,7 @@ public class PlacementController : MonoBehaviour
 
         Debug.Log(
             $"[PlacementController] Placed {prefab.name} " +
+            $"on {GridManager.Instance.SelectedSurfaceBand} " +
             $"at {cell.Coordinate}"
         );
     }
@@ -560,6 +636,7 @@ public class PlacementController : MonoBehaviour
         if (objectToDelete == null)
         {
             cell.ClearOccupied();
+
             return;
         }
 
@@ -572,11 +649,6 @@ public class PlacementController : MonoBehaviour
                 ? item.gridSize
                 : Vector2Int.one;
 
-        /*
-         * NOTE:
-         * selectedFurnitureCell is currently being used
-         * as the origin of selected furniture.
-         */
         Vector2Int origin =
             cell.Coordinate;
 
@@ -701,7 +773,7 @@ public class PlacementController : MonoBehaviour
                 ? item.gridSize
                 : Vector2Int.one;
 
-        // Temporarily clear old cells.
+        // Temporarily free the old footprint.
         ClearFootprint(
             oldOrigin,
             size
@@ -711,7 +783,7 @@ public class PlacementController : MonoBehaviour
                 targetCoord,
                 size))
         {
-            // Restore original occupancy.
+            // Restore old occupancy.
             OccupyFootprint(
                 oldOrigin,
                 size,
@@ -748,7 +820,7 @@ public class PlacementController : MonoBehaviour
     }
 
     // =========================================================
-    // ROOM SUPPORT
+    // ROOM
     // =========================================================
 
     public void SetFurnitureSet(
@@ -761,6 +833,11 @@ public class PlacementController : MonoBehaviour
             0;
 
         ClearSelection();
+
+        // IMPORTANT:
+        // Room changed, so update preferred Floor/Wall based
+        // on the first furniture in the new room.
+        UpdatePreferredSurface();
 
         int count =
             furniturePrefabs != null
@@ -802,7 +879,8 @@ public class PlacementController : MonoBehaviour
         }
 
         if (index < 0 ||
-            index >= furniturePrefabs.Length)
+            index >=
+            furniturePrefabs.Length)
         {
             Debug.LogWarning(
                 $"[PlacementController] Invalid furniture index: {index}"
@@ -830,14 +908,23 @@ public class PlacementController : MonoBehaviour
         currentIndex =
             index;
 
+        // VERY IMPORTANT:
+        // Window/light -> preferred Wall.
+        // Bed/table    -> preferred Floor.
+        UpdatePreferredSurface();
+
+        FurnitureItem item =
+            prefab.GetComponent<FurnitureItem>();
+
         Debug.Log(
             $"[PlacementController] Selected furniture: " +
-            $"{prefab.name}"
+            $"{prefab.name}, Surface: " +
+            $"{(item != null ? item.surface.ToString() : "Floor")}"
         );
     }
 
     // =========================================================
-    // UI ACTION BUTTONS
+    // UI ACTIONS
     // =========================================================
 
     public void OnPlaceButton()
@@ -915,5 +1002,4 @@ public class PlacementController : MonoBehaviour
             new Vector2Int(1, 0)
         );
     }
-    
 }
