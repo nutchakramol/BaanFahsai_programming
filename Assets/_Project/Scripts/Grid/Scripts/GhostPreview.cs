@@ -229,10 +229,7 @@ public class GhostPreview : MonoBehaviour
 
         newHighlight.transform.rotation =
             Quaternion.identity;
-
-        newHighlight.transform.localScale =
-            Vector3.one;
-
+            
         highlightPool.Add(newHighlight);
 
         return newHighlight;

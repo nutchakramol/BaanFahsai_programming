@@ -47,7 +47,7 @@ TagManager:
   - name: wall
     uniqueID: 3038475409
     locked: 0
-  - name: hightlight
+  - name: highlight
     uniqueID: 3552322635
     locked: 0
   - name: furniture
