@@ -20,499 +20,139 @@ public class GridManager : MonoBehaviour
     [Header("Placeable Surfaces")]
     public SurfaceTilemap[] surfaceTilemaps;
 
+    [Header("Selection Highlight")]
+    public GameObject highlightObject;
+
     public Camera MainCam { get; private set; }
 
-    // =========================================================
-    // CELL KEY
-    // =========================================================
-
-    // Floor and Wall can have the same cell coordinate.
-    // This makes them separate cells internally.
-    private struct CellKey
-    {
-        public int surfaceId;
-        public Vector3Int coordinate;
-
-        public CellKey(Tilemap surface, Vector3Int coordinate)
-        {
-            surfaceId =
-                surface != null
-                    ? surface.GetInstanceID()
-                    : 0;
-
-            this.coordinate = coordinate;
-        }
-    }
-
-    private readonly Dictionary<CellKey, GridCell> gridCells =
-        new Dictionary<CellKey, GridCell>();
-
-    // =========================================================
-    // CURRENT SELECTION
-    // =========================================================
+    private Dictionary<Vector3Int, GridCell> gridCells = new Dictionary<Vector3Int, GridCell>();
 
     public GridCell SelectedCell { get; private set; }
-
     public Vector3Int SelectedCellCoord { get; private set; }
-
     public Tilemap SelectedSurface { get; private set; }
-
     public SurfaceBand SelectedSurfaceBand { get; private set; }
-
-    // =========================================================
-    // PREFERRED SURFACE
-    // =========================================================
-
-    // PlacementController tells us which surface the currently
-    // selected furniture wants.
-    //
-    // Example:
-    // bed    -> Floor
-    // window -> Wall
-    //
-    // This solves Floor/Wall collider overlap.
-    public SurfaceBand PreferredSurfaceBand
-    {
-        get;
-        private set;
-    } = SurfaceBand.Floor;
-
-    // =========================================================
-    // UNITY
-    // =========================================================
 
     private void Awake()
     {
-        if (Instance != null &&
-            Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-
         MainCam = Camera.main;
 
-        if (MainCam == null)
-        {
-            Debug.LogError(
-                "[GridManager] Main Camera not found. " +
-                "Make sure the gameplay camera has the MainCamera tag."
-            );
-        }
-
         if (tilemapGrid == null)
-        {
-            Debug.LogWarning(
-                "[GridManager] tilemapGrid is not assigned yet. " +
-                "RoomManager should assign it."
-            );
-        }
+            Debug.LogError("[GridManager] tilemapGrid is not assigned in the Inspector");
     }
+    private SurfaceBand _preferredSurfaceBand = SurfaceBand.Floor;
 
+    public void SetPreferredSurfaceBand(SurfaceBand band)
+    {
+        _preferredSurfaceBand = band;
+    }
     private void Update()
     {
         HandleCellSelection();
     }
 
-    // =========================================================
-    // PREFERRED SURFACE
-    // =========================================================
-
-    public void SetPreferredSurfaceBand(
-        SurfaceBand band)
-    {
-        PreferredSurfaceBand = band;
-    }
-
-    // =========================================================
-    // CELL SELECTION
-    // =========================================================
-
     private void HandleCellSelection()
     {
-        if (MainCam == null)
-        {
-            MainCam = Camera.main;
+        if (MainCam == null || tilemapGrid == null) return;
+        if (Mouse.current == null) return;
 
-            if (MainCam == null)
-                return;
-        }
-
-        if (tilemapGrid == null)
-            return;
-
-        if (Mouse.current == null)
-            return;
-
-        // -----------------------------------------------------
-        // Mouse screen -> world
-        // -----------------------------------------------------
-
-        Vector2 mousePos =
-            Mouse.current.position.ReadValue();
-
-        Vector3 screenPos =
-            new Vector3(
-                mousePos.x,
-                mousePos.y,
-                MainCam.nearClipPlane + 10f
-            );
-
-        Vector3 worldPos =
-            MainCam.ScreenToWorldPoint(
-                screenPos
-            );
-
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        Vector3 worldPos = MainCam.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, MainCam.nearClipPlane + 10f));
         worldPos.z = 0f;
 
-        // -----------------------------------------------------
-        // Find every collider under the pointer
-        // -----------------------------------------------------
+        RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-        RaycastHit2D[] hits =
-            Physics2D.RaycastAll(
-                worldPos,
-                Vector2.zero
-            );
+        Tilemap hitSurface = null;
+        SurfaceBand hitBand = SurfaceBand.Floor;
 
-        // -----------------------------------------------------
-        // Fallback surface
-        // -----------------------------------------------------
-
-        Tilemap fallbackTilemap = null;
-
-        SurfaceBand fallbackBand =
-            SurfaceBand.Floor;
-
-        Vector3Int fallbackCoord =
-            Vector3Int.zero;
-
-        // -----------------------------------------------------
-        // Preferred surface
-        // -----------------------------------------------------
-
-        Tilemap preferredTilemap = null;
-
-        SurfaceBand preferredBand =
-            PreferredSurfaceBand;
-
-        Vector3Int preferredCoord =
-            Vector3Int.zero;
-
-        // =====================================================
-        // SEARCH SURFACES
-        // =====================================================
-
-        foreach (RaycastHit2D hit in hits)
+        if (hit.collider != null)
         {
-            if (hit.collider == null)
-                continue;
-
-            Tilemap hitTilemap =
-                hit.collider.GetComponent<Tilemap>();
-
-            if (hitTilemap == null)
+            Tilemap hitTilemap = hit.collider.GetComponent<Tilemap>();
+            if (hitTilemap != null && surfaceTilemaps != null)
             {
-                hitTilemap =
-                    hit.collider
-                        .GetComponentInParent<Tilemap>();
-            }
-
-            if (hitTilemap == null)
-                continue;
-
-            if (surfaceTilemaps == null)
-                continue;
-
-            foreach (SurfaceTilemap surface
-                     in surfaceTilemaps)
-            {
-                if (surface == null ||
-                    surface.tilemap == null)
+                foreach (var entry in surfaceTilemaps)
                 {
-                    continue;
-                }
-
-                if (surface.tilemap != hitTilemap)
-                    continue;
-
-                // ---------------------------------------------
-                // Check actual tile
-                // ---------------------------------------------
-
-                Vector3Int tileCoord =
-                    hitTilemap.WorldToCell(
-                        worldPos
-                    );
-
-                // Collider may overlap this location even when
-                // the Tilemap itself has no tile there.
-                if (!hitTilemap.HasTile(tileCoord))
-                    continue;
-
-                // ---------------------------------------------
-                // First valid result becomes fallback
-                // ---------------------------------------------
-
-                if (fallbackTilemap == null)
-                {
-                    fallbackTilemap =
-                        hitTilemap;
-
-                    fallbackBand =
-                        surface.band;
-
-                    fallbackCoord =
-                        tileCoord;
-                }
-
-                // ---------------------------------------------
-                // Furniture-required surface wins
-                // ---------------------------------------------
-
-                if (surface.band ==
-                    PreferredSurfaceBand)
-                {
-                    preferredTilemap =
-                        hitTilemap;
-
-                    preferredBand =
-                        surface.band;
-
-                    preferredCoord =
-                        tileCoord;
-
-                    break;
+                    if (entry.tilemap == hitTilemap)
+                    {
+                        hitSurface = entry.tilemap;
+                        hitBand = entry.band;
+                        break;
+                    }
                 }
             }
-
-            if (preferredTilemap != null)
-                break;
         }
 
-        // =====================================================
-        // CHOOSE RESULT
-        // =====================================================
-
-        Tilemap selectedTilemap;
-
-        SurfaceBand selectedBand;
-
-        Vector3Int selectedCoord;
-
-        if (preferredTilemap != null)
-        {
-            selectedTilemap =
-                preferredTilemap;
-
-            selectedBand =
-                preferredBand;
-
-            selectedCoord =
-                preferredCoord;
-        }
-        else if (fallbackTilemap != null)
-        {
-            selectedTilemap =
-                fallbackTilemap;
-
-            selectedBand =
-                fallbackBand;
-
-            selectedCoord =
-                fallbackCoord;
-        }
-        else
+        if (hitSurface == null)
         {
             SelectedCell = null;
             SelectedSurface = null;
-
             return;
         }
 
-        // =====================================================
-        // SAVE SELECTION
-        // =====================================================
+        Vector3Int cellCoord = tilemapGrid.WorldToCell(worldPos);
 
-        SelectedSurface =
-            selectedTilemap;
-
-        SelectedSurfaceBand =
-            selectedBand;
-
-        SelectedCellCoord =
-            selectedCoord;
-
-        SelectedCell =
-            GetOrCreateCell(
-                selectedCoord,
-                selectedTilemap
-            );
-
-        // Uncomment only while debugging.
-        /*
-        Debug.Log(
-            $"[GridManager] " +
-            $"Preferred = {PreferredSurfaceBand}, " +
-            $"Selected = {SelectedSurfaceBand}, " +
-            $"Tilemap = {SelectedSurface.name}, " +
-            $"Cell = {SelectedCellCoord}"
-        );
-        */
+        SelectedCell = GetOrCreateCell(cellCoord);
+        SelectedCellCoord = cellCoord;
+        SelectedSurface = hitSurface;
+        SelectedSurfaceBand = hitBand;
     }
 
-    // =========================================================
-    // GRID CELLS
-    // =========================================================
-
-    private GridCell GetOrCreateCell(
-        Vector3Int cellCoord,
-        Tilemap surface)
+    private GridCell GetOrCreateCell(Vector3Int cellCoord)
     {
-        CellKey key =
-            new CellKey(
-                surface,
-                cellCoord
-            );
-
-        if (!gridCells.TryGetValue(
-                key,
-                out GridCell cell))
+        if (!gridCells.TryGetValue(cellCoord, out GridCell cell))
         {
-            Vector3 worldCenter;
-
-            if (surface != null)
-            {
-                worldCenter =
-                    surface.GetCellCenterWorld(
-                        cellCoord
-                    );
-            }
-            else
-            {
-                worldCenter =
-                    tilemapGrid.GetCellCenterWorld(
-                        cellCoord
-                    );
-            }
-
-            cell =
-                new GridCell(
-                    new Vector2Int(
-                        cellCoord.x,
-                        cellCoord.y
-                    ),
-                    worldCenter
-                );
-
-            gridCells[key] =
-                cell;
+            Vector3 cellWorldCenter = tilemapGrid.GetCellCenterWorld(cellCoord);
+            cell = new GridCell(new Vector2Int(cellCoord.x, cellCoord.y), cellWorldCenter);
+            gridCells[cellCoord] = cell;
         }
-
         return cell;
     }
 
-    // =========================================================
-    // GET CELL
-    // =========================================================
-
-    public GridCell GetCell(
-        Vector3Int coord)
+    private void LateUpdate()
     {
-        if (SelectedSurface == null)
-            return null;
+        if (highlightObject == null) return;
 
-        CellKey key =
-            new CellKey(
-                SelectedSurface,
-                coord
-            );
+        if (SelectedCell != null)
+        {
+            highlightObject.SetActive(true);
+            highlightObject.transform.position = SelectedCell.WorldPosition;
+        }
+        else
+        {
+            highlightObject.SetActive(false);
+        }
+    }
 
-        gridCells.TryGetValue(
-            key,
-            out GridCell cell
-        );
-
+    public GridCell GetCell(Vector3Int coord)
+    {
+        gridCells.TryGetValue(coord, out GridCell cell);
         return cell;
     }
 
-    public GridCell GetCellByCoord2D(
-        Vector2Int coord2D,
-        int z = 0)
+    public GridCell GetCellByCoord2D(Vector2Int coord2D, int z = 0)
     {
-        Vector3Int coord3D =
-            new Vector3Int(
-                coord2D.x,
-                coord2D.y,
-                z
-            );
-
-        return GetOrCreateCell(
-            coord3D,
-            SelectedSurface
-        );
+        Vector3Int coord3D = new Vector3Int(coord2D.x, coord2D.y, z);
+        return GetOrCreateCell(coord3D);
     }
-
-    // =========================================================
-    // OCCUPIED CELLS
-    // =========================================================
 
     public List<GridCell> GetAllOccupiedCells()
     {
-        List<GridCell> occupied =
-            new List<GridCell>();
-
-        foreach (GridCell cell
-                 in gridCells.Values)
+        List<GridCell> occupied = new List<GridCell>();
+        foreach (var cell in gridCells.Values)
         {
             if (cell.IsOccupied)
-            {
                 occupied.Add(cell);
-            }
         }
-
         return occupied;
     }
 
-    // =========================================================
-    // ROOM SWITCHING
-    // =========================================================
-
-    public void SetActiveRoom(
-        Grid newGrid,
-        SurfaceTilemap[] newSurfaces)
+    public void SetActiveRoom(Grid newGrid, SurfaceTilemap[] newSurfaces)
     {
-        if (newGrid == null)
-        {
-            Debug.LogError(
-                "[GridManager] SetActiveRoom received null Grid."
-            );
-
-            return;
-        }
-
-        tilemapGrid =
-            newGrid;
-
-        surfaceTilemaps =
-            newSurfaces;
-
-        // New room = new cached grid cells.
+        tilemapGrid = newGrid;
+        surfaceTilemaps = newSurfaces;
         gridCells.Clear();
-
-        SelectedCell =
-            null;
-
-        SelectedSurface =
-            null;
-
-        Debug.Log(
-            $"[GridManager] Active room changed. " +
-            $"Grid: {newGrid.name}, " +
-            $"Surfaces: " +
-            $"{(newSurfaces != null ? newSurfaces.Length : 0)}"
-        );
+        SelectedCell = null;
+        SelectedSurface = null;
     }
 }
