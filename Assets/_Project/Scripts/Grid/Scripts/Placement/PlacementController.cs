@@ -375,30 +375,8 @@ public class PlacementController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (cell.IsOccupied)
-            {
-                selectedFurniture =
-                    cell.OccupyingObject;
-
-                selectedFurnitureCell =
-                    cell;
-
-                if (selectedFurniture != null)
-                {
-                    Debug.Log(
-                        $"[PlacementController] Selected: " +
-                        $"{selectedFurniture.name}"
-                    );
-                }
-            }
-            else
-            {
-                PlaceFurnitureAt(
-                    cell
-                );
-            }
+            PlaceFurnitureAt(cell);
         }
-
         // =====================================================
         // RIGHT CLICK
         // =====================================================

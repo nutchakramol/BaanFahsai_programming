@@ -2539,9 +2539,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSessionController
   allSchemas:
-  - {fileID: 11400000, guid: 0887c31372d61cc449ce7156051c5d1f, type: 2}
-  - {fileID: 11400000, guid: cfff266ef19dab24980ca8bd0635d13e, type: 2}
-  - {fileID: 11400000, guid: ed0deb3788fb6614e930027c611cd3a7, type: 2}
   - {fileID: 11400000, guid: 3f33d6d82ef90a54aaf75e186681b9f4, type: 2}
   - {fileID: 11400000, guid: 2a7f02e3c7662a9418e223d33298b6f0, type: 2}
   - {fileID: 11400000, guid: ea44a3f59d3e19c45b1563dc8d47a49b, type: 2}
