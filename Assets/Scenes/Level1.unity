@@ -2848,10 +2848,17 @@ MonoBehaviour:
   gameplayUIDocument: {fileID: 0}
   npcDialogueUI: {fileID: 1861111172}
   defaultLevelData: {fileID: 11400000, guid: f47a47b78516b98458f53f9afedfdbe9, type: 2}
+  allLevels:
+  - {fileID: 11400000, guid: f47a47b78516b98458f53f9afedfdbe9, type: 2}
+  - {fileID: 11400000, guid: 6d38ac1826f6fed4c8a1ae0c03c70297, type: 2}
+  - {fileID: 11400000, guid: 5f63f59aff55e0440b3752da61fc5c2a, type: 2}
+  - {fileID: 11400000, guid: caea7b972cf087f419306562292dc455, type: 2}
+  - {fileID: 11400000, guid: 2e623fdb1f689a946bffa6ecfc79c4b9, type: 2}
   checkButton: {fileID: 1780798648}
   resultPanel: {fileID: 1697997794}
   percentText: {fileID: 1318832422}
   retryButton: {fileID: 872588516}
+  nextLevelButton: {fileID: 1340666024}
 --- !u!4 &772869529
 Transform:
   m_ObjectHideFlags: 0
