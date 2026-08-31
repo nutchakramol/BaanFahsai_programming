@@ -15,12 +15,14 @@ public class LevelSessionController : MonoBehaviour
     [SerializeField] private UIDocument gameplayUIDocument;
     [SerializeField] private NPCDialogueUI npcDialogueUI;
     [SerializeField] private LevelDataSO defaultLevelData;
+    [SerializeField] private List<LevelDataSO> allLevels; // drag Level1Data..Level5Data here, in order
 
     [Header("Check / Result UI")]
     [SerializeField] private UnityEngine.UI.Button checkButton;
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI percentText;
     [SerializeField] private UnityEngine.UI.Button retryButton;
+    [SerializeField] private UnityEngine.UI.Button nextLevelButton;
 
     private LevelController _currentLevelController;
     private LevelDataSO _currentLevelData;
@@ -39,6 +41,12 @@ public class LevelSessionController : MonoBehaviour
 
         if (retryButton != null)
             retryButton.onClick.AddListener(HandleRetry);
+
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.gameObject.SetActive(false);
+            nextLevelButton.onClick.AddListener(HandleNextLevel);
+        }
     }
 
     private void Start()
@@ -86,8 +94,9 @@ public class LevelSessionController : MonoBehaviour
             string instanceId = $"{cell.Coordinate.x}_{cell.Coordinate.y}";
             string roomId = _currentLevelData.rooms.Count > 0 ? _currentLevelData.rooms[0].roomId : "";
 
-            Debug.Log($"[LevelSessionController] Reporting placement at cell.WorldPosition: {cell.WorldPosition}");
-            _currentLevelController.PlaceOrMoveItem(instanceId, schemaId, cell.LocalPosition, roomId);        }   
+            _currentLevelController.PlaceOrMoveItem(instanceId, schemaId, cell.LocalPosition, roomId);
+            _knownPlacements.Add(cell.Coordinate);
+        }
     }
 
     private void OnEnable()
@@ -192,6 +201,9 @@ public class LevelSessionController : MonoBehaviour
 
         if (resultPanel != null)
             resultPanel.SetActive(false);
+
+        if (nextLevelButton != null)
+            nextLevelButton.gameObject.SetActive(false);
     }
 
     // Call this from the Check button
@@ -227,11 +239,37 @@ public class LevelSessionController : MonoBehaviour
 
         if (resultPanel != null)
             resultPanel.SetActive(true);
+
+        if (nextLevelButton != null)
+            nextLevelButton.gameObject.SetActive(canProceed);
     }
 
     private void HandleRetry()
     {
         if (resultPanel != null)
             resultPanel.SetActive(false);
+    }
+
+    private void HandleNextLevel()
+    {
+        int nextLevelIndex = _currentLevelData.levelIndex + 1;
+
+        LevelDataSO nextLevel = allLevels.FirstOrDefault(l => l.levelIndex == nextLevelIndex);
+
+        if (nextLevel == null)
+        {
+            Debug.LogWarning($"[LevelSessionController] No level found with levelIndex {nextLevelIndex} — might be the last level.");
+            return;
+        }
+
+        _currentLevelData = nextLevel;
+
+        if (resultPanel != null)
+            resultPanel.SetActive(false);
+
+        if (npcDialogueUI != null)
+            npcDialogueUI.Show(_currentLevelData, StartGameplay);
+        else
+            StartGameplay();
     }
 }
