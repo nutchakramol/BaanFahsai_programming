@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 315001287
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1824777350089454896, guid: 1e91bb9d96ecb8e41ae9e926f613846c, type: 3}
@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: bar
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 4
+  surface: 0
   colorVariants: []

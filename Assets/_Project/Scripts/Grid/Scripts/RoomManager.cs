@@ -71,13 +71,19 @@ public class RoomManager : MonoBehaviour
     // START
     // =====================================================
 
-    private void Start()
+private void Start()
+{
+    // Hide all rooms immediately, so no room flashes visible before
+    // LevelSessionController.StartGameplay() picks the correct one
+    // (which happens after NPC dialogue closes).
+    for (int i = 0; i < rooms.Length; i++)
     {
-        Debug.Log("[RoomManager] Start called");
-
-        SwitchRoom(startingRoomIndex);
+        if (rooms[i] != null && rooms[i].roomRoot != null)
+        {
+            rooms[i].roomRoot.SetActive(false);
+        }
     }
-
+}
     // =====================================================
     // SWITCH ROOM
     // =====================================================

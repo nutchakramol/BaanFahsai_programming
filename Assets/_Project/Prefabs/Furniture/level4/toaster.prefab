@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 315001287
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -5696232168332645895, guid: 1e337903dc2d5ab48b958fbfeea6ce72, type: 3}
@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FurnitureItem
   furnitureID: 
-  furnitureName: 
+  furnitureName: toaster
   gridSize: {x: 2, y: 2}
   canRotate: 1
   levelUnlock: 4
+  surface: 0
   colorVariants: []
